@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 
 <?php
+	$ACType = $_GET[''];
+	$ACReg = $_GET[''];
+	$DateStart = $_GET[''];
+	$DateEnd = $_GET[''];
+	$ATA = $_GET[''];
+	$Fault_code = $_GET[''];
+	$Keyword = $_GET[''];
+
 	include "config/connect.php";
 
+//	Notif_Number, A/CType, ACREg, StaDep, Flight_Number, delay_lenght (D4), ATA, SubAta, problem, Code(D2)
+	$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
+	WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
 
-	$sql = "SELECT PirepID, ACTYPE, REG, STADEP, STAARR, DATE, SEQ, JOBTYPE, ATA, SUBATA FROM tblpirep_swift ";
+	//$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
+	//WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
+
 	$res = mysqli_query($link, $sql);
 
-
- ?>
+?>
 
 <html>
 <head>
@@ -50,7 +62,11 @@
 						A/C Reg
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<?php
+							echo "<input type='text' name='ACReg_Input' value = '.$ACReg.'>";
+						 ?>
+<!--						<input type="text" name="firstname">
+-->
 					</th>
 				</tr>
 				<tr>
@@ -58,13 +74,21 @@
 						Date from
 					</th>
 					<th>
-						<input type="date" name="firstname">
+						<?php
+						echo "<input type='date' name='DateStart_Input' value = '.$DateStart.'>";
+						 ?>
+<!--						<input type="date" name="firstname">
+-->
 					</th>
 					<th>
 						Date to
 					</th>
 					<th>
-						<input type="date" name="firstname">
+						<?php
+							echo "<input type='date' name='DateEnd_Input' value = '.$DateEnd.'>";
+						 ?>
+<!--						<input type="date" name="firstname">
+-->
 					</th>
 				</tr>
 				<tr>
@@ -72,7 +96,11 @@
 						ATA
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<?php
+							echo "<input type='text' name='ATA_Input' value = '.$ATA.'>";
+						 ?>
+<!--						<input type="text" name="firstname">
+-->
 					</th>
 				</tr>
 				<tr>
@@ -80,7 +108,11 @@
 						Fault Code
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<?php
+							echo "<input type='text' name='Fault_code_Input' value = '.$Fault_code.'>";
+						 ?>
+<!--						<input type="text" name="firstname">
+-->
 					</th>
 				</tr>
 				<tr>
@@ -89,7 +121,11 @@
 						Keyword
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<?php
+							echo "<input type='text' name='Keyword_Input' value = '.$Keyword.'>";
+						 ?>
+<!--						<input type="text" name="firstname">
+-->
 					</th>
 				</tr>
 			</tbody>
