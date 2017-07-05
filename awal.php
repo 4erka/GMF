@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+
+<?php
+	include "config/connect.php";
+
+	$sql = "SELECT DISTINCT ACtype FROM mcdrnew";
+	$res = mysqli_query($link, $sql);
+
+	?>
+
 <html>
 <head>
 	<title>
@@ -15,7 +24,13 @@
 					</th>
 					<th>
 						<select name="cars" style="">
-					  		<option value="volvo" style="">A330-200</option>
+								<?php
+									while($row = $res->fetch_array(MYSQLI_NUM))
+								 		echo "<option value=".$row[0]."style = ''>".$row[0]."</option>";
+								 ?>
+					  		<!--
+								<option value="volvo" style="">A330-200</option>
+							-->
 						</select>
 					</th>
 					<th></th>
