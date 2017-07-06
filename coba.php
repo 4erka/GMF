@@ -1,61 +1,66 @@
 <!DOCTYPE html>
-
-<?php 
-	echo $_POST["actype"]; ?><br>
-	<?php 
-	echo $_POST["acreg"]; ?>
-	<?php 
-	echo $_POST["datefrom"]; ?>
-	<?php 
-	echo $_POST["dateto"]; ?>
-	<?php 
-	echo $_POST["ata"]; ?>
-	<?php 
-	echo $_POST["faultcode"]; ?>
-	<?php 
-	echo $_POST["keyword"]; ?>
-
 <?php
-	if(empty($_POST["actype"])){
-		$ACType = "";
-	}
-	else{
-		$ACType = "'".$_POST['actype']."'";
-	}
-	if(empty($_POST["actreg"])){
+	$ACType = "'".$_POST["actype"]."'";
+	if(empty($_POST["acreg"])){
 		$ACReg = "";
 	}
 	else{
-		$ACReg = "'".$_POST['acreg']."'";
+		$ACReg = " AND REG = '".$_POST['acreg']."'";
 	}
 	if(empty($_POST["datefrom"])){
-		$DateStart = "'".$_POST['datefrom']."'";
+		$DateStart = "";
+			$DateStart2 = "";
 	}
 	else{
-		$DateStart;
+		$DateStart = " AND DATE BETWEEN '".$_POST['datefrom']."'";
+			$DateStart2 = " AND DATEEVENT BETWEEN '".$_POST['datefrom']."'";
 	}
 	if(empty($_POST["dateto"])){
-		$DateEnd = "'".$_POST['dateto']."'";
+		$DateEnd = "";
 	}
-	else
-	$ATA = "'".$_POST['ata']."'";
-	$Fault_code = "'".$_POST['faultcode']."'";
-	$Keyword = "'".$_POST['keyword']."'";
+	else{
+		$DateEnd = " AND '".$_POST['dateto']."'";
+	}
+	if(empty($_POST["ata"])){
+		$ATA = "";
+			$ATA2 = "";
+	}
+	else{
+		$ATA = " AND ATA = '".$_POST['ata']."'";
+			$ATA2 = " AND ATATDM = '".$_POST['ata']."'";
+	}
+	if(empty($_POST["faultcode"])){
+		$Fault_code = "";
+			$Fault_code2 = "";
+	}
+	else{
+		$Fault_code = " AND SUBATA = '".$_POST['faultcode']."'";
+			$Fault_code2 = " AND SUBATATDM = '".$_POST['faultcode']."'";
+	}
+	if(empty($_POST["keyword"])){
+		$Keyword = "";
+	}
+	else{
+		$Keyword = "'".$_POST['keyword']."'";
+	}
 
 	include "config/connect.php";
 
 	$sql_actype = "SELECT DISTINCT ACtype FROM mcdrnew";
 	$res_actype = mysqli_query($link, $sql_actype);
 
-//	Notif_Number, A/CType, ACREg, StaDep, Flight_Number, delay_lenght (D4), ATA, SubAta, problem, Code(D2)
-	 $sql_delay = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM tblpirep_swift
-	 WHERE ACTYPE = ".$ACType." AND REG = ".$ACReg." AND ATA = ".$ATA." AND SUBATA = ".$Fault_code." AND DATE BETWEEN ".$DateStart." AND ".$DateEnd."";
+	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, MinTot, ATAtdm, SubATAtdm, Problem, Rectification FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DateStart2."".$DateEnd."";
+	$sql_pirep = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift
+	WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
 
 	//$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
 	//WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
 
 	$res_delay = mysqli_query($link, $sql_delay);
+	$res_pirep = mysqli_query($link, $sql_pirep);
 	print_r($sql_delay);
+	echo "<br>";
+	print_r($sql_pirep);
 ?>
 
 <html>
@@ -161,7 +166,6 @@
 	<table id="table_delay" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Notification Number</th>
                 <th>A/C Type</th>
                 <th>A/C Reg</th>
                 <th>Sta Dep</th>
@@ -175,7 +179,6 @@
         </thead>
         <tfoot>
             <tr>
-                <th>Notification Number</th>
                 <th>A/C Type</th>
                 <th>A/C Reg</th>
                 <th>Sta Dep</th>
@@ -203,33 +206,6 @@
 					echo "</tr>";
 				}
 			 ?>
-					<!--
-				 </tr>
-            <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-            </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-                <td>$170,750</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-            </tr>
-					-->
         </tbody>
     </table>
     <div style="margin-bottom: 50px"></div>
@@ -263,30 +239,22 @@
             </tr>
         </tfoot>
         <tbody>
-            <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-            </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-                <td>$170,750</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-                <td>$320,800</td>
-            </tr>
+        	<?php
+				while ($rowes = $res_pirep->fetch_array(MYSQLI_NUM)) {
+					echo "<tr>";
+						echo "<td>".$rowes[0]."</td>";
+						echo "<td>".$rowes[1]."</td>";
+						echo "<td>".$rowes[2]."</td>";
+						echo "<td>".$rowes[3]."</td>";
+						echo "<td>".$rowes[4]."</td>";
+						echo "<td>".$rowes[5]."</td>";
+						echo "<td>".$rowes[6]."</td>";
+						echo "<td>".$rowes[7]."</td>";
+						echo "<td>".$rowes[8]."</td>";
+						echo "<td>".$rowes[9]."</td>";
+					echo "</tr>";
+				}
+			 ?>
         </tbody>
     </table>
    	<script type="text/javascript">
