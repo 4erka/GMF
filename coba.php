@@ -50,8 +50,17 @@
 	$res_actype = mysqli_query($link, $sql_actype);
 
 	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, MinTot, ATAtdm, SubATAtdm, Problem, Rectification FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DateStart2."".$DateEnd."";
-	$sql_pirep = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift
-	WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
+
+	// $que_data_delay = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DateStart2."".$DateEnd." GROUP BY DateEvent");
+	// $res_data_delay = $link->query($que_data_delay);
+	// $data_delay = array();
+	// foreach ($res_data_delay as $row) {
+	// 	$data_delay[] = $row;
+	// }
+	// $res_data_delay->close();
+	// print json_encode($data_delay);
+
+	$sql_pirep = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
 
 	//$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
 	//WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
@@ -270,30 +279,12 @@
 		} );
    	</script>
 
-	<div id="grafik_delay" style="height: 250px; margin-top: 50px"></div>
-	<div id="grafik_pirep" style="height: 250px; margin-top: 50px"></div>
-	<script type="text/javascript">
-		new Morris.Line({
-		// ID of the element in which to draw the chart.
-		element: 'grafik_delay',
-		// Chart data records -- each entry in this array corresponds to a point on
-		// the chart.
-		data: [
-		  { year: '2008', value: 20 },
-		  { year: '2009', value: 10 },
-		  { year: '2010', value: 5 },
-		  { year: '2011', value: 5 },
-		  { year: '2012', value: 20 }
-		],
-		// The name of the data record attribute that contains x-values.
-		xkey: 'year',
-		// A list of names of data record attributes that contain y-values.
-		ykeys: ['value'],
-		// Labels for the ykeys -- will be displayed when you hover over the
-		// chart.
-		labels: ['Value']
-		});
-	</script>
+   	<script type="text/javascript" src="js/Chart.min.js"></script>
+	<script type="text/javascript" src="js/js_data_delay.js"></script>
+	<div id="chart-container">
+		<canvas id="graf_data_delay"></canvas>
+	</div>
+	<div id="grafik_pirep"></div>
 	<script type="text/javascript">
 		new Morris.Line({
 		// ID of the element in which to draw the chart.
@@ -301,11 +292,12 @@
 		// Chart data records -- each entry in this array corresponds to a point on
 		// the chart.
 		data: [
-		  { year: '2008', value: 20 },
-		  { year: '2009', value: 10 },
-		  { year: '2010', value: 5 },
-		  { year: '2011', value: 5 },
-		  { year: '2012', value: 20 }
+		  // { year: '2008', value: 20 },
+		  // { year: '2009', value: 10 },
+		  // { year: '2010', value: 5 },
+		  // { year: '2011', value: 5 },
+		  // { year: '2012', value: 20 }
+		  <php
 		],
 		// The name of the data record attribute that contains x-values.
 		xkey: 'year',
