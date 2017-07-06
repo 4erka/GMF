@@ -13,9 +13,10 @@
 	<title>
 		<title>morris by kukuh</title>
 	</title>
+	<script src="jquery.js" type="text/javascript"></script>
 </head>
 <body>
-	<form style="margin-bottom: 50px">
+	<form action="coba.php" method="post" style="margin-bottom: 50px">
 		<table>
 			<tbody>
 				<tr>
@@ -23,14 +24,11 @@
 						A/C Type
 					</th>
 					<th>
-						<select name="cars" style="">
+						<select name="actype" style="">
 								<?php
 									while($row = $res->fetch_array(MYSQLI_NUM))
-								 		echo "<option value=".$row[0]."style = ''>".$row[0]."</option>";
+								 		echo "<option value=".$row[0].">".$row[0]."</option>";
 								 ?>
-					  		<!--
-								<option value="volvo" style="">A330-200</option>
-							-->
 						</select>
 					</th>
 					<th></th>
@@ -50,7 +48,7 @@
 						A/C Reg
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<input type="text" name="acreg">
 					</th>
 				</tr>
 				<tr>
@@ -58,13 +56,13 @@
 						Date from
 					</th>
 					<th>
-						<input type="date" name="firstname">
+						<input type="date" name="datefrom" id="id_datefrom">
 					</th>
 					<th>
 						Date to
 					</th>
 					<th>
-						<input type="date" name="firstname">
+						<input type="date" name="dateto" id="id_dateto">
 					</th>
 				</tr>
 				<tr>
@@ -72,7 +70,7 @@
 						ATA
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<input type="text" name="ata">
 					</th>
 				</tr>
 				<tr>
@@ -80,7 +78,7 @@
 						Fault Code
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<input type="text" name="faultcode">
 					</th>
 				</tr>
 				<tr>
@@ -89,7 +87,7 @@
 						Keyword
 					</th>
 					<th>
-						<input type="text" name="firstname">
+						<input type="text" name="keyword">
 					</th>
 				</tr>
 			</tbody>

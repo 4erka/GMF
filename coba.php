@@ -1,25 +1,61 @@
 <!DOCTYPE html>
 
+<?php 
+	echo $_POST["actype"]; ?><br>
+	<?php 
+	echo $_POST["acreg"]; ?>
+	<?php 
+	echo $_POST["datefrom"]; ?>
+	<?php 
+	echo $_POST["dateto"]; ?>
+	<?php 
+	echo $_POST["ata"]; ?>
+	<?php 
+	echo $_POST["faultcode"]; ?>
+	<?php 
+	echo $_POST["keyword"]; ?>
+
 <?php
-	$ACType = $_GET[''];
-	$ACReg = $_GET[''];
-	$DateStart = $_GET[''];
-	$DateEnd = $_GET[''];
-	$ATA = $_GET[''];
-	$Fault_code = $_GET[''];
-	$Keyword = $_GET[''];
+	if(empty($_POST["actype"])){
+		$ACType = "";
+	}
+	else{
+		$ACType = "'".$_POST['actype']."'";
+	}
+	if(empty($_POST["actreg"])){
+		$ACReg = "";
+	}
+	else{
+		$ACReg = "'".$_POST['acreg']."'";
+	}
+	if(empty($_POST["datefrom"])){
+		$DateStart = "'".$_POST['datefrom']."'";
+	}
+	else{
+		$DateStart;
+	}
+	if(empty($_POST["dateto"])){
+		$DateEnd = "'".$_POST['dateto']."'";
+	}
+	else
+	$ATA = "'".$_POST['ata']."'";
+	$Fault_code = "'".$_POST['faultcode']."'";
+	$Keyword = "'".$_POST['keyword']."'";
 
 	include "config/connect.php";
 
+	$sql_actype = "SELECT DISTINCT ACtype FROM mcdrnew";
+	$res_actype = mysqli_query($link, $sql_actype);
+
 //	Notif_Number, A/CType, ACREg, StaDep, Flight_Number, delay_lenght (D4), ATA, SubAta, problem, Code(D2)
-	$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
-	WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
+	 $sql_delay = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM tblpirep_swift
+	 WHERE ACTYPE = ".$ACType." AND REG = ".$ACReg." AND ATA = ".$ATA." AND SUBATA = ".$Fault_code." AND DATE BETWEEN ".$DateStart." AND ".$DateEnd."";
 
 	//$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
 	//WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
 
-	$res = mysqli_query($link, $sql);
-
+	$res_delay = mysqli_query($link, $sql_delay);
+	print_r($sql_delay);
 ?>
 
 <html>
@@ -33,7 +69,7 @@
 </head>
 <body>
 	<!-- filter form -->
-	<form style="margin-bottom: 50px">
+	<form action="coba.php" method="post" style="margin-bottom: 50px">
 		<table>
 			<tbody>
 				<tr>
@@ -41,8 +77,14 @@
 						A/C Type
 					</th>
 					<th>
-						<select name="cars" style="">
-					  		<option value="volvo" style="">A330-200</option>
+						<select name="actype" style="">
+								<?php
+									while($row = $res_actype->fetch_array(MYSQLI_NUM))
+								 		echo "<option value=".$row[0].">".$row[0]."</option>";
+								 ?>
+					  		<!--
+								<option value="volvo" style="">A330-200</option>
+							-->
 						</select>
 					</th>
 					<th></th>
@@ -62,11 +104,7 @@
 						A/C Reg
 					</th>
 					<th>
-						<?php
-							echo "<input type='text' name='ACReg_Input' value = '.$ACReg.'>";
-						 ?>
-<!--						<input type="text" name="firstname">
--->
+						<input type="text" name="acreg">
 					</th>
 				</tr>
 				<tr>
@@ -74,21 +112,13 @@
 						Date from
 					</th>
 					<th>
-						<?php
-						echo "<input type='date' name='DateStart_Input' value = '.$DateStart.'>";
-						 ?>
-<!--						<input type="date" name="firstname">
--->
+						<input type="date" name="datefrom">
 					</th>
 					<th>
 						Date to
 					</th>
 					<th>
-						<?php
-							echo "<input type='date' name='DateEnd_Input' value = '.$DateEnd.'>";
-						 ?>
-<!--						<input type="date" name="firstname">
--->
+						<input type="date" name="dateto">
 					</th>
 				</tr>
 				<tr>
@@ -96,11 +126,7 @@
 						ATA
 					</th>
 					<th>
-						<?php
-							echo "<input type='text' name='ATA_Input' value = '.$ATA.'>";
-						 ?>
-<!--						<input type="text" name="firstname">
--->
+						<input type="text" name="ata">
 					</th>
 				</tr>
 				<tr>
@@ -108,11 +134,7 @@
 						Fault Code
 					</th>
 					<th>
-						<?php
-							echo "<input type='text' name='Fault_code_Input' value = '.$Fault_code.'>";
-						 ?>
-<!--						<input type="text" name="firstname">
--->
+						<input type="text" name="faultcode">
 					</th>
 				</tr>
 				<tr>
@@ -121,21 +143,17 @@
 						Keyword
 					</th>
 					<th>
-						<?php
-							echo "<input type='text' name='Keyword_Input' value = '.$Keyword.'>";
-						 ?>
-<!--						<input type="text" name="firstname">
--->
+						<input type="text" name="keyword">
 					</th>
 				</tr>
 			</tbody>
 		</table>
 	</form>
 
-<?php
-	$row_cnt = $res->num_rows;
+<!-- <?php
+	$row_cnt = $res_delay->num_rows;
 	//$row = $res->fetch_array(MYSQLI_NUM);
- ?>
+ ?> -->
 
 	<!-- Table delay and pirep -->
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
@@ -170,29 +188,21 @@
             </tr>
         </tfoot>
         <tbody>
-
-
-					<?php
-						if($row_cnt != 0){
-							$i=0;
-							while ($rowes = $res->fetch_array(MYSQLI_NUM)) {
-								if($i > 10 ) break;
-								echo "<tr>";
-									echo "<td>".$rowes[0]."</td>";
-									echo "<td>".$rowes[1]."</td>";
-									echo "<td>".$rowes[2]."</td>";
-									echo "<td>".$rowes[3]."</td>";
-									echo "<td>".$rowes[4]."</td>";
-									echo "<td>".$rowes[5]."</td>";
-									echo "<td>".$rowes[6]."</td>";
-									echo "<td>".$rowes[7]."</td>";
-									echo "<td>".$rowes[8]."</td>";
-									echo "<td>".$rowes[9]."</td>";
-								echo "</tr>";
-								$i++;
-							}
-						}
-					 ?>
+			<?php
+				while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
+					echo "<tr>";
+						echo "<td>".$rowes[0]."</td>";
+						echo "<td>".$rowes[1]."</td>";
+						echo "<td>".$rowes[2]."</td>";
+						echo "<td>".$rowes[3]."</td>";
+						echo "<td>".$rowes[4]."</td>";
+						echo "<td>".$rowes[5]."</td>";
+						echo "<td>".$rowes[6]."</td>";
+						echo "<td>".$rowes[7]."</td>";
+						echo "<td>".$rowes[8]."</td>";
+					echo "</tr>";
+				}
+			 ?>
 					<!--
 				 </tr>
             <tr>
