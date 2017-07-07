@@ -1,7 +1,7 @@
 <?php
 
   //Memilih Ac Type
-  $sql0 = "SELECT DISTINCT ACtype FROM mcdrnew";
+  $sql0 = "SELECT DISTINCT ACtype FROM tbl_master_actype";
   $res0 = mysqli_query($link, $sql0);
 
  ?>
@@ -46,13 +46,13 @@
           Date from
         </th>
         <th>
-          <input type="date" name="datefrom" id="id_datefrom">
+          <input type="date" name="datefrom" id="id_datefrom" required>
         </th>
         <th>
           Date to
         </th>
         <th>
-          <input type="date" name="dateto" id="id_dateto">
+          <input type="date" name="dateto" id="id_dateto" required>
         </th>
       </tr>
     </tbody>
@@ -62,16 +62,9 @@
           Graph settings for X-axis
         </th>
         <th>
-          <input type="radio" name="graph" value="1"> 1
-          <input type="radio" name="graph" value="2"> 2
-          <input type="radio" name="graph" value="3"> 3
-          <input type="radio" name="graph" value="4"> 4
-          <input type="radio" name="graph" value="5"> 5
-          <input type="radio" name="graph" value="6"> 6
-          <input type="radio" name="graph" value="7"> 7
-          <input type="radio" name="graph" value="8"> 8
-          <input type="radio" name="graph" value="9"> 9
-          <input type="radio" name="graph" value="10"> 10
+          <input type="radio" name="graph" value="ata" required> ATA
+          <input type="radio" name="graph" value="ac_reg"required> A/C REG
+          <input type="radio" name="graph" value="fault_c"required> Fault Code
         </th>
 
 </form>

@@ -7,9 +7,6 @@
 
 <html>
 <head>
-	<title>
-		<title>morris by Habib</title>
-	</title>
 	<script src="jquery.js" type="text/javascript"></script>
 </head>
 <body>
