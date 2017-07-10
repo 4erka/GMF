@@ -167,7 +167,7 @@
 	<h1 style="text-align: center;">Table Delay</h1>
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-	<table id="table_delay" class="display" cellspacing="0" width="100%">
+	<table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>A/C Type</th>
@@ -215,7 +215,7 @@
 
     <h1 style="text-align: center;">Table Pirep</h1>
     <div style="margin-bottom: 50px"></div>
-    <table id="table_pirep" class="display" cellspacing="0" width="100%">
+    <table id="table_pirep" class="display cell-border" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Notification Number</th>
