@@ -15,7 +15,7 @@ body,td,th {
 }
 a:link {
 	text-decoration: none;
-	
+
 }
 a:visited {
 	text-decoration: none;
@@ -26,7 +26,7 @@ a:hover {
 }
 a:active {
 	text-decoration: none;
-	
+
 }
 -->
 </style>
@@ -56,7 +56,7 @@ function SwitchMenu(obj){
 			for (var i=0; i<ar.length; i++){
 				if (ar[i].className=="submenu") //DynamicDrive.com change
 				ar[i].style.display = "none";
-				 parent.balanceList.location.href="index.php";	
+				 parent.balanceList.location.href="index.php";
 			}
 			el.style.display = "block";
 		}else{
@@ -65,12 +65,12 @@ function SwitchMenu(obj){
 	}
 }
 
-function get_cookie(Name) { 
+function get_cookie(Name) {
 var search = Name + "="
 var returnvalue = "";
 if (document.cookie.length > 0) {
 offset = document.cookie.indexOf(search)
-if (offset != -1) { 
+if (offset != -1) {
 offset += search.length
 end = document.cookie.indexOf(";", offset);
 if (end == -1) end = document.cookie.length;
@@ -115,71 +115,75 @@ window.onunload=savemenustate
 
 function move_air()
 {
-	 parent.balanceList.location.href="AOS.php";	
+	 parent.balanceList.location.href="AOS.php";
 }
 function move_engi_rate()
 {
-	 parent.balanceList.location.href="aopMain.php";	
-	   
+	 parent.balanceList.location.href="aopMain.php";
+
 }
 
 
 function move_engi_remo()
 {
-	 parent.balanceList.location.href="engineremoval.php";	
+	 parent.balanceList.location.href="engineremoval.php";
 }
 function move_etops_relia()
 {
-	 parent.balanceList.location.href="index2.php";	
+	 parent.balanceList.location.href="index2.php";
 }
 function tek_delay()
 {
-	 parent.balanceList.location.href="kape1.php";	
+	 parent.balanceList.location.href="kape1.php";
 }
 function move_rel_graph()
 {
-	 parent.balanceList.location.href="reliabilitygraph.php";	
+	 parent.balanceList.location.href="reliabilitygraph.php";
 }
 
 function move_pilot()
 {
- parent.balanceList.location.href="pirep.php";	
+ parent.balanceList.location.href="pirep.php";
 }
 function move_etops_event()
 {
- parent.balanceList.location.href="etops.php";	
+ parent.balanceList.location.href="etops.php";
 }
 function move_cumu()
 {
- parent.balanceList.location.href="cumulative.php";	
+ parent.balanceList.location.href="cumulative.php";
 }
 function eos()
 {
- parent.balanceList.location.href="EOS.php";	
+ parent.balanceList.location.href="EOS.php";
 }
 function weekly()
 {
- parent.balanceList.location.href="weekly-real.php";	
+ parent.balanceList.location.href="weekly-real.php";
 }
 function summary()
 {
- parent.balanceList.location.href="reportbulanan.php";	
+ parent.balanceList.location.href="reportbulanan.php";
 }
 function pirepperformance()
 {
- parent.balanceList.location.href="pirepperformance.php";	
+ parent.balanceList.location.href="pirepperformance.php";
 }
 function delayperformance()
 {
- parent.balanceList.location.href="delayperformance.php";	
+ parent.balanceList.location.href="delayperformance.php";
 }
 function systperformance()
 {
- parent.balanceList.location.href="ApuOS.php";	
+ parent.balanceList.location.href="ApuOS.php";
 }
 function apuremoval()
 {
- parent.balanceList.location.href="apu_removal.php";	
+ parent.balanceList.location.href="apu_removal.php";
+}
+function paretoDisp()
+{
+ parent.balanceList.location.href="../awal_pareto.php";
 }
 
 </script>
@@ -208,7 +212,7 @@ function apuremoval()
   <tr>
     <td width="23" height="31" valign="top"><img src="images/plane.gif" width="19" height="20" /></td>
     <td width="174" valign="top" onclick="move_etops_relia()" style="cursor:hand" >Etops Reliability Report</td>
-  </tr> 
+  </tr>
   <tr>
     <td width="23" height="31" valign="top"><img src="images/plane.gif" width="19" height="20" /></td>
     <td width="174" valign="top" onclick="move_etops_event()" style="cursor:hand">Etops Event</td>
@@ -253,14 +257,18 @@ function apuremoval()
     <td width="23" height="31" valign="top"><img src="images/plane.gif" width="19" height="20" /></td>
     <td width="174" valign="top" onclick="apuremoval()" style="cursor:hand">APU Removal</td>
   </tr>
- 
+	<tr>
+		<td width="23" height="31" valign="top"><img src="images/plane.gif" width="19" height="20" /></td>
+		<td width="174" valign="top" onclick="paretoDisp()" style="cursor:hand">Pareto Display</td>
+	</tr>
+
 </table>
 
 
-		
+
 	</span>
 
-	
+
 
 </div>
 

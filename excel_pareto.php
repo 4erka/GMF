@@ -38,7 +38,7 @@ $setCounter = 0;
 //Nama excellnya
 $setExcelName = "Pareto";
 
-$setSql = "SELECT Notification AS 'Notification Number', ACTYPE AS 'A/C Type', REG AS 'A/C Reg', STADEP, FN AS 'Flight Number', NULL as 'Delay Lenght' ATA, SUBATA, PROBLEM, 4DigitCode AS 'Coding (D2 Only)'
+$setSql = "SELECT Notification AS 'Notification Number', ACTYPE AS 'A/C Type', REG AS 'A/C Reg', STADEP, FN AS 'Flight Number', ATA, SUBATA, PROBLEM, 4DigitCode AS 'Coding (D2 Only)'
 FROM tblpirep_swift
 WHERE ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DATE BETWEEN ".$DateStart." AND ".$DateEnd."";
 
@@ -69,6 +69,7 @@ while($rec = mysql_fetch_row($setRec))  {
 }
   $setData = str_replace("\r", "", $setData);
 
+/*
   $setSql = "SELECT ACTYPE, REG, DepSta, FlightNo, HoursTot, MinTot, ATAtdm, Iata, Problem FROM mcdrnew
   WHERE ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd."";
 
@@ -91,6 +92,7 @@ while($rec = mysql_fetch_row($setRec))  {
     $setData1 .= trim($rowLine)."\n";
   }
     $setData1 = str_replace("\r", "", $setData);
+    */
 
 
 if ($setData == "") {

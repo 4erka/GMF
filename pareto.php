@@ -57,6 +57,7 @@
 	<?php
 		include 'form_pareto.php';
 	 ?>
+	 <!--
 	 <a href="excel_pareto.php?actype=<?php echo $_POST['actype'];?>&acreg=<?php echo $_POST['acreg'];?>&dateto=<?php echo $_POST['dateto'];?>&datefrom=<?php echo $_POST['datefrom'];?>" class="btn btn-default">Export Excel</a>
 
 			 <div class="row" style="background-color:#DCDCDC; text-align:center">
@@ -66,6 +67,7 @@
 				 </h1>
 				 <br>
 			 </div>
+		 -->
 	 <br>
 
 	<!-- Table delay and pirep -->
@@ -147,9 +149,26 @@
 
         </tbody>
 			</table>
+
+			<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+			<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+			<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+			<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+
    	<script type="text/javascript">
    		$(document).ready(function() {
     	$('#table_delay').DataTable({
+				dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'pdfHtml5'
+        ]
     	});
 
 			// $('#example').bind('sort', function (e, dt) {
