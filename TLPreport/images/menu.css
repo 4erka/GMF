@@ -1,0 +1,30 @@
+#menu TABLE {
+	BORDER-COLLAPSE: collapse
+}
+#menu TD {
+	BORDER-RIGHT: #adadad 1px solid; BORDER-TOP: #adadad 1px solid; BORDER-LEFT: #adadad 1px solid; BORDER-BOTTOM: #adadad 1px solid; BACKGROUND-COLOR: #c7d0dc
+}
+#menu DIV.top {
+	PADDING-RIGHT: 8px; PADDING-LEFT: 6px; PADDING-BOTTOM: 6px; WIDTH: 100%; PADDING-TOP: 5px
+}
+#menu DIV.section {
+	DISPLAY: inline; Z-INDEX: -1; POSITION: absolute
+}
+#menu DIV.box {
+	BORDER-RIGHT: #666666 1px; PADDING-RIGHT: 6px; BORDER-TOP: #666666 1px; PADDING-LEFT: 6px; VISIBILITY: hidden; PADDING-BOTTOM: 5px; BORDER-LEFT: #666666 1px; WIDTH: 100%; PADDING-TOP: 4px; BORDER-BOTTOM: #666666 1px solid; POSITION: relative; BACKGROUND-COLOR: #505050
+}
+DIV.top A {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #666666; FONT-FAMILY: verdana, tahoma, arial, sans-serif; WHITE-SPACE: nowrap; TEXT-DECORATION: none
+}
+DIV.top A:hover {
+	FONT-WEIGHT: bold; FONT-SIZE: 11px; COLOR: #ffffff; FONT-FAMILY: verdana, tahoma, arial, sans-serif; WHITE-SPACE: nowrap; TEXT-DECORATION: none
+}
+DIV.box A {
+	FONT-SIZE: 11px; COLOR: #fff; FONT-FAMILY: verdana, tahoma, arial, sans-serif; WHITE-SPACE: nowrap; TEXT-DECORATION: none
+}
+DIV.box A:visited {
+	FONT-SIZE: 11px; COLOR: #fff; FONT-FAMILY: verdana, tahoma, arial, sans-serif; WHITE-SPACE: nowrap; TEXT-DECORATION: none
+}
+DIV.box A:hover {
+	FONT-SIZE: 11px; COLOR: #998675; FONT-FAMILY: verdana, tahoma, arial, sans-serif; WHITE-SPACE: nowrap; TEXT-DECORATION: none
+}
