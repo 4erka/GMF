@@ -5,7 +5,7 @@
 		$ACReg = "";
 	}
 	else{
-		$ACReg = " AND REG = '".$_POST['acreg']."'";
+		$ACReg = " AND REG LIKE '%".$_POST['acreg']."%'";
 	}
 	if(empty($_POST["datefrom"])){
 		$DateStart = "";
@@ -53,11 +53,16 @@
 
 	$sql_pirep = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
 
+	// $query = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."%%".$ACReg."%%".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent");
+
 	$res_delay = mysqli_query($link, $sql_delay);
 	$res_pirep = mysqli_query($link, $sql_pirep);
 	// print_r($sql_delay);
+	//print_r($query);
 	// echo "<br>";
 	// print_r($sql_pirep);
+	// $req_exp_pdf = "graph.php?actype=".$_POST["actype"]."&acreg=".$_POST['acreg']."&datefrom=".$_POST['datefrom']."&dateto=".$_POST['dateto']."&ata=".$_POST['ata']."&faultcode=".$_POST['faultcode']."&keyword=".$_POST['keyword'];
+	// print_r($req_exp_pdf);
 ?>
 
 <html>
@@ -98,7 +103,8 @@
 						<input type="submit" value="Export Excel">
 					</th>
 					<th>
-						<input type="submit" value="Export PDF">
+						<!-- <a href="index.php"><input type="button" value="Export PDF" /></a> -->
+						<input type="button" value="Export PDF" onclick="window.print()">
 					</th>
 				</tr>
 				<tr>

@@ -3,9 +3,9 @@
 header('Content-Type: application/json');
 
 //database
-define('DB_HOST', '192.168.40.101');
-define('DB_USERNAME', 'ter1');
-define('DB_PASSWORD', 'reliability');
+define('DB_HOST', '127.0.0.1');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
 define('DB_NAME', 'mcdr');
 
 //get connection
@@ -26,7 +26,7 @@ $Keyword = $_POST["keyword"];
 //query to get data from the table
 // $query = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent");
 
-$query = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent");
+$query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent";
 
 //execute query
 $result = $mysqli->query($query);
