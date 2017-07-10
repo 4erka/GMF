@@ -46,30 +46,18 @@
 
 	include "config/connect.php";
 
-	$sql_actype = "SELECT DISTINCT ACtype FROM mcdrnew";
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
 	$res_actype = mysqli_query($link, $sql_actype);
 
 	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, MinTot, ATAtdm, SubATAtdm, Problem, Rectification FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DateStart2."".$DateEnd."";
 
-	// $que_data_delay = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DateStart2."".$DateEnd." GROUP BY DateEvent");
-	// $res_data_delay = $link->query($que_data_delay);
-	// $data_delay = array();
-	// foreach ($res_data_delay as $row) {
-	// 	$data_delay[] = $row;
-	// }
-	// $res_data_delay->close();
-	// print json_encode($data_delay);
-
 	$sql_pirep = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
-
-	//$sql = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM t tblpirep_swift
-	//WHERE ACTYPE = '.$ACType.' OR REG = '.$ACReg.' OR ATA = '.$ATA.' OR SUBATA = '.$Fault_code.'";
 
 	$res_delay = mysqli_query($link, $sql_delay);
 	$res_pirep = mysqli_query($link, $sql_pirep);
-	print_r($sql_delay);
-	echo "<br>";
-	print_r($sql_pirep);
+	// print_r($sql_delay);
+	// echo "<br>";
+	// print_r($sql_pirep);
 ?>
 
 <html>
@@ -81,9 +69,9 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 </head>
-<body>
+<body style="padding: 50px">
 	<!-- filter form -->
-	<form action="coba.php" method="post" style="margin-bottom: 50px">
+	<form action="graph.php" method="post" style="margin-bottom: 50px">
 		<table>
 			<tbody>
 				<tr>
@@ -170,6 +158,7 @@
  ?> -->
 
 	<!-- Table delay and pirep -->
+	<h1 style="text-align: center;">Table Delay</h1>
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 	<table id="table_delay" class="display" cellspacing="0" width="100%">
@@ -217,6 +206,8 @@
 			 ?>
         </tbody>
     </table>
+
+    <h1 style="text-align: center;">Table Pirep</h1>
     <div style="margin-bottom: 50px"></div>
     <table id="table_pirep" class="display" cellspacing="0" width="100%">
         <thead>
