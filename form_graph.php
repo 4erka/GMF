@@ -3,7 +3,7 @@
 <?php
 	include "config/connect.php";
 
-	$sql = "SELECT DISTINCT ACtype FROM mcdrnew";
+	$sql = "SELECT DISTINCT ACtype FROM tbl_master_actype";
 	$res = mysqli_query($link, $sql);
 
 	?>
@@ -16,7 +16,7 @@
 	<script src="jquery.js" type="text/javascript"></script>
 </head>
 <body>
-	<form action="coba.php" method="post" style="margin-bottom: 50px">
+	<form action="graph.php" method="post" style="margin-bottom: 50px">
 		<table>
 			<tbody>
 				<tr>
