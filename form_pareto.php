@@ -27,7 +27,12 @@
           <input type="submit" value="Display Report">
         </th>
         <th>
-          <input type="submit" value="Export Excel">
+          <?php
+            //echo "<a href='excel_pareto.php?act='.$_POST['actype'].'&acr='$_POST['acreg'] class='btn btn-default'>Excell Report</a>";
+           ?>
+
+<!--          <input type="submit" value="Export Excel">
+-->
         </th>
         <th>
           <input type="submit" value="Export PDF">

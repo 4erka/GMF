@@ -57,6 +57,7 @@
 	<?php
 		include 'form_pareto.php';
 	 ?>
+	 <a href="excel_pareto.php?actype=<?php echo $_POST['actype'];?>&acreg=<?php echo $_POST['acreg'];?>&dateto=<?php echo $_POST['dateto'];?>&datefrom=<?php echo $_POST['datefrom'];?>" class="btn btn-default">Export Excel</a>
 
 			 <div class="row" style="background-color:#DCDCDC; text-align:center">
 				 <br>

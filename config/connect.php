@@ -1,5 +1,6 @@
 <?php
   $link = mysqli_connect("127.0.0.1", "root", "", "mcdr");
+//    $link = mysqli_connect("192.168.40.101", "ter1", "reliability", "mcdr");
   if (!$link) {
     echo "Error: Unable to connect to MySQL." . PHP_EOL;
     echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;

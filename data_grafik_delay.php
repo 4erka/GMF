@@ -3,9 +3,9 @@
 header('Content-Type: application/json');
 
 //database
-define('DB_HOST', '127.0.0.1');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
+define('DB_HOST', '192.168.40.101');
+define('DB_USERNAME', 'ter1');
+define('DB_PASSWORD', 'reliability');
 define('DB_NAME', 'mcdr');
 
 //get connection
