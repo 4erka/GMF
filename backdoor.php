@@ -163,7 +163,7 @@
 
 	<!-- Table delay and pirep -->
 	<?php
-	if ( $Depir == "Delay" ) {
+	if ( $Depir == "delay" ) {
 	    ?>
 	    <h1 style="text-align: center;">Table Delay</h1>
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
@@ -219,10 +219,9 @@
 	    	});
 			} );
    		</script><?php;
-	}
-	?>
+	}?>
 	<?php
-	if ( $my_name == "someguy" ) {
+	if ( $Depir == "pirep" ) {
 	    ?>
 	    <h1 style="text-align: center;">Table Pirep</h1>
 	    <div style="margin-bottom: 50px"></div>
@@ -280,157 +279,158 @@
 	    	});
 			} );
 	   	</script><?php;
-	}
-	?>
+	}?>
 
    	<script type="text/javascript" src="js/Chart.min.js"></script>
 	<!-- <script type="text/javascript" src="js/js_data_delay.js"></script> -->
-	<script type="text/javascript">
-		var depir = <?php echo(json_encode($ACType)); ?>;
-		if(depir = "delay"){
-			var actype = <?php echo(json_encode($ACType)); ?>;
-			var acreg = <?php echo(json_encode($ACReg)); ?>;
-			var datestart = <?php echo(json_encode($DateStart2)); ?>;
-			var dateend = <?php echo(json_encode($DateEnd)); ?>;
-			var ata = <?php echo(json_encode($ATA2)); ?>;
-			var fault_code = <?php echo(json_encode($Fault_code2)); ?>;
-			var keyword = <?php echo(json_encode($Keyword)); ?>;
-			$(document).ready(function(){
-				$.ajax({
-					url: "http://localhost/GMF/data_grafik_delay.php",
-					method: "POST",
-					data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword},
-					success: function(data) {
-						console.log(data);
-						var date = {
-							date : [],
-							delay : []
-						};
-						// var date = [];
-						// var delay = [];
+	<?php if($Depir == "delay"){?>
+			<script type="text/javascript">
+				var actype = <?php echo(json_encode($ACType)); ?>;
+				var acreg = <?php echo(json_encode($ACReg)); ?>;
+				var datestart = <?php echo(json_encode($DateStart2)); ?>;
+				var dateend = <?php echo(json_encode($DateEnd)); ?>;
+				var ata = <?php echo(json_encode($ATA2)); ?>;
+				var fault_code = <?php echo(json_encode($Fault_code2)); ?>;
+				var keyword = <?php echo(json_encode($Keyword)); ?>;
+				$(document).ready(function(){
+					$.ajax({
+						url: "http://localhost/GMF/data_grafik_delay.php",
+						method: "POST",
+						data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword},
+						success: function(data) {
+							console.log(data);
+							var date = {
+								date : [],
+								delay : []
+							};
+							// var date = [];
+							// var delay = [];
 
-						for(var i in data) {
-							date.date.push(data[i].DateEvent);
-							date.delay.push(data[i].delay);
-							//delay.push(data[i].delay);
-						}
-
-						var chartdata = {
-							labels: date.date,
-							datasets : [
-								{
-									label: 'Delay',
-									fill: 'false',
-									backgroundColor: 'rgba(200, 200, 200, 0.75)',
-									borderColor: 'rgba(0, 0, 255, 1)',
-									pointBackgroundColor: 'rgba(255, 0, 0, 1)',
-									pointBorderColor: 'rgba(255, 0, 0, 1)',
-									lineTension: '0',
-									data: date.delay
-								}
-							]
-						};
-
-						var options = {
-							title : {
-								display : true,
-								position : "top",
-								text : "Delay (D4)",
-								fontSize : 18,
-								fontColor : "#111"
-							},
-							legend : {
-								display : true,
-								position : "bottom"
+							for(var i in data) {
+								date.date.push(data[i].DateEvent);
+								date.delay.push(data[i].delay);
+								//delay.push(data[i].delay);
 							}
-						};
 
-						var ctx = $("#graf_data_delay_pirep");
+							var chartdata = {
+								labels: date.date,
+								datasets : [
+									{
+										label: 'Delay',
+										fill: 'false',
+										backgroundColor: 'rgba(200, 200, 200, 0.75)',
+										borderColor: 'rgba(0, 0, 255, 1)',
+										pointBackgroundColor: 'rgba(255, 0, 0, 1)',
+										pointBorderColor: 'rgba(255, 0, 0, 1)',
+										lineTension: '0',
+										data: date.delay
+									}
+								]
+							};
 
-						var barGraph = new Chart(ctx, {
-							type: 'line',
-							data: chartdata,
-							options: options
-						});
-					},
-					error: function(data) {
-						console.log(data);
-					}
-				});
-			});
-		}
-		else if(depir = "pirep"){
-			var actype1 = <?php echo(json_encode($ACType)); ?>;
-			var acreg1 = <?php echo(json_encode($ACReg)); ?>;
-			var datestart1 = <?php echo(json_encode($DateStart)); ?>;
-			var dateend1 = <?php echo(json_encode($DateEnd)); ?>;
-			var ata1 = <?php echo(json_encode($ATA)); ?>;
-			var fault_code1 = <?php echo(json_encode($Fault_code)); ?>;
-			var keyword1 = <?php echo(json_encode($Keyword)); ?>;
-			$(document).ready(function(){
-				$.ajax({
-					url: "http://localhost/GMF/data_grafik_pirep.php",
-					method: "POST",
-					data: {actype: actype1, acreg: acreg1, datestart: datestart1, dateend: dateend1, ata: ata1, fault_code: fault_code1, keyword: keyword1},
-					success: function(data) {
-						console.log(data);
-						var date = {
-							date : [],
-							pirep : []
-						};
-						// var date = [];
-						// var delay = [];
-
-						for(var i in data) {
-							date.date.push(data[i].DATE);
-							date.pirep.push(data[i].pirep);
-							//delay.push(data[i].delay);
-						}
-
-						var chartdata = {
-							labels: date.date,
-							datasets : [
-								{
-									label: 'Pirep',
-									fill: 'false',
-									backgroundColor: 'rgba(200, 200, 200, 0.75)',
-									borderColor: 'rgba(255, 0, 0, 1)',
-									pointBackgroundColor: 'rgba(0, 0, 255, 1)',
-									pointBorderColor: 'rgba(0, 0, 255, 1)',
-									lineTension: '0',
-									data: date.pirep
+							var options = {
+								title : {
+									display : true,
+									position : "top",
+									text : "Delay (D4)",
+									fontSize : 18,
+									fontColor : "#111"
+								},
+								legend : {
+									display : true,
+									position : "bottom"
 								}
-							]
-						};
+							};
 
-						var options = {
-							title : {
-								display : true,
-								position : "top",
-								text : "Pirep (D2)",
-								fontSize : 18,
-								fontColor : "#111"
-							},
-							legend : {
-								display : true,
-								position : "bottom"
-							}
-						};
+							var ctx = $("#graf_data_delay_pirep");
 
-						var ctx = $("#graf_data_delay_pirep");
-
-						var barGraph = new Chart(ctx, {
-							type: 'line',
-							data: chartdata,
-							options: options
-						});
-					},
-					error: function(data) {
-						console.log(data);
-					}
+							var barGraph = new Chart(ctx, {
+								type: 'line',
+								data: chartdata,
+								options: options
+							});
+						},
+						error: function(data) {
+							console.log(data);
+						}
+					});
 				});
-			});
-		}
+			</script><?php;
+			}?>
+			<?php if($Depir == "pirep") { ?>
+				<script type="text/javascript">
+					var actype1 = <?php echo(json_encode($ACType)); ?>;
+					var acreg1 = <?php echo(json_encode($ACReg)); ?>;
+					var datestart1 = <?php echo(json_encode($DateStart)); ?>;
+					var dateend1 = <?php echo(json_encode($DateEnd)); ?>;
+					var ata1 = <?php echo(json_encode($ATA)); ?>;
+					var fault_code1 = <?php echo(json_encode($Fault_code)); ?>;
+					var keyword1 = <?php echo(json_encode($Keyword)); ?>;
+					$(document).ready(function(){
+						$.ajax({
+							url: "http://localhost/GMF/data_grafik_pirep.php",
+							method: "POST",
+							data: {actype: actype1, acreg: acreg1, datestart: datestart1, dateend: dateend1, ata: ata1, fault_code: fault_code1, keyword: keyword1},
+							success: function(data) {
+								console.log(data);
+								var date = {
+									date : [],
+									pirep : []
+								};
+								// var date = [];
+								// var delay = [];
+
+								for(var i in data) {
+									date.date.push(data[i].DATE);
+									date.pirep.push(data[i].pirep);
+									//delay.push(data[i].delay);
+								}
+
+								var chartdata = {
+									labels: date.date,
+									datasets : [
+										{
+											label: 'Pirep',
+											fill: 'false',
+											backgroundColor: 'rgba(200, 200, 200, 0.75)',
+											borderColor: 'rgba(255, 0, 0, 1)',
+											pointBackgroundColor: 'rgba(0, 0, 255, 1)',
+											pointBorderColor: 'rgba(0, 0, 255, 1)',
+											lineTension: '0',
+											data: date.pirep
+										}
+									]
+								};
+
+								var options = {
+									title : {
+										display : true,
+										position : "top",
+										text : "Pirep (D2)",
+										fontSize : 18,
+										fontColor : "#111"
+									},
+									legend : {
+										display : true,
+										position : "bottom"
+									}
+								};
+
+								var ctx = $("#graf_data_delay_pirep");
+
+								var barGraph = new Chart(ctx, {
+									type: 'line',
+									data: chartdata,
+									options: options
+								});
+							},
+							error: function(data) {
+								console.log(data);
+							}
+						});
+					});
+				</script><?php;
+			}?>
 	<div id="chart-container">
 		<canvas id="graf_data_delay_pirep"></canvas>
 	</div>
