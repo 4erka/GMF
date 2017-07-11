@@ -75,13 +75,22 @@
 				</tr>
 				<tr>
 					<th>
-						Fault Code
+						SUBATA
 					</th>
 					<th>
-						<input type="text" name="faultcode">
+						<input type="text" name="subata">
 					</th>
 				</tr>
 				<tr>
+				<tr>
+					<th>
+						Delay / Pirep
+					</th>
+					<th>
+						<input type="radio" name="depir" value="delay"> Delay
+						<input type="radio" name="depir" value="pirep"> Pirep
+					</th>
+				</tr>
 				</tr>
 					<th>
 						Keyword
