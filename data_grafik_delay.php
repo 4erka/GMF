@@ -22,11 +22,9 @@ $DateEnd = $_POST["dateend"];
 $ATA = $_POST["ata"];
 $Fault_code = $_POST["fault_code"];
 $Keyword = $_POST["keyword"];
+$DCP = $_POST["dcp"];
 
-//query to get data from the table
-// $query = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent");
-
-$query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent";
+$query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DCP[0]."".$DCP[1]."".$DCP[2]."".$DateStart."".$DateEnd."GROUP BY DateEvent";
 
 //execute query
 $result = $mysqli->query($query);
