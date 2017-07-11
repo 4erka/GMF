@@ -44,15 +44,37 @@
 	else{
 		$Keyword = "'".$_POST['keyword']."'";
 	}
+	if(empty($_POST["dcp"])){
+		$DCP[] = "";
+	}
+	else{
+		$DCP = $_POST['dcp'];
+		for($i = 0; $i < 3; $i++){
+			if(empty($DCP[$i])){
+				$DCP[$i] = "";
+			}
+			else{
+				if($i == 0){
+					$DCP[$i] = " AND DCP IN ('".$DCP[$i]."'";
+				}
+				else if($i == 1){
+					$DCP[$i] = ",'".$DCP[$i]."'";
+				}
+				else{
+					$DCP[$i] = ",'".$DCP[$i]."')";
+				}
+			}
+		}
+	}
 
 	include "config/connect.php";
 
 	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
 	$res_actype = mysqli_query($link, $sql_actype);
 
-	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, MinTot, ATAtdm, SubATAtdm, Problem, Rectification FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DateStart2."".$DateEnd."";
+	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, MinTot, ATAtdm, SubATAtdm, Problem, Rectification FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCP[0]."".$DCP[1]."".$DCP[2]."".$DateStart2."".$DateEnd."";
 	$res_delay = mysqli_query($link, $sql_delay);
-	// print_r($sql_delay);
+	//print_r($sql_delay);
 	//print_r($query);
 	// echo "<br>";
 	// print_r($sql_pirep);
@@ -216,11 +238,12 @@
 		var ata = <?php echo(json_encode($ATA2)); ?>;
 		var fault_code = <?php echo(json_encode($Fault_code2)); ?>;
 		var keyword = <?php echo(json_encode($Keyword)); ?>;
+		var dcp = <?php echo(json_encode($DCP)); ?>;
 		$(document).ready(function(){
 			$.ajax({
 				url: "http://localhost/GMF/data_grafik_delay.php",
 				method: "POST",
-				data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword},
+				data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword, dcp: dcp},
 				success: function(data) {
 					console.log(data);
 					var date = {
@@ -263,7 +286,14 @@
 						legend : {
 							display : true,
 							position : "bottom"
-						}
+						},
+						scales: {
+					        yAxes: [{
+					            ticks: {
+					                beginAtZero: true
+					            }
+					        }]
+					    }
 					};
 
 					var ctx = $("#graf_data_delay");

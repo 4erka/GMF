@@ -16,7 +16,7 @@
 	<script src="jquery.js" type="text/javascript"></script>
 </head>
 <body>
-	<form action="graph_pirep.php" method="post" style="margin-bottom: 50px">
+	<form method="post" style="margin-bottom: 50px" id="form_graph">
 		<table>
 			<tbody>
 				<tr>
@@ -87,8 +87,8 @@
 						Delay / Pirep
 					</th>
 					<th>
-						<input type="radio" name="depir" value="delay"> Delay
-						<input type="radio" name="depir" value="pirep"> Pirep
+						<input type="radio" name="depir" value="delay" onclick="check(this.value)"> Delay
+						<input type="radio" name="depir" value="pirep" onclick="check(this.value)"> Pirep
 					</th>
 				</tr>
 				</tr>
@@ -99,8 +99,24 @@
 						<input type="text" name="keyword">
 					</th>
 				</tr>
+				<tr>
+					<th>
+						DCP
+					</th>
+					<th>
+						<input type="checkbox" name="dcp[]" value="d"> D
+						<input type="checkbox" name="dcp[]" value="c"> C
+						<input type="checkbox" name="dcp[]" value="x"> X
+					</th>
+				</tr>
 			</tbody>
 		</table>
 	</form>
+	<script type="text/javascript">
+		function check(depir) {
+			depir = "graph_" + depir + ".php";
+		    document.getElementById("form_graph").action=depir;
+		}
+	</script>
 </body>
 </html>

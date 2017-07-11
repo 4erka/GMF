@@ -49,7 +49,7 @@
 	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
 	$res_actype = mysqli_query($link, $sql_actype);
 
-	$sql_pirep = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
+	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd."";
 		
 	$res_pirep = mysqli_query($link, $sql_pirep);
 ?>
@@ -151,6 +151,8 @@
 	<table id="table_pirep" class="display cell-border" cellspacing="0" width="100%">
 	    <thead>
 	        <tr>
+	        	<th>Date</th>
+	        	<th>Sequence</th>
 	            <th>Notification Number</th>
 	            <th>A/C Type</th>
 	            <th>A/C Reg</th>
@@ -165,6 +167,8 @@
 	    </thead>
 	    <tfoot>
 	        <tr>
+	        	<th>Date</th>
+	        	<th>Sequence</th>
 	            <th>Notification Number</th>
 	            <th>A/C Type</th>
 	            <th>A/C Reg</th>
@@ -191,6 +195,8 @@
 						echo "<td>".$rowes[7]."</td>";
 						echo "<td>".$rowes[8]."</td>";
 						echo "<td>".$rowes[9]."</td>";
+						echo "<td>".$rowes[10]."</td>";
+						echo "<td>".$rowes[11]."</td>";
 					echo "</tr>";
 				}
 			 ?>
@@ -258,7 +264,14 @@
 						legend : {
 							display : true,
 							position : "bottom"
-						}
+						},
+						scales: {
+					        yAxes: [{
+					            ticks: {
+					                beginAtZero: true
+					            }
+					        }]
+					    }
 					};
 
 					var ctx = $("#graf_data_pirep");
