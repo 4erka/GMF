@@ -1,5 +1,9 @@
 <!--sidebar start -->
 
+<?php
+
+ ?>
+
 <aside>
     <div id="sidebar"  class="nav-collapse ">
         <!-- sidebar menu start-->
@@ -9,14 +13,14 @@
             <h5 class="centered">GMF Aeroasia TER 1</h5>
 
             <li class="mt">
-                <a class="active" href="index.html">
+                <a href="index.php">
                     <i class="fa fa-dashboard"></i>
                     <span>Graph Display</span>
                 </a>
             </li>
 
             <li class="sub-menu">
-                <a href="javascript:;" >
+                <a href="awal_pareto.php" >
                     <i class="fa fa-desktop"></i>
                     <span>Pareto Display</span>
                 </a>
@@ -89,3 +93,10 @@
     </div>
 </aside>
 <!--sidebar end-->
+
+<script>
+  $(function() {
+   $( "#tabs" ).tabs();
+   $( "#action" ).on("click", function(){});
+  });
+</script>

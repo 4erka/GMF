@@ -11,7 +11,6 @@
 </head>
 <body>
 
-	<?php echo $_GET['actype'] ?>
 	<?php
 		include 'form_pareto.php';
 	 ?>

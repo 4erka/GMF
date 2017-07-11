@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+<?php
+  $pg_now = "pareto";
+
+  include 'config/connect.php';
+ ?>
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -7,7 +14,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - TER 1</title>
+    <title>TLP Report - Pareto</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -37,7 +44,7 @@
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
 
-      <?php        
+      <?php
         include 'header.php';
        ?>
 
@@ -56,16 +63,12 @@
       <!--main content start-->
       <section id="main-content" style="min-height:100%;">
         <section class="wrapper" style="text-align: centered">
-              <h2>Selamat datang di halaman TLP Report - TER 1</h2>
-              <br>
-              <embed src="assets/img/report.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="670" height="400">
-              <br>
+              <?php
+                include 'form_pareto.php';
+               ?>
           </section>
       </section>
 
-      <!-- **********************************************************************************************************************************************************
-      FOOTER CONTENT
-      *********************************************************************************************************************************************************** -->
 <?php
   include 'footer.php';
  ?>
@@ -116,6 +119,7 @@
 	</script>
 
 	<script type="application/javascript">
+  /*
         $(document).ready(function () {
             $("#date-popover").popover({html: true, trigger: "manual"});
             $("#date-popover").hide();
@@ -148,6 +152,7 @@
             var to = $("#" + id).data("to");
             console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
         }
+        */
     </script>
 
 

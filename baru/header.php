@@ -4,12 +4,13 @@
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
       <!--logo start-->
-      <a href="index.html" class="logo"><b>TLP Report</b></a>
+      <a href="index.php" class="logo"><b>TLP Report</b></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
           <!--  notification start -->
           <ul class="nav top-menu">
               <!-- settings start -->
+              <!--
               <li class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                       <i class="fa fa-tasks"></i>
@@ -77,8 +78,11 @@
                       </li>
                   </ul>
               </li>
+            -->
               <!-- settings end -->
               <!-- inbox dropdown start-->
+              <!--
+
               <li id="header_inbox_bar" class="dropdown">
                   <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                       <i class="fa fa-envelope-o"></i>

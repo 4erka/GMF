@@ -6,7 +6,13 @@
 
  ?>
 
-<form action="pareto.php" method="post" style="margin-bottom: 50px">
+<form action="pareto.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px">
+  <div class="form-group">
+    <label class="col-sm-2 col-sm-2 control-label">Default</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control">
+      </div>
+  </div>
   <table>
     <tbody>
       <tr>
@@ -14,7 +20,7 @@
           A/C Type
         </th>
         <th>
-          <select name="actype" style="">
+          <select name="actype" class="form-control">
               <?php
                 while($row = $res0->fetch_array(MYSQLI_NUM))
                   echo "<option value=".$row[0].">".$row[0]."</option>";
@@ -24,7 +30,7 @@
         <th></th>
         <th></th>
         <th>
-          <input type="submit" value="Display Report">
+          <input type="submit" value="Display Report" class="form-control">
         </th>
         <th>
           <?php
