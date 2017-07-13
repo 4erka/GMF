@@ -76,7 +76,7 @@
 
 	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$DateStart2."".$DateEnd."";
 	$res_delay = mysqli_query($link, $sql_delay);
-	print_r($sql_delay);
+	//print_r($sql_delay);
 	//print_r($query);
 	// echo "<br>";
 	// print_r($sql_pirep);

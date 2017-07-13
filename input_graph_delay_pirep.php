@@ -1,9 +1,9 @@
 <?php
-	$sql = "SELECT DISTINCT ACtype FROM tbl_master_actype";
-	$res = mysqli_query($link, $sql);
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 
-<form action="mtbur.php" method="post" style="margin-bottom: 50px" id="form_mtbur">
+<form action="graph.php" method="post" style="margin-bottom: 50px" id="form_graph">
 	<table>
 		<tbody>
 			<tr>

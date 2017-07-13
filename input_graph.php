@@ -1,6 +1,6 @@
 <?php
-	$sql = "SELECT DISTINCT ACtype FROM tbl_master_actype";
-	$res = mysqli_query($link, $sql);
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+	$res_actype = mysqli_query($link, $sql);
 ?>
 
 <form method="post" style="margin-bottom: 50px" id="form_graph">
@@ -13,7 +13,7 @@
 				<th>
 					<select name="actype" style="">
 							<?php
-								while($row = $res->fetch_array(MYSQLI_NUM))
+								while($row = $res_actype->fetch_array(MYSQLI_NUM))
 							 		echo "<option value=".$row[0].">".$row[0]."</option>";
 							 ?>
 					</select>
