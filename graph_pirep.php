@@ -46,9 +46,6 @@
 
 	include "config/connect.php";
 
-	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
-	$res_actype = mysqli_query($link, $sql_actype);
-
 	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$DateStart."".$DateEnd."";
 		
 	$res_pirep = mysqli_query($link, $sql_pirep);
