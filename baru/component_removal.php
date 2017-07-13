@@ -107,8 +107,11 @@ else
           <br>
           <h4>A/C Type : <?php echo $ACType; ?></h4>
           <h4>Removal Code : <?php
-            if($RemCode[0]){
+            if(!empty($RemCode[0])){
               echo $RemCode[0];
+            }
+            else {
+              echo "";
             }
             if(!empty($RemCode[1])){
               echo ", ". $RemCode[1];
@@ -126,6 +129,7 @@ else
       <div class="col-md-12 mt">
         <div class="content-panel">
           <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+          <link rel-"stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
             <!--
 
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
@@ -135,7 +139,7 @@ else
           <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
           <div class="adv-table">
           -->
-              <table id="comp_table" class="table table-hover">
+              <table id="comp_table" class="table table-bordered table-striped table-condensed">
 
                 <h4><i class="fa fa-angle-right"></i> Tabel</h4>
                 <hr>
@@ -181,11 +185,17 @@ else
                         $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
                                 FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
                       }
-                      elseif ($RemCode[0]== "D") {
-                        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
-                                FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                      if(!empty($RemCode[0])){
+                        if ($RemCode[0] == "D") {
+                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                                  FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                        }
+                        else if ($RemCode[0]=="W") {
+                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                                  FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                        }
                       }
-                      elseif ($RemCode[0]=="W") {
+                      else {
                         $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
                                 FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
                       }
@@ -220,12 +230,6 @@ else
                     </tbody>
                 </table>
 
-
-                <script type="text/javascript">
-                  $(document).ready(function() {
-                  $('#comp_table').DataTable();
-                });
-                </script>
               </div>
             </div><! --/content-panel -->
       </div><!-- /col-md-12 -->
@@ -341,6 +345,7 @@ else
   include 'footer.php';
  ?>
 
+
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
@@ -351,7 +356,6 @@ else
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
   -->
 
-  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
   <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
@@ -361,7 +365,18 @@ else
   <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
   <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
 
-    <script src="assets/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#comp_table').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            //'excelHtml5', 'pdfHtml5'
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+      });
+  });
+  </script>
+
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <script src="assets/js/jquery.scrollTo.min.js"></script>
     <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>

@@ -306,7 +306,9 @@ $Graph_type = $_POST['graph'];
     		// chart.
     		labels: ['Jumlah Delay'],
 
-    		hideHover: 'auto'
+    		hideHover: 'auto',
+
+        xLabelMargin: 10
     		});
     	</script>
     	<script type="text/javascript">
@@ -336,7 +338,9 @@ $Graph_type = $_POST['graph'];
 
     		hideHover:'auto',
 
-    		barColors: "blue"
+    		barColors: ['red'],
+
+        xLabelMargin: 10
     		});
 
 
