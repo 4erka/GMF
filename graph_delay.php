@@ -37,44 +37,49 @@
 		$Fault_code = " AND SUBATA = '".$_POST['subata']."'";
 			$Fault_code2 = " AND SUBATATDM = '".$_POST['subata']."'";
 	}
-	$Depir = $_POST["depir"];
 	if(empty($_POST["keyword"])){
 		$Keyword = "";
 	}
 	else{
-		$Keyword = "'".$_POST['keyword']."'";
+		$Keyword = " AND (PROBLEM LIKE '%".$_POST['keyword']."%' OR RECTIFICATION LIKE '%".$_POST['keyword']."%')";
 	}
 	if(empty($_POST["dcp"])){
-		$DCP[] = "";
+		$DCP[4] = "";
+		$DCPs="";
 	}
 	else{
 		$DCP = $_POST['dcp'];
-		for($i = 0; $i < 3; $i++){
-			if(empty($DCP[$i])){
-				$DCP[$i] = "";
+		$i = 0;
+		foreach ($DCP as &$value) {
+		    if($i == 0){
+				$DCP[$i] = " AND DCP IN ('".$DCP[$i]."'";
+			}
+			else if($i == 1){
+				$DCP[$i] = ",'".$DCP[$i]."'";
 			}
 			else{
-				if($i == 0){
-					$DCP[$i] = " AND DCP IN ('".$DCP[$i]."'";
-				}
-				else if($i == 1){
-					$DCP[$i] = ",'".$DCP[$i]."'";
-				}
-				else{
-					$DCP[$i] = ",'".$DCP[$i]."')";
-				}
+				$DCP[$i] = ",'".$DCP[$i]."'";
 			}
+			$i++;
+		}
+		$DCP[$i-1]=$DCP[$i-1].")";
+		$i = 0;
+		$DCPs="";
+		foreach ($DCP as &$value) {
+			$DCPs = $DCPs.$DCP[$i];
+			$i++;
 		}
 	}
+	//print_r($DCP);
 
 	include "config/connect.php";
 
 	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
 	$res_actype = mysqli_query($link, $sql_actype);
 
-	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, MinTot, ATAtdm, SubATAtdm, Problem, Rectification FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCP[0]."".$DCP[1]."".$DCP[2]."".$DateStart2."".$DateEnd."";
+	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$DateStart2."".$DateEnd."";
 	$res_delay = mysqli_query($link, $sql_delay);
-	//print_r($sql_delay);
+	print_r($sql_delay);
 	//print_r($query);
 	// echo "<br>";
 	// print_r($sql_pirep);
@@ -91,7 +96,7 @@
 </head>
 <body style="padding: 50px">
 	<!-- filter form -->
-	<form action="graph.php" method="post" style="margin-bottom: 50px">
+	<form action="graph.php" method="post" style="margin-bottom: 50px" id="form_graph">
 		<table>
 			<tbody>
 				<tr>
@@ -101,8 +106,16 @@
 					<th>
 						<select name="actype" style="">
 								<?php
-									while($row = $res_actype->fetch_array(MYSQLI_NUM))
-								 		echo "<option value=".$row[0].">".$row[0]."</option>";
+									$isSelect = "";
+									while($row = $res_actype->fetch_array(MYSQLI_NUM)){
+										if($row[0]==$_POST["actype"]){
+											$isSelect="selected";
+											echo "<option value=".$row[0]." ".$isSelect.">".$row[0]."</option>";
+										}
+										else{
+											echo "<option value=".$row[0].">".$row[0]."</option>";
+										}
+									}
 								 ?>
 					  		<!--
 								<option value="volvo" style="">A330-200</option>
@@ -127,7 +140,9 @@
 						A/C Reg
 					</th>
 					<th>
-						<input type="text" name="acreg">
+						<?php
+							echo '<input type="text" name="acreg" value="'.$_POST["acreg"].'">';
+						?>
 					</th>
 				</tr>
 				<tr>
@@ -135,13 +150,17 @@
 						Date from
 					</th>
 					<th>
-						<input type="date" name="datefrom">
+						<?php
+							echo '<input type="date" name="datefrom" id="id_datefrom" value="'.$_POST["datefrom"].'">';	 
+						?>
 					</th>
 					<th>
 						Date to
 					</th>
 					<th>
-						<input type="date" name="dateto">
+						<?php
+							echo '<input type="date" name="dateto" id="id_dateto" value="'.$_POST["dateto"].'">'; 
+						?>
 					</th>
 				</tr>
 				<tr>
@@ -149,29 +168,95 @@
 						ATA
 					</th>
 					<th>
-						<input type="text" name="ata">
+						<?php
+							echo '<input type="text" name="ata" value="'.$_POST["ata"].'">'; 
+						?>
 					</th>
 				</tr>
 				<tr>
 					<th>
-						Fault Code
+						SUBATA
 					</th>
 					<th>
-						<input type="text" name="faultcode">
+						<?php
+							echo '<input type="text" name="subata" value="'.$_POST["subata"].'">'; 
+						?>
 					</th>
 				</tr>
 				<tr>
+				<tr>
+					<th>
+						Delay / Pirep
+					</th>
+					<th>
+						<?php
+							if($_POST["depir"]=="delay"){
+								?><input type="radio" name="depir" value="delay" onclick="check(this.value)" checked> Delay<?php
+							}
+							else{
+								?>
+								<input type="radio" name="depir" value="delay" onclick="check(this.value)"> Delay <?php
+							}
+							if($_POST["depir"]=="pirep"){?>
+								<input type="radio" name="depir" value="pirep" onclick="check(this.value)" checked> Pirep<?php
+							}
+							else{?>
+								<input type="radio" name="depir" value="pirep" onclick="check(this.value)"> Pirep <?php
+							}
+						?>
+					</th>
+				</tr>
 				</tr>
 					<th>
 						Keyword
 					</th>
 					<th>
-						<input type="text" name="keyword">
+						<?php
+							echo '<input type="text" name="keyword" value="'.$_POST["keyword"].'">'; 
+						?>
+					</th>
+				</tr>
+				<tr>
+					<th>
+						DCP
+					</th>
+					<th>
+						<?php
+							$DCP = $_POST['dcp'];
+							for($i = 0; $i < 3; $i++){
+								if (empty($DCP[$i])) {
+									$DCP[$i] = "";
+								}
+								if($i == 0 and $DCP[$i] != "d"){?>
+									<input type="checkbox" name="dcp[]" value="d"> D <?php
+								}
+								else if($i == 1 and $DCP[$i] != "c"){?>
+									<input type="checkbox" name="dcp[]" value="c"> C <?php
+								}
+								else if($i == 2 and $DCP[$i] != "x"){?>
+									<input type="checkbox" name="dcp[]" value="x"> X <?php
+								}
+								if($DCP[$i] == "d"){?>
+									<input type="checkbox" name="dcp[]" value="d" checked> D <?php
+								}else if($DCP[$i] == "c"){?>
+									<input type="checkbox" name="dcp[]" value="c" checked> C<?php
+								}else if($DCP[$i] == "x"){?>
+									<input type="checkbox" name="dcp[]" value="x" checked> X <?php
+								}
+							}
+							//print_r($DCP);
+						?>
 					</th>
 				</tr>
 			</tbody>
 		</table>
 	</form>
+	<script type="text/javascript">
+		function check(depir) {
+			depir = "graph_" + depir + ".php";
+		    document.getElementById("form_graph").action=depir;
+		}
+	</script>
 
 	<!-- Table delay and pirep -->
     <h1 style="text-align: center;">Table Delay</h1>
@@ -207,6 +292,9 @@
         <tbody>
 			<?php
 				while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
+					$rowes[4] = $rowes[4]*60;
+					$rowes[4] = $rowes[4]+$rowes[9];
+					//print_r($rowes[4]);echo "<br>";
 					echo "<tr>";
 						echo "<td>".$rowes[0]."</td>";
 						echo "<td>".$rowes[1]."</td>";
@@ -238,7 +326,7 @@
 		var ata = <?php echo(json_encode($ATA2)); ?>;
 		var fault_code = <?php echo(json_encode($Fault_code2)); ?>;
 		var keyword = <?php echo(json_encode($Keyword)); ?>;
-		var dcp = <?php echo(json_encode($DCP)); ?>;
+		var dcp = <?php echo(json_encode($DCPs)); ?>;
 		$(document).ready(function(){
 			$.ajax({
 				url: "http://localhost/GMF/data_grafik_delay.php",

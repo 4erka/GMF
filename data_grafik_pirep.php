@@ -26,7 +26,7 @@ $Keyword = $_POST["keyword"];
 //query to get data from the table
 // $query = sprintf("SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DateEvent");
 
-$query = "SELECT COUNT(DATE) as pirep, DATE FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DateStart."".$DateEnd." GROUP BY DATE";
+$query = "SELECT COUNT(DATE) as pirep, DATE FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$DateStart."".$DateEnd." GROUP BY DATE";
 
 //execute query
 $result = $mysqli->query($query);
