@@ -96,7 +96,7 @@
 </head>
 <body style="padding: 50px">
 	<!-- filter form -->
-	<form action="graph.php" method="post" style="margin-bottom: 50px" id="form_graph">
+	<form method="post" style="margin-bottom: 50px" id="form_graph">
 		<table>
 			<tbody>
 				<tr>
@@ -191,17 +191,17 @@
 					<th>
 						<?php
 							if($_POST["depir"]=="delay"){
-								?><input type="radio" name="depir" value="delay" onclick="check(this.value)" checked> Delay<?php
+								?><input type="radio" name="depir" value="delay" id="radio_delay" onclick="check(this.value)" checked> Delay<?php
 							}
 							else{
 								?>
-								<input type="radio" name="depir" value="delay" onclick="check(this.value)"> Delay <?php
+								<input type="radio" name="depir" value="delay" id="radio_delay" onclick="check(this.value)"> Delay <?php
 							}
 							if($_POST["depir"]=="pirep"){?>
-								<input type="radio" name="depir" value="pirep" onclick="check(this.value)" checked> Pirep<?php
+								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)" checked> Pirep<?php
 							}
 							else{?>
-								<input type="radio" name="depir" value="pirep" onclick="check(this.value)"> Pirep <?php
+								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)"> Pirep <?php
 							}
 						?>
 					</th>
@@ -258,9 +258,10 @@
 		</table>
 	</form>
 	<script type="text/javascript">
-		function check(depir) {
-			depir = "graph_" + depir + ".php";
-		    document.getElementById("form_graph").action=depir;
+		if(document.getElementById('radio_delay').checked) {
+			document.getElementById("form_graph").action = "graph_delay.php";
+		}else if(document.getElementById('radio_pirep').checked) {
+			document.getElementById("form_graph").action = "graph_pirep.php";
 		}
 	</script>
 
