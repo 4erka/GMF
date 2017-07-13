@@ -223,25 +223,31 @@
 					<th>
 						<?php
 							$DCP = $_POST['dcp'];
+							$flag_d = 0;
+							$flag_c = 0;
+							$flag_x = 0;
 							for($i = 0; $i < 3; $i++){
 								if (empty($DCP[$i])) {
 									$DCP[$i] = "";
 								}
-								if($i == 0 and $DCP[$i] != "d"){?>
+								if($i == 0 and $DCP[$i] != "d"  and $flag_d == 0){?>
 									<input type="checkbox" name="dcp[]" value="d"> D <?php
 								}
-								else if($i == 1 and $DCP[$i] != "c"){?>
+								else if($i == 1 and $DCP[$i] != "c"  and $flag_c == 0){?>
 									<input type="checkbox" name="dcp[]" value="c"> C <?php
 								}
-								else if($i == 2 and $DCP[$i] != "x"){?>
+								else if($i == 2 and $DCP[$i] != "x"  and $flag_x == 0){?>
 									<input type="checkbox" name="dcp[]" value="x"> X <?php
 								}
 								if($DCP[$i] == "d"){?>
 									<input type="checkbox" name="dcp[]" value="d" checked> D <?php
+									$flag_d = 1;
 								}else if($DCP[$i] == "c"){?>
 									<input type="checkbox" name="dcp[]" value="c" checked> C<?php
+									$flag_c = 1;
 								}else if($DCP[$i] == "x"){?>
 									<input type="checkbox" name="dcp[]" value="x" checked> X <?php
+									$flag_x = 1;
 								}
 							}
 							//print_r($DCP);

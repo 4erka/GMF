@@ -103,7 +103,7 @@
 						DCP
 					</th>
 					<th>
-						<input type="checkbox" name="dcp[]" value="d" checked> D
+						<input type="checkbox" name="dcp[]" value="d"> D
 						<input type="checkbox" name="dcp[]" value="c"> C
 						<input type="checkbox" name="dcp[]" value="x"> X
 					</th>
@@ -115,7 +115,6 @@
 		function check(depir) {
 			depir = "graph_" + depir + ".php";
 		    document.getElementById("form_graph").action=depir;
-		    alert(depir);
 		}
 	</script>
 </body>
