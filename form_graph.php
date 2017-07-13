@@ -13,7 +13,6 @@
 	<title>
 		<title>morris by kukuh</title>
 	</title>
-	<script src="jquery.js" type="text/javascript"></script>
 </head>
 <body>
 	<form method="post" style="margin-bottom: 50px" id="form_graph">
@@ -87,8 +86,8 @@
 						Delay / Pirep
 					</th>
 					<th>
-						<input type="radio" name="depir" value="delay" onclick="check(this.value)"> Delay
-						<input type="radio" name="depir" value="pirep" onclick="check(this.value)"> Pirep
+						<input type="radio" name="depir" value="delay" id="radio_delay" onclick="check(this.value)" checked> Delay
+						<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)"> Pirep
 					</th>
 				</tr>
 				</tr>
@@ -113,10 +112,15 @@
 		</table>
 	</form>
 	<script type="text/javascript">
-		function check(depir) {
-			depir = "graph_" + depir + ".php";
-		    document.getElementById("form_graph").action=depir;
+		if(document.getElementById('radio_delay').checked) {
+			document.getElementById("form_graph").action = "graph_delay.php";
+		}else if(document.getElementById('radio_pirep').checked) {
+			document.getElementById("form_graph").action = "graph_pirep.php";
 		}
+		// function check(depir) {
+		// 	depir = "graph_" + depir + ".php";
+		//     document.getElementById("form_graph").action=depir;
+		// }
 	</script>
 </body>
 </html>
