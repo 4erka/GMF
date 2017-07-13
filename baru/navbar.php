@@ -1,11 +1,7 @@
 <!--sidebar start -->
 
-<?php
-
- ?>
-
 <aside>
-    <div id="sidebar"  class="nav-collapse ">
+    <div id="sidebar"  class="nav-collapse " style="z-index:1">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
 
@@ -13,14 +9,28 @@
             <h5 class="centered">GMF Aeroasia TER 1</h5>
 
             <li class="mt">
-                <a href="index.php">
+              <?php
+                if($page_now == "index"){
+                  echo "<a class='active' href='index.php'>";
+                }
+                else {
+                  echo "<a href='index.php'>";
+                }
+              ?>
                     <i class="fa fa-dashboard"></i>
                     <span>Graph Display</span>
                 </a>
             </li>
 
             <li class="sub-menu">
-                <a href="awal_pareto.php" >
+              <?php
+                if($page_now == "pareto"){
+                  echo "<a class='active' href='awal_pareto.php'>";
+                }
+                else {
+                  echo "<a href='awal_pareto.php'>";
+                }
+              ?>
                     <i class="fa fa-desktop"></i>
                     <span>Pareto Display</span>
                 </a>
@@ -34,15 +44,17 @@
             </li>
 
             <li class="sub-menu">
-                <a href="javascript:;" >
+              <?php
+                if($page_now == "component"){
+                  echo "<a class='active' href='awal_component.php'>";
+                }
+                else {
+                  echo "<a href='awal_component.php'>";
+                }
+              ?>
                     <i class="fa fa-cogs"></i>
                     <span>Components Display</span>
                 </a>
-                <ul class="sub">
-                    <li><a  href="calendar.html">Calendar</a></li>
-                    <li><a  href="gallery.html">Gallery</a></li>
-                    <li><a  href="todo_list.html">Todo List</a></li>
-                </ul>
             </li>
 
             <!--
@@ -93,10 +105,3 @@
     </div>
 </aside>
 <!--sidebar end-->
-
-<script>
-  $(function() {
-   $( "#tabs" ).tabs();
-   $( "#action" ).on("click", function(){});
-  });
-</script>

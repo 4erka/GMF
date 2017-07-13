@@ -6,6 +6,8 @@
 
 ?>
 
+<h2> Tab Rank </h2>
+
 <form action="pareto.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px">
 
 <br>

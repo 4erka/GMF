@@ -9,25 +9,29 @@ if(empty($_POST["actype"])){
 else{
   $ACType = "'".$_POST['actype']."'";
 }
-if(empty($_POST["acreg"])){
-  $ACReg = "";
+if(empty($_POST["rem_code"])){
+  $RemCode = "";
 }
 else{
-  $ACReg = $_POST['acreg'];
+  $RemCode = $_POST['rem_code'];
+}
+if(empty($_POST["part_no"])){
+  $PartNum = "";
+}
+else{
+  $PartNum = "".$_POST['part_no']."";
 }
 if(!empty($_POST["datefrom"])){
-  $DateStart = "'".$_POST['datefrom']."'";
+  $DateStart = "".$_POST['datefrom']."";
 }
 else{
   $DateStart = "";
 }
 if(!empty($_POST["dateto"])){
-  $DateEnd = "'".$_POST['dateto']."'";
+  $DateEnd = "".$_POST['dateto']."";
 }
 else
   $DateEnd = "";
-
-$Graph_type = $_POST['graph'];
 
   include 'config/connect.php';
  ?>
@@ -40,7 +44,7 @@ $Graph_type = $_POST['graph'];
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - Pareto</title>
+    <title>TLP Report - Component Removal</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -76,7 +80,7 @@ $Graph_type = $_POST['graph'];
       *********************************************************************************************************************************************************** -->
 
       <?php
-        $page_now = "pareto";
+        $page_now = "component";
         include 'header.php';
        ?>
 
@@ -96,20 +100,141 @@ $Graph_type = $_POST['graph'];
       <section id="main-content" style="min-height:100%;">
         <section class="wrapper" style="text-align: centered">
           <?php
-            include 'form_pareto.php';
+            include 'form_component.php';
            ?>
 
           <h3>Menampilkan Data dari</h3>
           <br>
           <h4>A/C Type : <?php echo $ACType; ?></h4>
-          <h4>A/C Reg : <?php echo $ACReg; ?></h4>
+          <h4>Removal Code : <?php
+            if($RemCode[0]){
+              echo $RemCode[0];
+            }
+            if(!empty($RemCode[1])){
+              echo ", ". $RemCode[1];
+            }
+            ?></h4>
+          <h4>Part Number : <?php echo $PartNum; ?></h4>
           <h4>Tanggal mulai : <?php echo $DateStart; ?></h4>
           <h4>Tanggal Berakhir : <?php echo $DateEnd; ?></h4>
-          <h4>Setting untuk X-Axis : <?php echo $Graph_type; ?></h4>
 
       <!-- Ini isi tabel -->
-      <!-- Table delay and pirep -->
-      <!--
+      <!-- Tabel Component Removal -->
+
+      <br>
+      <br>
+      <div class="col-md-12 mt">
+        <div class="content-panel">
+          <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+            <!--
+
+            <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+            <table id="comp_table" class="displayr" cellspacing="0" width="100%">\
+
+          <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+          <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
+          <div class="adv-table">
+          -->
+              <table id="comp_table" class="table table-hover">
+
+                <h4><i class="fa fa-angle-right"></i> Tabel</h4>
+                <hr>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ATA</th>
+                        <th>AIN</th>
+                        <th>Part Number</th>
+                        <th>Serial Number</th>
+                        <th>Part Name</th>
+                        <th>Register</th>
+                        <th>A/C Type</th>
+                        <th>Reason</th>
+                        <th>Real Reason</th>
+                        <th>Date Removal</th>
+                        <th>TSN</th>
+                        <th>TSI</th>
+                        <th>CSN</th>
+                        <th>CSI</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <?php
+
+          //                  echo "Sebelum: ".$DateStart;
+          //                  echo "<br>";
+
+                    $Date_temp = explode("-", $DateStart);
+                    $DateStart = $Date_temp[0].$Date_temp[1];
+
+                    $Date_temp = explode("-", $DateEnd);
+                    $DateEnd =$Date_temp[0].$Date_temp[1];
+          /*
+                    echo "Month date :". $MonthDate[0].$MonthDate[1]."<br>";
+
+                    echo "Terbaruuu : ".$DateStart;
+                    echo "<br>";
+                    */
+
+                      if(!empty($RemCode[1])){
+                        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                                FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                      }
+                      elseif ($RemCode[0]== "D") {
+                        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                                FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                      }
+                      elseif ($RemCode[0]=="W") {
+                        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                                FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                      }
+
+                      $res_rem = mysqli_query($link, $sql_rem);
+
+                      //print_r($sql_rem);
+
+                      while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
+                        echo "<tr>";
+                          echo "<td>".$rowes[0]."</td>"; //ID
+                          echo "<td>".$rowes[1]."</td>"; //ATA
+                          echo "<td>".$rowes[2]."</td>"; //AIN
+                          echo "<td>".$rowes[3]."</td>"; //Part No
+                          echo "<td>".$rowes[4]."</td>"; //Serial No
+                          echo "<td>".$rowes[5]."</td>"; //Part Name
+                          echo "<td>".$rowes[6]."</td>"; //Reg
+                          echo "<td>".$rowes[7]."</td>"; //Aircraft
+                          echo "<td>".$rowes[11]."</td>"; //Reason
+                          echo "<td>".$rowes[12]."</td>"; //Real Reason
+                          echo "<td>".$rowes[13]."</td>"; //Date Rem
+                          echo "<td>".$rowes[14]."</td>"; //TSN
+                          echo "<td>".$rowes[15]."</td>"; //TSI
+                          echo "<td>".$rowes[16]."</td>"; //CSN
+                          echo "<td>".$rowes[17]."</td>"; //CSI/
+                          //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
+                        echo "</tr>";
+                      }
+
+                     ?>
+
+                    </tbody>
+                </table>
+
+
+                <script type="text/javascript">
+                  $(document).ready(function() {
+                  $('#comp_table').DataTable();
+                });
+                </script>
+              </div>
+            </div><! --/content-panel -->
+      </div><!-- /col-md-12 -->
+
+    </section>
+  </section>
+
+<!--
+
       <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
     	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
     	<table id="table_delay" class="display" cellspacing="0" width="100%">
@@ -211,140 +336,6 @@ $Graph_type = $_POST['graph'];
                   <!-- Grafik-->
 
 
-       	<script type="text/javascript">
-       		$(document).ready(function() {
-        	$('#table_delay').DataTable({
-    				dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'pdfHtml5'
-            ]
-        	});
-
-    		} );
-       	</script>
-
-    	<?php
-
-    		if($Graph_type == 'ata'){
-    			$sql_graph_pirep = "SELECT ata, COUNT(ata) AS number_of_ata FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY ata ORDER BY number_of_ata DESC";
-    			$sql_graph_delay = "SELECT ATAtdm, COUNT(Atatdm) AS number_of_ata1 FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ATAtdm ORDER BY number_of_ata1 DESC";
-          //print_r($sql_graph_delay);
-    		}
-    		else if($Graph_type == 'ac_reg'){
-    			$sql_graph_pirep = "SELECT REG, COUNT(REG) AS number_of_reg FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY REG ORDER BY number_of_reg DESC";
-    			$sql_graph_delay = "SELECT Reg, COUNT(Reg) AS number_of_reg FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY REG ORDER BY number_of_reg DESC";
-    		}
-    		else if($Graph_type == 'sub_ata'){
-          $sql_graph_pirep = "SELECT SUBATA, COUNT(SUBATA) AS number_of_subata FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY SUBATA ORDER BY number_of_subata DESC";
-          $sql_graph_delay = "SELECT Subatatdm, COUNT(Subatatdm) AS number_of_subata FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY Subatatdm ORDER BY number_of_subata DESC";
-    		}
-
-    		$res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
-    		$res_graph_delay = mysqli_query($link, $sql_graph_delay);
-
-    		$i = 0;
-    		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
-    			if($i > 9) break;
-    			$arr_pirep[$i][0] = $rowes[0];
-    			$arr_pirep[$i][1] = $rowes[1];
-    			$i++;
-    		}
-
-    		$i = 0;
-    		while ($rowes = $res_graph_delay->fetch_array(MYSQLI_NUM)) {
-    			if($i > 9) break;
-    			$arr_delay[$i][0] = $rowes[0];
-    			$arr_delay[$i][1] = $rowes[1];
-    			$i++;
-    		}
-    	 ?>
-
-    	<h1 style="text-align:center;">Top 10 Delay</h1>
-    	<div id="grafik_delay" style="height: 250px; margin-top: 50px"></div>
-
-    	<h1 style="text-align:center;">Top 10 Pirep</h1>
-    	<div id="grafik_pirep" style="height: 250px; margin-top: 50px"></div>
-    	<script type="text/javascript">
-      var Morris_data = [];
-      var z=0;
-
-    	arr_delay = <?php echo json_encode($arr_delay); ?>;
-
-      for ( tot=arr_delay.length; z < tot; z++) {
-         Morris_data.push({option: arr_delay[z][0], value: arr_delay[z][1]});
-      }
-
-/*
-        for(var i=0; i<arr_delay.lenght; i++0{
-          Morris_data[i][0].push(arr_delay[i][0]);
-          Morris_data[i][1].push(arr_delay[i][1]);
-        })
-        /*
-        $.each(arr_delay, function(index, obj){
-          $.each(obj, function(key, val){
-            Morris_data.push({'option': key, 'value': val});
-            console.log(val);
-            console.log(key);
-          })
-        });
-        */
-
-    		new Morris.Bar({
-
-    		// ID of the element in which to draw the chart.
-    		element: 'grafik_delay',
-    		// Chart data records -- each entry in this array corresponds to a point on
-    		// the chart.
-        data: Morris_data,
-    		// The name of the data record attribute that contains x-values.
-    		xkey: 'option',
-    		// A list of names of data record attributes that contain y-values.
-    		ykeys: ['value'],
-    		// Labels for the ykeys -- will be displayed when you hover over the
-    		// chart.
-    		labels: ['Jumlah Delay'],
-
-    		hideHover: 'auto'
-    		});
-    	</script>
-    	<script type="text/javascript">
-
-        var Morris_data = [];
-        var z=0;
-
-        var arr_pirep = <?php echo json_encode($arr_pirep); ?>;
-
-        for ( tot=arr_pirep.length; z < tot; z++) {
-           Morris_data.push({option: arr_pirep[z][0], value: arr_pirep[z][1]});
-        }
-
-    		new Morris.Bar({
-    		// ID of the element in which to draw the chart.
-    		element: 'grafik_pirep',
-    		// Chart data records -- each entry in this array corresponds to a point on
-    		// the chart.
-    		data: Morris_data,
-    		// The name of the data record attribute that contains x-values.
-    		xkey: 'option',
-    		// A list of names of data record attributes that contain y-values.
-    		ykeys: ['value'],
-    		// Labels for the ykeys -- will be displayed when you hover over the
-    		// chart.
-    		labels: ['Jumlah Pirep'],
-
-    		hideHover:'auto',
-
-    		barColors: "blue"
-    		});
-
-
-    	</script>
-
-
-      </section>
-    </section>
 
 <?php
   include 'footer.php';
@@ -355,12 +346,26 @@ $Graph_type = $_POST['graph'];
     <!-- js placed at the end of the document so the pages load faster -->
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/jquery-1.8.3.min.js"></script>
+  <!--
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+  -->
+
+  <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+  <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+  <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+  <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+  <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+
     <script src="assets/js/bootstrap.min.js"></script>
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <script src="assets/js/jquery.scrollTo.min.js"></script>
     <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="assets/js/jquery.sparkline.js"></script>
-
 
     <!--common script for all pages-->
     <script src="assets/js/common-scripts.js"></script>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 
 <?php
-  $pg_now = "pareto";
-
   include 'config/connect.php';
  ?>
 
@@ -54,6 +52,7 @@
       <!--sidebar start-->
 
       <?php
+        $page_now = "pareto";
         include 'navbar.php';
        ?>
 
