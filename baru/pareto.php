@@ -93,7 +93,7 @@ $Graph_type = $_POST['graph'];
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
       <!--main content start-->
-      <section id="main-content" style="min-height:100%;">
+      <section id="main-content" style="min-height:94vh;">
         <section class="wrapper" style="text-align: centered">
           <?php
             include 'form_pareto.php';
@@ -240,6 +240,8 @@ $Graph_type = $_POST['graph'];
           $sql_graph_pirep = "SELECT SUBATA, COUNT(SUBATA) AS number_of_subata FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY SUBATA ORDER BY number_of_subata DESC";
           $sql_graph_delay = "SELECT Subatatdm, COUNT(Subatatdm) AS number_of_subata FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY Subatatdm ORDER BY number_of_subata DESC";
     		}
+
+        //print_r($sql_graph_pirep);
 
     		$res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		$res_graph_delay = mysqli_query($link, $sql_graph_delay);

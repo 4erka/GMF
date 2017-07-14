@@ -60,7 +60,7 @@
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
       <!--main content start-->
-      <section id="main-content" style="min-height:100%;">
+      <section id="main-content" style="min-height:94vh">
         <section class="wrapper" style="text-align: centered">
               <?php
                 include 'form_pareto.php';

@@ -46,6 +46,9 @@ else
 
     <title>TLP Report - Component Removal</title>
 
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    <link rel-"stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <!--external css-->
@@ -97,7 +100,7 @@ else
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
       <!--main content start-->
-      <section id="main-content" style="min-height:100%;">
+      <section id="main-content" style="min-height:94vh;">
         <section class="wrapper" style="text-align: centered">
           <?php
             include 'form_component.php';
@@ -118,20 +121,18 @@ else
       <br>
       <div class="col-md-12 mt">
         <div class="content-panel">
-          <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-          <link rel-"stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
-            <!--
-
+<!--
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
             <table id="comp_table" class="displayr" cellspacing="0" width="100%">\
 
           <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
           <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
           <div class="adv-table">
-          -->
+              <table id="comp_table" class="table table-hover">
+              -->
+              <h4><i class="fa fa-angle-right"></i> Tabel</h4>
+              <section id="unseen">
               <table id="comp_table" class="table table-bordered table-striped table-condensed">
-
-                <h4><i class="fa fa-angle-right"></i> Tabel</h4>
                 <hr>
                     <thead>
                     <tr>
@@ -196,7 +197,7 @@ else
 
                       $res_rem = mysqli_query($link, $sql_rem);
 
-                      print_r($sql_rem);
+                      //print_r($sql_rem);
 
                       while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
                         echo "<tr>";
@@ -223,10 +224,11 @@ else
 
                     </tbody>
                 </table>
+              </section>
 
-              </div>
             </div><! --/content-panel -->
       </div><!-- /col-md-12 -->
+
 
     </section>
   </section>
@@ -343,12 +345,16 @@ else
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
+    <!--
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/jquery-1.8.3.min.js"></script>
-  <!--
-    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+
+      <script src="//code.jquery.com/jquery-1.12.4.js"></script>
   -->
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
 
   <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
@@ -358,19 +364,6 @@ else
   <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
   <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
   <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('#comp_table').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            //'excelHtml5', 'pdfHtml5'
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        responsive: true
-      });
-  });
-  </script>
 
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <script src="assets/js/jquery.scrollTo.min.js"></script>
@@ -386,6 +379,19 @@ else
     <!--script for this page-->
     <script src="assets/js/sparkline-chart.js"></script>
 	<script src="assets/js/zabuto_calendar.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#comp_table').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            //'excelHtml5', 'pdfHtml5'
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        responsive: true
+      });
+  });
+  </script>
 
   </body>
 </html>

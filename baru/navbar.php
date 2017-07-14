@@ -10,11 +10,11 @@
 
             <li class="mt">
               <?php
-                if($page_now == "index"){
-                  echo "<a class='active' href='index.php'>";
+                if($page_now == "graph"){
+                  echo "<a class='active' href='awal_graph.php'>";
                 }
                 else {
-                  echo "<a href='index.php'>";
+                  echo "<a href='awal_graph.php'>";
                 }
               ?>
                     <i class="fa fa-dashboard"></i>

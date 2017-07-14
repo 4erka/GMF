@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+
+<?php
+  include 'config/connect.php';
+ ?>
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -7,7 +12,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - TER 1</title>
+    <title>TLP Report - Graph</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -38,7 +43,6 @@
       *********************************************************************************************************************************************************** -->
 
       <?php
-        $page_now = "index";
         include 'header.php';
        ?>
 
@@ -48,6 +52,7 @@
       <!--sidebar start-->
 
       <?php
+        $page_now = "graph";
         include 'navbar.php';
        ?>
 
@@ -55,18 +60,14 @@
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
       <!--main content start-->
-      <section id="main-content" style="min-height:94vh;">
+      <section id="main-content" style="min-height:94vh">
         <section class="wrapper" style="text-align: centered">
-              <h2>Selamat datang di halaman TLP Report - TER 1</h2>
-              <br>
-              <embed src="assets/img/report.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="670" height="400">
-              <br>
+					<?php
+						include 'input_graph.php';
+					 ?>
           </section>
       </section>
 
-      <!-- **********************************************************************************************************************************************************
-      FOOTER CONTENT
-      *********************************************************************************************************************************************************** -->
 <?php
   include 'footer.php';
  ?>
@@ -117,6 +118,7 @@
 	</script>
 
 	<script type="application/javascript">
+  /*
         $(document).ready(function () {
             $("#date-popover").popover({html: true, trigger: "manual"});
             $("#date-popover").hide();
@@ -149,6 +151,7 @@
             var to = $("#" + id).data("to");
             console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
         }
+        */
     </script>
 
 
