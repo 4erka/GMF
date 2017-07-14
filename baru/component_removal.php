@@ -9,11 +9,11 @@ if(empty($_POST["actype"])){
 else{
   $ACType = "'".$_POST['actype']."'";
 }
-if(empty($_POST["rem_code"])){
-  $RemCode = "";
+if(empty($_POST["acreg"])){
+  $ACReg = "";
 }
 else{
-  $RemCode = $_POST['rem_code'];
+  $ACReg = $_POST['acreg'];
 }
 if(empty($_POST["part_no"])){
   $PartNum = "";
@@ -106,17 +106,7 @@ else
           <h3>Menampilkan Data dari</h3>
           <br>
           <h4>A/C Type : <?php echo $ACType; ?></h4>
-          <h4>Removal Code : <?php
-            if(!empty($RemCode[0])){
-              echo $RemCode[0];
-            }
-            else {
-              echo "";
-            }
-            if(!empty($RemCode[1])){
-              echo ", ". $RemCode[1];
-            }
-            ?></h4>
+          <h4>A/C Reg : <?php echo $ACReg; ?></h4>
           <h4>Part Number : <?php echo $PartNum; ?></h4>
           <h4>Tanggal mulai : <?php echo $DateStart; ?></h4>
           <h4>Tanggal Berakhir : <?php echo $DateEnd; ?></h4>
@@ -165,7 +155,7 @@ else
                     <tbody>
 
                     <?php
-
+/*
           //                  echo "Sebelum: ".$DateStart;
           //                  echo "<br>";
 
@@ -174,13 +164,16 @@ else
 
                     $Date_temp = explode("-", $DateEnd);
                     $DateEnd =$Date_temp[0].$Date_temp[1];
-          /*
+
                     echo "Month date :". $MonthDate[0].$MonthDate[1]."<br>";
 
                     echo "Terbaruuu : ".$DateStart;
                     echo "<br>";
                     */
 
+                    $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                            FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."'";
+/*
                       if(!empty($RemCode[1])){
                         $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
                                 FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
@@ -199,10 +192,11 @@ else
                         $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
                                 FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
                       }
+                      */
 
                       $res_rem = mysqli_query($link, $sql_rem);
 
-                      //print_r($sql_rem);
+                      print_r($sql_rem);
 
                       while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
                         echo "<tr>";
@@ -372,7 +366,8 @@ else
         buttons: [
             //'excelHtml5', 'pdfHtml5'
             'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        ],
+        responsive: true
       });
   });
   </script>

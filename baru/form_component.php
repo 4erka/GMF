@@ -25,14 +25,9 @@
   </div>
 
   <div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">Removal Code</label>
+    <label class="col-sm-2 col-sm-2 control-label">A/C Registration</label>
       <div class="col-sm-10">
-        <label class="checkbox-inline">
-				      <input type="checkbox" id="inlineCheckbox1" name="rem_code[]" value="W"> Worn
-				</label>
-        <label class="checkbox-inline">
-              <input type="checkbox" id="inlineCheckbox1" name="rem_code[]" value="D"> Damaged
-        </label>
+        <input type="text" class="form-control" name="acreg">
       </div>
   </div>
 
