@@ -7,12 +7,12 @@
 <html>
 <head>
 	<title>
-		<title>GRAPH</title>
+		<title>MTBUR</title>
 	</title>
 </head>
 <body>
 	<?php
-		include 'input_graph.php';
+		include 'input_mtbur.php';
 	 ?>
 </body>
 </html>
