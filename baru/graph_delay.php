@@ -90,32 +90,32 @@
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - Graph</title>
+  <title>TLP Report - Graph</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <!--external css-->
-    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css">
-    <link rel="stylesheet" type="text/css" href="assets/js/gritter/css/jquery.gritter.css" />
-    <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.css" rel="stylesheet">
+  <!--external css-->
+  <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css">
+  <link rel="stylesheet" type="text/css" href="assets/js/gritter/css/jquery.gritter.css" />
+  <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
 
-    <!-- Custom styles for this template -->
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/style-responsive.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/style-responsive.css" rel="stylesheet">
 
-    <script src="assets/js/chart-master/Chart.js"></script>
+  <script src="assets/js/chart-master/Chart.js"></script>
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
-    <?php  
-      include 'loader_style.php';
-    ?>
+  <?php  
+    include 'loader_style.php';
+  ?>
 </head>
 
 <body onload="myFunction()" style="margin:0;">
@@ -131,7 +131,7 @@
       *********************************************************************************************************************************************************** -->
 
       <?php
-        $page_now = "mtbur";
+        $page_now = "graph";
         include 'header.php';
       ?>
 
