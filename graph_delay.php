@@ -86,10 +86,7 @@
 <head>
 	<title>morris by kukuh</title>
 
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 </head>
 <body style="padding: 50px">
 	<!-- filter form -->
@@ -168,7 +165,7 @@
 		var dcp = <?php echo(json_encode($DCPs)); ?>;
 		$(document).ready(function(){
 			$.ajax({
-				url: "http://localhost/GMF/data_grafik_delay.php",
+				url: "data_grafik_delay.php",
 				method: "POST",
 				data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword, dcp: dcp},
 				success: function(data) {

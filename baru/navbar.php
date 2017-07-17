@@ -57,6 +57,20 @@
                 </a>
             </li>
 
+            <li class="sub-menu">
+              <?php
+                if($page_now == "mtbur"){
+                  echo "<a class='active' href='awal_mtbur.php'>";
+                }
+                else {
+                  echo "<a href='awal_mtbur.php'>";
+                }
+              ?>
+                    <i class="fa fa-database"></i>
+                    <span>MTBUR</span>
+                </a>
+            </li>
+
             <!--
             <li class="sub-menu">
                 <a href="javascript:;" >
