@@ -1,6 +1,7 @@
 <?php
+	include "config/connect.php";
 	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
-	$res_actype = mysqli_query($link, $sql);
+	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 
 <form method="post" style="margin-bottom: 50px" id="form_graph">

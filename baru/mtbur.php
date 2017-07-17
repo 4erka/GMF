@@ -80,157 +80,158 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+
+    <?php  
+      include 'loader_style.php';
+    ?>
 </head>
 
-<body>
+<body onload="myFunction()" style="margin:0;">
 
-  <section id="container" >
-      <!-- **********************************************************************************************************************************************************
-      TOP BAR CONTENT & NOTIFICATIONS
-      *********************************************************************************************************************************************************** -->
+	<div id="loader"></div>
 
-      <?php
-        $page_now = "mtbur";
-        include 'header.php';
-       ?>
+  
+  	<div style="display:none;" id="myDiv" class="animate-bottom">
 
-      <!-- **********************************************************************************************************************************************************
-      MAIN SIDEBAR MENU
-      *********************************************************************************************************************************************************** -->
-      <!--sidebar start-->
+  		<section id="container" >
+	      <!-- **********************************************************************************************************************************************************
+	      TOP BAR CONTENT & NOTIFICATIONS
+	      *********************************************************************************************************************************************************** -->
 
-      <?php
-        include 'navbar.php';
-       ?>
+	      <?php
+	        $page_now = "mtbur";
+	        include 'header.php';
+	       ?>
 
-      <!-- **********************************************************************************************************************************************************
-      MAIN CONTENT
-      *********************************************************************************************************************************************************** -->
-      <!--main content start-->
-      <section id="main-content" style="min-height:94vh;">
-        <section class="wrapper" style="text-align: centered">
+	      <!-- **********************************************************************************************************************************************************
+	      MAIN SIDEBAR MENU
+	      *********************************************************************************************************************************************************** -->
+	      <!--sidebar start-->
 
-          <?php
-        		include "input_mtbur_n.php";
-        	?>
+	      <?php
+	        include 'navbar.php';
+	       ?>
 
-        	<table style="margin-bottom: 50px">
-			 	<tr>
-			 		<th>
-			 			FH
-			 		</th>
-			 		<th>
-			 			<?php  
-			 				echo "$fhours";
-			 			?>
-			 		</th>
-			 	</tr>
-			 	<tr>
-			 		<th>
-			 			Removal
-			 		</th>
-			 		<th>
-			 			<?php
-			 				$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
-			 				echo "$rm";
-			 			?>
-			 		</th>
-			 	</tr>
-			 	<tr>
-			 		<th>
-			 			MTBUR
-			 		</th>
-			 		<th>
-			 			<?php
-			 				$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
-			 				$mtbur = $fhours*$qty/$rm;
-			 				echo "$mtbur";
-			 			?>
-			 		</th>
-			 	</tr>
-			 	<tr>
-			 		<th>
-			 			Perhitungan MTBUR
-			 		</th>
-			 		<th>
-			 			<?php  
-			 				print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
-			 			?>
-			 		</th>
-			 	</tr>
-			</table>
+	      <!-- **********************************************************************************************************************************************************
+	      MAIN CONTENT
+	      *********************************************************************************************************************************************************** -->
+	      <!--main content start-->
+	      <section id="main-content" style="min-height:94vh;">
+	        <section class="wrapper" style="text-align: centered">
+
+	          <?php
+	        		include "input_mtbur_n.php";
+	        	?>
+
+	        	<table style="margin-bottom: 50px">
+				 	<tr>
+				 		<th>
+				 			FH
+				 		</th>
+				 		<th>
+				 			<?php  
+				 				echo "$fhours";
+				 			?>
+				 		</th>
+				 	</tr>
+				 	<tr>
+				 		<th>
+				 			Removal
+				 		</th>
+				 		<th>
+				 			<?php
+				 				$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
+				 				echo "$rm";
+				 			?>
+				 		</th>
+				 	</tr>
+				 	<tr>
+				 		<th>
+				 			MTBUR
+				 		</th>
+				 		<th>
+				 			<?php
+				 				$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
+				 				$mtbur = $fhours*$qty/$rm;
+				 				echo "$mtbur";
+				 			?>
+				 		</th>
+				 	</tr>
+				 	<tr>
+				 		<th>
+				 			Perhitungan MTBUR
+				 		</th>
+				 		<th>
+				 			<?php  
+				 				print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
+				 			?>
+				 		</th>
+				 	</tr>
+				</table>
 
 
-		          	<h1 style="text-align: center;">Table MTBUR</h1>
-		        	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-		        	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-		        	<table id="table_mtbur" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
-		                <thead>
-				            <tr>
-				                <th>Part Number</th>
-				                <th>Serial Number</th>
-				                <th>Part Name</th>
-				                <th>Reg</th>
-				            </tr>
-				        </thead>
-				        <tfoot>
-				            <tr>
-				                <th>Part Number</th>
-				                <th>Serial Number</th>
-				                <th>Part Name</th>
-				                <th>Reg</th>
-				            </tr>
-				        </tfoot>
-				        <tbody>
-					<?php
-						while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
-							echo "<tr>";
-								echo "<td>".$rowes[0]."</td>";
-								echo "<td>".$rowes[1]."</td>";
-								echo "<td>".$rowes[2]."</td>";
-								echo "<td>".$rowes[3]."</td>";
-							echo "</tr>";
-						}
-					 ?>
-		        </tbody>
-		    </table>
-		    <script type="text/javascript">
-		   		$(document).ready(function() {
-		    	$('#table_mtbur').DataTable({
-		    	});
-				} );
-			</script>
+			          	<h1 style="text-align: center;">Table MTBUR</h1>
+			        	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+			        	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+			        	<table id="table_mtbur" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
+			                <thead>
+					            <tr>
+					                <th>Part Number</th>
+					                <th>Serial Number</th>
+					                <th>Part Name</th>
+					                <th>Reg</th>
+					            </tr>
+					        </thead>
+					        <tfoot>
+					            <tr>
+					                <th>Part Number</th>
+					                <th>Serial Number</th>
+					                <th>Part Name</th>
+					                <th>Reg</th>
+					            </tr>
+					        </tfoot>
+					        <tbody>
+						<?php
+							while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
+								echo "<tr>";
+									echo "<td>".$rowes[0]."</td>";
+									echo "<td>".$rowes[1]."</td>";
+									echo "<td>".$rowes[2]."</td>";
+									echo "<td>".$rowes[3]."</td>";
+								echo "</tr>";
+							}
+						 ?>
+			        </tbody>
+			    </table>
+			    <script type="text/javascript">
+			   		$(document).ready(function() {
+			    	$('#table_mtbur').DataTable({
+			    	});
+					} );
+				</script>
 
-        </section>
-    </section>
+	          </section>
+	      </section>
 
-<?php
-  include 'footer.php';
-?>
+		  <?php
+			include 'footer.php';
+		  ?>
 
-</section>
+		</section>
+	</div>
 
-    <!-- js placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/jquery-1.8.3.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-    <script src="assets/js/jquery.scrollTo.min.js"></script>
-    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
-    <script src="assets/js/jquery.sparkline.js"></script>
+	<script>
+	    var myVar;
 
-    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+	    function myFunction() {
+	      myVar = setTimeout(showPage, 3000);
+	    }
 
-    <!--common script for all pages-->
-    <script src="assets/js/common-scripts.js"></script>
-
-    <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
-    <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
-
-    <!--script for this page-->
-    <script src="assets/js/sparkline-chart.js"></script>
-	<script src="assets/js/zabuto_calendar.js"></script>
-
+	    function showPage() {
+	      document.getElementById("loader").style.display = "none";
+	      document.getElementById("myDiv").style.display = "block";
+	    }
+	 </script>
   </body>
 </html>
