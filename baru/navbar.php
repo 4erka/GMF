@@ -67,7 +67,7 @@
                 }
               ?>
                     <i class="fa fa-database"></i>
-                    <span>CMTBUR</span>
+                    <span>MTBUR</span>
                 </a>
             </li>
 
