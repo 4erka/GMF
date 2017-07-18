@@ -232,19 +232,17 @@ $Graph_type = $_POST['graph'];
 
       if($Graph_type == 'ata' || $Graph_type == 'ac_reg'){
         if($Graph_type == 'ata'){
-    			$sql_graph_pirep = "SELECT ata, COUNT(ata) AS number_of_ata FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY ata ORDER BY number_of_ata DESC";
-    			$sql_graph_delay = "SELECT ATAtdm, COUNT(Atatdm) AS number_of_ata1 FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ATAtdm ORDER BY number_of_ata1 DESC";
+    			$sql_graph_pirep = "SELECT ata, COUNT(ata) AS number_of_ata FROM tblpirep_swift WHERE ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ata ORDER BY number_of_ata DESC";
+    			$sql_graph_delay = "SELECT ATAtdm, COUNT(Atatdm) AS number_of_ata1 FROM mcdrnew WHERE ACTYPE = ".$ACType." AND DCP <> 'X' AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ATAtdm ORDER BY number_of_ata1 DESC";
           //print_r($sql_graph_delay);
     		}
     		else if($Graph_type == 'ac_reg'){
     			$sql_graph_pirep = "SELECT REG, COUNT(REG) AS number_of_reg FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY REG ORDER BY number_of_reg DESC";
-    			$sql_graph_delay = "SELECT Reg, COUNT(Reg) AS number_of_reg FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY REG ORDER BY number_of_reg DESC";
+    			$sql_graph_delay = "SELECT Reg, COUNT(Reg) AS number_of_reg FROM mcdrnew WHERE ACTYPE = ".$ACType." AND DCP <> 'X' AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY REG ORDER BY number_of_reg DESC";
     		}
 
         $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		$res_graph_delay = mysqli_query($link, $sql_graph_delay);
-
-        //print_r($sql_graph_pirep);
 
     		$i = 0;
     		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
@@ -274,7 +272,7 @@ $Graph_type = $_POST['graph'];
           	WHEN SubATAtdm = '0' THEN CONCAT(ATAtdm, '00')
           	ELSE CONCAT(ATAtdm, SubATAtdm)
           	END AS new_ata
-            FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd."";
+            FROM mcdrnew WHERE DCP <>'X' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd."";
 
           $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		  $res_graph_delay = mysqli_query($link, $sql_graph_delay);

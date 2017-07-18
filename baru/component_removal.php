@@ -147,15 +147,15 @@ else
                 <hr>
                     <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Notification</th>
                         <th>ATA</th>
-                        <th>AIN</th>
+                        <th>Equipment</th>
                         <th>Part Number</th>
                         <th>Serial Number</th>
                         <th>Part Name</th>
                         <th>Register</th>
                         <th>A/C Type</th>
-                        <th>Reason</th>
+                        <th>Rem Code</th>
                         <th>Real Reason</th>
                         <th>Date Removal</th>
                         <th>TSN</th>
@@ -183,7 +183,7 @@ else
                     echo "<br>";
                     */
 
-                    $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
+                    $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
                             FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."'";
 /*
                       if(!empty($RemCode[1])){
@@ -208,7 +208,7 @@ else
 
                       $res_rem = mysqli_query($link, $sql_rem);
 
-                      //print_r($sql_rem);
+                      print_r($sql_rem);
 
                       while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
                         echo "<tr>";
@@ -220,13 +220,13 @@ else
                           echo "<td>".$rowes[5]."</td>"; //Part Name
                           echo "<td>".$rowes[6]."</td>"; //Reg
                           echo "<td>".$rowes[7]."</td>"; //Aircraft
-                          echo "<td>".$rowes[11]."</td>"; //Reason
-                          echo "<td>".$rowes[12]."</td>"; //Real Reason
-                          echo "<td>".$rowes[13]."</td>"; //Date Rem
-                          echo "<td>".$rowes[14]."</td>"; //TSN
-                          echo "<td>".$rowes[15]."</td>"; //TSI
-                          echo "<td>".$rowes[16]."</td>"; //CSN
-                          echo "<td>".$rowes[17]."</td>"; //CSI/
+                          echo "<td>".$rowes[8]."</td>"; //Reason
+                          echo "<td>".$rowes[9]."</td>"; //Real Reason
+                          echo "<td>".$rowes[10]."</td>"; //Date Rem
+                          echo "<td>".$rowes[11]."</td>"; //TSN
+                          echo "<td>".$rowes[12]."</td>"; //TSI
+                          echo "<td>".$rowes[13]."</td>"; //CSN
+                          echo "<td>".$rowes[14]."</td>"; //CSI/
                           //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
                         echo "</tr>";
                       }
