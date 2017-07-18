@@ -120,7 +120,9 @@
 
 <body onload="myFunction()" style="margin:0;">
 
-  <div id="loader"></div>
+  <?php  
+    include 'loader.php';
+  ?>
 
   
   <div style="display:none;" id="myDiv" class="animate-bottom">
@@ -309,18 +311,5 @@
 
     </section>
   </div>
-
-  <script>
-    var myVar;
-
-    function myFunction() {
-      myVar = setTimeout(showPage, 3000);
-    }
-
-    function showPage() {
-      document.getElementById("loader").style.display = "none";
-      document.getElementById("myDiv").style.display = "block";
-    }
-  </script>
   </body>
 </html>

@@ -88,7 +88,7 @@
 
 </head>
 
-<body onload="myFunction()" style="margin:0;">
+<body onload="myFunction()">
 
 	<?php  
       include 'loader.php';
@@ -98,117 +98,99 @@
 
   		<section id="container" >
 
-	      <?php
-	        $page_now = "mtbur";
-	        include 'header.php';
-	       ?>
+			<?php
+				$page_now = "mtbur";
+				include 'header.php';
+			?>
 
-	      <?php
-	        include 'navbar.php';
-	       ?>
-	       
-	      <section id="main-content" style="min-height:94vh;">
-	        <section class="wrapper" style="text-align: centered">
+			<?php
+				include 'navbar.php';
+			?>
 
-	          <?php
-	        		include "input_mtbur_n.php";
-	        	?>
+			<section id="main-content" style="min-height:94vh;">
+				<section class="wrapper" style="text-align: centered">
 
-	        	<table style="margin-bottom: 50px">
-				 	<tr>
-				 		<th>
-				 			FH
-				 		</th>
-				 		<th>
-				 			<?php  
-				 				echo "$fhours";
-				 			?>
-				 		</th>
-				 	</tr>
-				 	<tr>
-				 		<th>
-				 			Removal
-				 		</th>
-				 		<th>
-				 			<?php
-				 				$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
-				 				echo "$rm";
-				 			?>
-				 		</th>
-				 	</tr>
-				 	<tr>
-				 		<th>
-				 			MTBUR
-				 		</th>
-				 		<th>
-				 			<?php
-				 				$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
-				 				$mtbur = $fhours*$qty/$rm;
-				 				echo "$mtbur";
-				 			?>
-				 		</th>
-				 	</tr>
-				 	<tr>
-				 		<th>
-				 			Perhitungan MTBUR
-				 		</th>
-				 		<th>
-				 			<?php  
-				 				print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
-				 			?>
-				 		</th>
-				 	</tr>
-				</table>
+				  	<?php
+						include "input_mtbur_n.php";
+					?>
 
-
-			          	<h1 style="text-align: center;">Table MTBUR</h1>
-			        	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-			        	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-			        	<table id="table_mtbur" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
-			                <thead>
-					            <tr>
-					                <th>Part Number</th>
-					                <th>Serial Number</th>
-					                <th>Part Name</th>
-					                <th>Reg</th>
-					            </tr>
-					        </thead>
-					        <tfoot>
-					            <tr>
-					                <th>Part Number</th>
-					                <th>Serial Number</th>
-					                <th>Part Name</th>
-					                <th>Reg</th>
-					            </tr>
-					        </tfoot>
-					        <tbody>
+					<label class="col-sm-1 control-label">FH</label>
+					<div class="col-sm-2">
+						<?php  
+								echo "$fhours";
+							?>
+					</div><br><br>
+					<label class="col-sm-1 control-label">Removal</label>
+					<div class="col-sm-2">
 						<?php
-							while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
-								echo "<tr>";
-									echo "<td>".$rowes[0]."</td>";
-									echo "<td>".$rowes[1]."</td>";
-									echo "<td>".$rowes[2]."</td>";
-									echo "<td>".$rowes[3]."</td>";
-								echo "</tr>";
-							}
-						 ?>
-			        </tbody>
-			    </table>
-			    <script type="text/javascript">
-			   		$(document).ready(function() {
-			    	$('#table_mtbur').DataTable({
-			    	});
-					} );
+								$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
+								echo "$rm";
+							?>
+					</div><br><br>
+					<label class="col-sm-1 control-label">MTBUR</label>
+					<div class="col-sm-2">
+						<?php
+								$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
+								$mtbur = $fhours*$qty/$rm;
+								echo "$mtbur";
+							?>
+					</div><br><br>
+					<label class="col-sm-1 control-label">Removal</label>
+					<div class="col-sm-2">
+						<?php  
+								print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
+							?>
+					</div><br><br>
+
+
+				  	<h1 style="text-align: center;">Table MTBUR</h1>
+					<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+					<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+					<table id="table_mtbur" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
+				        <thead>
+				            <tr>
+				                <th>Part Number</th>
+				                <th>Serial Number</th>
+				                <th>Part Name</th>
+				                <th>Reg</th>
+				            </tr>
+				        </thead>
+				        <tfoot>
+				            <tr>
+				                <th>Part Number</th>
+				                <th>Serial Number</th>
+				                <th>Part Name</th>
+				                <th>Reg</th>
+				            </tr>
+				        </tfoot>
+				        <tbody>
+					<?php
+						while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
+							echo "<tr>";
+								echo "<td>".$rowes[0]."</td>";
+								echo "<td>".$rowes[1]."</td>";
+								echo "<td>".$rowes[2]."</td>";
+								echo "<td>".$rowes[3]."</td>";
+							echo "</tr>";
+						}
+					 ?>
+				</tbody>
+				</table>
+				<script type="text/javascript">
+					$(document).ready(function() {
+				$('#table_mtbur').DataTable({
+				});
+				} );
 				</script>
 
-	          </section>
-	      </section>
+				</section>
+			</section>
 
-		  <?php
-			include 'footer.php';
-		  ?>
+			<?php
+				include 'footer.php';
+			?>
 
 		</section>
 	</div>
-  </body>
+</body>
 </html>
