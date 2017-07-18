@@ -85,38 +85,28 @@
     <?php  
       include 'loader_style.php';
     ?>
+
 </head>
 
 <body onload="myFunction()" style="margin:0;">
 
-	<div id="loader"></div>
+	<?php  
+      include 'loader.php';
+    ?>
 
-  
   	<div style="display:none;" id="myDiv" class="animate-bottom">
 
   		<section id="container" >
-	      <!-- **********************************************************************************************************************************************************
-	      TOP BAR CONTENT & NOTIFICATIONS
-	      *********************************************************************************************************************************************************** -->
 
 	      <?php
 	        $page_now = "mtbur";
 	        include 'header.php';
 	       ?>
 
-	      <!-- **********************************************************************************************************************************************************
-	      MAIN SIDEBAR MENU
-	      *********************************************************************************************************************************************************** -->
-	      <!--sidebar start-->
-
 	      <?php
 	        include 'navbar.php';
 	       ?>
-
-	      <!-- **********************************************************************************************************************************************************
-	      MAIN CONTENT
-	      *********************************************************************************************************************************************************** -->
-	      <!--main content start-->
+	       
 	      <section id="main-content" style="min-height:94vh;">
 	        <section class="wrapper" style="text-align: centered">
 
@@ -220,18 +210,5 @@
 
 		</section>
 	</div>
-
-	<script>
-	    var myVar;
-
-	    function myFunction() {
-	      myVar = setTimeout(showPage, 3000);
-	    }
-
-	    function showPage() {
-	      document.getElementById("loader").style.display = "none";
-	      document.getElementById("myDiv").style.display = "block";
-	    }
-	 </script>
   </body>
 </html>
