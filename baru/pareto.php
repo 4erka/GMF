@@ -30,6 +30,7 @@ else
 $Graph_type = $_POST['graph'];
 
   include 'config/connect.php';
+#  include 'jsonwrapper.php';
  ?>
 
 <html lang="en">
@@ -212,17 +213,17 @@ $Graph_type = $_POST['graph'];
 
 
        	<script type="text/javascript">
-       		$(document).ready(function() {
-        	$('#table_delay').DataTable({
-    				dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'pdfHtml5'
-            ]
-        	});
-
-    		} );
+       // 		$(document).ready(function() {
+        // 	$('#table_delay').DataTable({
+    		// 		dom: 'Bfrtip',
+        //     buttons: [
+        //         'copyHtml5',
+        //         'excelHtml5',
+        //         'pdfHtml5'
+        //     ]
+        // 	});
+        //
+    		// } );
        	</script>
 
     	<?php
@@ -290,7 +291,18 @@ $Graph_type = $_POST['graph'];
             $i++;
       		}
 
-          $ar = array_replace($temp_delay,array_fill_keys(array_keys($temp_delay, NULL),'0000'));
+          $ar = [];
+          for($i=0; $i<sizeof($temp_delay); $i++){
+            if($temp_delay[$i] == NULL){
+              echo "Null rek";
+              $ar[$i] = '0000';
+            }
+            else {
+              $ar[$i] = $temp_delay[$i];
+            }
+          }
+
+//          $ar = array_replace($temp_delay,array_fill_keys(array_keys($temp_delay, NULL),'0000'));
           #$ar = array_slice($ar, 0, 20);
 
           $ar1 = array_count_values($ar);
