@@ -1,33 +1,52 @@
 <style>
-	/* Center the loader */
-	#loader {
-	  position: absolute;
-	  left: 50%;
-	  top: 50%;
-	  z-index: 1;
-	  width: 150px;
-	  height: 150px;
-	  margin: -75px 0 0 -75px;
-	  border: 16px solid #f3f3f3;
-	  border-radius: 50%;
-	  border-top: 16px solid #3498db;
-	  width: 120px;
-	  height: 120px;
-	  -webkit-animation: spin 2s linear infinite;
-	  animation: spin 2s linear infinite;
+	svg {
+	  height: 0px;
+	  width: 0px;
 	}
 
-	@-webkit-keyframes spin {
-	  0% { -webkit-transform: rotate(0deg); }
-	  100% { -webkit-transform: rotate(360deg); }
+	@keyframes loader {
+	  50% {
+	    transform: translateY(-16px);
+	    background-color: #1b98e0;
+	  }
 	}
 
-	@keyframes spin {
-	  0% { transform: rotate(0deg); }
-	  100% { transform: rotate(360deg); }
+	.loader {
+	  filter: url("#goo");
+	  width: 100px;
+	  margin: 0 auto;
+	  position: relative;
+	  top: 50vh;
+	  transform: translateY(-10px);
+	}
+	.loader > div {
+	  float: left;
+	  height: 20px;
+	  width: 20px;
+	  border-radius: 100%;
+	  background-color: #006494;
+	  animation: loader 0.8s infinite;
 	}
 
-	/* Add animation to "page content" */
+	.loader > div:nth-child(1) {
+	  animation-delay: 0.16s;
+	}
+
+	.loader > div:nth-child(2) {
+	  animation-delay: 0.32s;
+	}
+
+	.loader > div:nth-child(3) {
+	  animation-delay: 0.48s;
+	}
+
+	.loader > div:nth-child(4) {
+	  animation-delay: 0.64s;
+	}
+
+	.loader > div:nth-child(5) {
+	  animation-delay: 0.8s;
+	}
 	.animate-bottom {
 	  position: relative;
 	  -webkit-animation-name: animatebottom;
