@@ -67,6 +67,7 @@ $Graph_type = $_POST['graph'];
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
   </head>
 
   <body>
@@ -294,7 +295,7 @@ $Graph_type = $_POST['graph'];
           $ar = [];
           for($i=0; $i<sizeof($temp_delay); $i++){
             if($temp_delay[$i] == NULL){
-              echo "Null rek";
+            //  echo "Null rek";
               $ar[$i] = '0000';
             }
             else {
@@ -448,5 +449,6 @@ $Graph_type = $_POST['graph'];
     <script src="assets/js/sparkline-chart.js"></script>
 	<script src="assets/js/zabuto_calendar.js"></script>
 
+</div>
   </body>
 </html>

@@ -1,5 +1,5 @@
 <!--header start-->
-<header class="header black-bg" style="background-color: #add8e6">
+<header class="header black-bg" style="background-color: #add8e6; top: 0px">
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>

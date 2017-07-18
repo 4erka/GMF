@@ -73,9 +73,19 @@ else
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <?php
+      include 'loader_style.php';
+    ?>
   </head>
 
-  <body>
+  <body onload="myFunction()" style="margin:0;">
+
+    <?php
+        include 'loader.php';
+      ?>
+
+    <div style="display:none;" id="myDiv" class="animate-bottom">
 
   <section id="container" >
       <!-- **********************************************************************************************************************************************************
