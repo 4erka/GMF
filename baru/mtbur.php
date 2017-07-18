@@ -110,76 +110,103 @@
 			<section id="main-content" style="min-height:94vh;">
 				<section class="wrapper" style="text-align: centered">
 
-				  	<?php
-						include "input_mtbur_n.php";
-					?>
+					<div class="col-md-12 mt">
+        				<div class="panel panel-default">
+        					<div class="panel-heading">
+        						<h4><i class="fa fa-angle-right"></i> Filter MTBUR</h4>
+        					</div>
+        					<div class="panel-body">
+        						<?php
+									include "input_mtbur_n.php";
+								?>
+        					</div>
+        				</div>
+        			</div>
 
-					<label class="col-sm-1 control-label">FH</label>
-					<div class="col-sm-2">
-						<?php  
-								echo "$fhours";
-							?>
-					</div><br><br>
-					<label class="col-sm-1 control-label">Removal</label>
-					<div class="col-sm-2">
-						<?php
-								$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
-								echo "$rm";
-							?>
-					</div><br><br>
-					<label class="col-sm-1 control-label">MTBUR</label>
-					<div class="col-sm-2">
-						<?php
-								$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
-								$mtbur = $fhours*$qty/$rm;
-								echo "$mtbur";
-							?>
-					</div><br><br>
-					<label class="col-sm-1 control-label">Removal</label>
-					<div class="col-sm-2">
-						<?php  
-								print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
-							?>
-					</div><br><br>
+					<div class="col-md-12 mt">
+        				<div class="panel panel-default">
+        					<div class="panel-heading">
+        						<h4><i class="fa fa-angle-right"></i> Data MTBUR</h4>
+        					</div>
+        					<div class="panel-body">
+	        					<label class="col-sm-1 control-label">FH</label>
+								<div class="col-sm-2">
+									<?php  
+											echo "$fhours";
+										?>
+								</div><br><br>
+								<label class="col-sm-1 control-label">Removal</label>
+								<div class="col-sm-2">
+									<?php
+											$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
+											echo "$rm";
+										?>
+								</div><br><br>
+								<label class="col-sm-1 control-label">MTBUR</label>
+								<div class="col-sm-2">
+									<?php
+											$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
+											$mtbur = $fhours*$qty/$rm;
+											echo "$mtbur";
+										?>
+								</div><br><br>
+								<label class="col-sm-1 control-label">Removal</label>
+								<div class="col-sm-2">
+									<?php  
+											print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
+										?>
+								</div><br><br>
+        					</div>
+        				</div>
+        			</div>
+					
 
-
-				  	<h1 style="text-align: center;">Table MTBUR</h1>
 					<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 					<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-					<table id="table_mtbur" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
-				        <thead>
-				            <tr>
-				                <th>Part Number</th>
-				                <th>Serial Number</th>
-				                <th>Part Name</th>
-				                <th>Reg</th>
-				            </tr>
-				        </thead>
-				        <tfoot>
-				            <tr>
-				                <th>Part Number</th>
-				                <th>Serial Number</th>
-				                <th>Part Name</th>
-				                <th>Reg</th>
-				            </tr>
-				        </tfoot>
-				        <tbody>
-					<?php
-						while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
-							echo "<tr>";
-								echo "<td>".$rowes[0]."</td>";
-								echo "<td>".$rowes[1]."</td>";
-								echo "<td>".$rowes[2]."</td>";
-								echo "<td>".$rowes[3]."</td>";
-							echo "</tr>";
-						}
-					 ?>
-				</tbody>
-				</table>
+
+					<div class="col-md-12 mt">
+        				<div class="panel panel-default">
+        					<div class="panel-heading">
+        						<h4><i class="fa fa-angle-right"></i> Table MTBUR</h4>
+        					</div>
+        					<div class="panel-body" style="padding: 10px">
+        						<table id="table_mtbur" class="table table-bordered table-striped table-condensed">
+								        <thead>
+								            <tr>
+								                <th>Part Number</th>
+								                <th>Serial Number</th>
+								                <th>Part Name</th>
+								                <th>Reg</th>
+								            </tr>
+								        </thead>
+								        <tfoot>
+								            <tr>
+								                <th>Part Number</th>
+								                <th>Serial Number</th>
+								                <th>Part Name</th>
+								                <th>Reg</th>
+								            </tr>
+								        </tfoot>
+								        <tbody>
+											<?php
+												while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
+													echo "<tr>";
+														echo "<td>".$rowes[0]."</td>";
+														echo "<td>".$rowes[1]."</td>";
+														echo "<td>".$rowes[2]."</td>";
+														echo "<td>".$rowes[3]."</td>";
+													echo "</tr>";
+												}
+										 	?>
+									</tbody>
+								</table>
+        					</div>
+					</div>
+				</div>
 				<script type="text/javascript">
 					$(document).ready(function() {
-				$('#table_mtbur').DataTable({
-				});
+					$('#table_mtbur').DataTable({
+					});
 				} );
 				</script>
 

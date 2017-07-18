@@ -2,9 +2,6 @@
 	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
 	$res_actype = mysqli_query($link, $sql_actype);
 ?>
-
-<h2> MTBUR </h2>
-
 <form method="post" style="margin-bottom: 50px" id="form_mtbur" class="form-horizontal style-form">
 	<div class="form-group">
 		<label class="col-sm-2 col-sm-2 control-label">A/C Type</label>
