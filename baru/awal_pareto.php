@@ -62,8 +62,20 @@
       <!--main content start-->
       <section id="main-content" style="min-height:94vh">
         <section class="wrapper" style="text-align: centered">
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Filter Pareto Display</h4>
+              </div>
+              <div class="panel-body">
+                <?php
+                  include 'form_pareto.php';
+                ?>
+              </div>
+            </div>
+          </div>
               <?php
-                include 'form_pareto.php';
+//                include 'form_pareto.php';
                ?>
           </section>
       </section>

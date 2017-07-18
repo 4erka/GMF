@@ -112,17 +112,18 @@ else
       <!--main content start-->
       <section id="main-content" style="min-height:94vh;">
         <section class="wrapper" style="text-align: centered">
-          <?php
-            include 'form_component.php';
-           ?>
-
-          <h3>Menampilkan Data dari</h3>
-          <br>
-          <h4>A/C Type : <?php echo $ACType; ?></h4>
-          <h4>A/C Reg : <?php echo $ACReg; ?></h4>
-          <h4>Part Number : <?php echo $PartNum; ?></h4>
-          <h4>Tanggal mulai : <?php echo $DateStart; ?></h4>
-          <h4>Tanggal Berakhir : <?php echo $DateEnd; ?></h4>
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Filter Component Trend</h4>
+              </div>
+              <div class="panel-body">
+                <?php
+                  include 'form_component.php';
+                ?>
+              </div>
+            </div>
+          </div>
 
       <!-- Ini isi tabel -->
       <!-- Tabel Component Removal -->

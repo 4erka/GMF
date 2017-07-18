@@ -35,7 +35,7 @@
 			?>
 	    </div>
 	</div>
-			
+
 	<div class="form-group">
 	    <label class="col-sm-2 col-sm-2 control-label">Date from</label>
 	    <div class="col-sm-10">
@@ -84,13 +84,13 @@
 							else{
 								?>
 								<input type="radio" name="depir" value="delay" id="radio_delay" onclick="check(this.value)"> Delay <?php
-							}  
+							}
 						?>
 					</label>
 				</div>
 				<div class="radio">
 					<label>
-						<?php  
+						<?php
 							if($_POST["depir"]=="pirep"){?>
 								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)" checked> Pirep<?php
 							}
@@ -131,23 +131,23 @@
 							}
 							if($i == 0 and $DCP[$i] != "d"  and $flag_d == 0){?>
 								<label class="checkbox-inline">
-									<input type="checkbox" name="dcp[]" value="d"> D 
+									<input type="checkbox" name="dcp[]" value="d"> D
 								</label><?php
 
 							}
 							else if($i == 1 and $DCP[$i] != "c"  and $flag_c == 0){?>
 								<label class="checkbox-inline">
-									<input type="checkbox" name="dcp[]" value="c"> C 
+									<input type="checkbox" name="dcp[]" value="c"> C
 								</label><?php
 							}
 							else if($i == 2 and $DCP[$i] != "x"  and $flag_x == 0){?>
 								<label class="checkbox-inline">
-									<input type="checkbox" name="dcp[]" value="x"> X 
+									<input type="checkbox" name="dcp[]" value="x"> X
 								</label><?php
 							}
 							if($DCP[$i] == "d"){?>
 								<label class="checkbox-inline">
-									<input type="checkbox" name="dcp[]" value="d" checked> D 
+									<input type="checkbox" name="dcp[]" value="d" checked> D
 								</label><?php
 								$flag_d = 1;
 							}else if($DCP[$i] == "c"){?>
@@ -157,7 +157,7 @@
 								$flag_c = 1;
 							}else if($DCP[$i] == "x"){?>
 								<label class="checkbox-inline">
-									<input type="checkbox" name="dcp[]" value="x" checked> X 
+									<input type="checkbox" name="dcp[]" value="x" checked> X
 								</label><?php
 								$flag_x = 1;
 							}

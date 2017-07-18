@@ -97,17 +97,18 @@ $Graph_type = $_POST['graph'];
       <!--main content start-->
       <section id="main-content" style="min-height:94vh;">
         <section class="wrapper" style="text-align: centered">
-          <?php
-            include 'form_pareto.php';
-           ?>
-
-          <h3>Menampilkan Data dari</h3>
-          <br>
-          <h4>A/C Type : <?php echo $ACType; ?></h4>
-          <h4>A/C Reg : <?php echo $ACReg; ?></h4>
-          <h4>Tanggal mulai : <?php echo $DateStart; ?></h4>
-          <h4>Tanggal Berakhir : <?php echo $DateEnd; ?></h4>
-          <h4>Setting untuk X-Axis : <?php echo $Graph_type; ?></h4>
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Filter Pareto Display</h4>
+              </div>
+              <div class="panel-body">
+                <?php
+                  include 'form_pareto.php';
+                ?>
+              </div>
+            </div>
+          </div>
 
       <!-- Ini isi tabel -->
       <!-- Table delay and pirep -->
@@ -243,6 +244,8 @@ $Graph_type = $_POST['graph'];
         $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		$res_graph_delay = mysqli_query($link, $sql_graph_delay);
 
+        //print_r($sql_graph_pirep);
+
     		$i = 0;
     		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
     			if($i > 9) break;
@@ -332,11 +335,29 @@ $Graph_type = $_POST['graph'];
 
     	 ?>
 
-    	<h1 style="text-align:center;">Top 10 Delay</h1>
-    	<div id="grafik_delay" style="height: 250px; margin-top: 50px"></div>
+       <div class="col-md-12 mt">
+         <div class="panel panel-default">
+           <div class="panel-heading">
+             <h4><i class="fa fa-angle-right"></i>Top 10 Delay</h4>
+           </div>
+           <div class="panel-body">
+                 	<div id="grafik_delay" style="height: 250px; margin-top: 50px"></div>
+           </div>
+         </div>
+       </div>
 
-    	<h1 style="text-align:center;">Top 10 Pirep</h1>
-    	<div id="grafik_pirep" style="height: 250px; margin-top: 50px"></div>
+       <div class="col-md-12 mt">
+         <div class="panel panel-default">
+           <div class="panel-heading">
+             <h4><i class="fa fa-angle-right"></i>Top 10 Pirep</h4>
+           </div>
+           <div class="panel-body">
+                  <div id="grafik_pirep" style="height: 250px; margin-top: 50px"></div>
+           </div>
+         </div>
+       </div>
+
+
     	<script type="text/javascript">
       var Morris_data = [];
       var z=0;
@@ -344,7 +365,7 @@ $Graph_type = $_POST['graph'];
     	arr_delay = <?php echo json_encode($arr_delay); ?>;
 
       for ( tot=arr_delay.length; z < tot; z++) {
-         Morris_data.push({option: 'Kode: '+arr_delay[z][0], value: arr_delay[z][1]});
+         Morris_data.push({option: arr_delay[z][0], value: arr_delay[z][1]});
       }
 
 /*

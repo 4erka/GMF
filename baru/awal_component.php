@@ -65,8 +65,20 @@
 
       <section id="main-content" style="min-height:94vh;">
         <section class="wrapper" style="text-align: centered">
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Filter Component Trend</h4>
+              </div>
+              <div class="panel-body">
+                <?php
+                  include 'form_component.php';
+                ?>
+              </div>
+            </div>
+          </div>
               <?php
-                include 'form_component.php';
+//                include 'form_component.php';
                ?>
           </section>
       </section>
@@ -92,7 +104,7 @@
 
     <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
     <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
-
+    
     <!--script for this page-->
     <script src="assets/js/sparkline-chart.js"></script>
 	<script src="assets/js/zabuto_calendar.js"></script>
