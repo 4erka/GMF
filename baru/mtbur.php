@@ -150,11 +150,11 @@
 											echo "$mtbur";
 										?>
 								</div><br><br>
-								<label class="col-sm-1 control-label">Removal</label>
+								<label class="col-sm-1 control-label">Perhitungan MTBUR</label>
 								<div class="col-sm-2">
 									<?php  
-											print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
-										?>
+										print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
+									?>
 								</div><br><br>
         					</div>
         				</div>
