@@ -30,7 +30,7 @@ else
 $Graph_type = $_POST['graph'];
 
   include 'config/connect.php';
-#  include 'jsonwrapper.php';
+  include 'jsonwrapper.php';
  ?>
 
 <html lang="en">
@@ -292,7 +292,6 @@ $Graph_type = $_POST['graph'];
             $i++;
       		}
 
-          $ar = [];
           for($i=0; $i<sizeof($temp_delay); $i++){
             if($temp_delay[$i] == NULL){
             //  echo "Null rek";
