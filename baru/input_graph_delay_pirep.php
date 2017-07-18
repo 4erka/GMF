@@ -5,8 +5,6 @@
 	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 
-<h2> Graph </h2>
-
 <form action="graph.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px" id="form_graph">
 
 	<div class="form-group">

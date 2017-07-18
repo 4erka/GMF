@@ -154,66 +154,83 @@
         <section class="wrapper" style="text-align: centered">
 
           <!-- filter form -->
-          <?php 
-            include "input_graph_delay_pirep.php"; 
-          ?>
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Filter Graph Delay / Pirep</h4>
+              </div>
+              <div class="panel-body">
+                <?php 
+                  include "input_graph_delay_pirep.php"; 
+                ?>
+              </div>
+            </div>
+          </div>
 
           <!-- Table delay and pirep -->
-          <h1 style="text-align: center;">Table Delay</h1>
           <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
           <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-          <table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>A/C Type</th>
-                        <th>A/C Reg</th>
-                        <th>Sta Dep</th>
-                        <th>Flight No</th>
-                        <th>Delay Length</th>
-                        <th>ATA</th>
-                        <th>Sub ATA</th>
-                        <th>Problem</th>
-                        <th>Rectification</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>A/C Type</th>
-                        <th>A/C Reg</th>
-                        <th>Sta Dep</th>
-                        <th>Flight No</th>
-                        <th>Delay Length</th>
-                        <th>ATA</th>
-                        <th>Sub ATA</th>
-                        <th>Problem</th>
-                        <th>Rectification</th>
-                    </tr>
-                </tfoot>
-                <tbody>
-              <?php
-                while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
-                  $rowes[4] = $rowes[4]*60;
-                  $rowes[4] = $rowes[4]+$rowes[9];
-                  //print_r($rowes[4]);echo "<br>";
-                  echo "<tr>";
-                    echo "<td>".$rowes[0]."</td>";
-                    echo "<td>".$rowes[1]."</td>";
-                    echo "<td>".$rowes[2]."</td>";
-                    echo "<td>".$rowes[3]."</td>";
-                    echo "<td>".$rowes[4]."</td>";
-                    echo "<td>".$rowes[5]."</td>";
-                    echo "<td>".$rowes[6]."</td>";
-                    echo "<td>".$rowes[7]."</td>";
-                    echo "<td>".$rowes[8]."</td>";
-                  echo "</tr>";
-                }
-               ?>
-                </tbody>
-            </table>
-            <script type="text/javascript">
-              $(document).ready(function() {
-              $('#table_delay').DataTable({
-              });
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Table Delay</h4>
+              </div>
+              <div class="panel-body">
+                <table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
+                  <thead>
+                      <tr>
+                          <th>A/C Type</th>
+                          <th>A/C Reg</th>
+                          <th>Sta Dep</th>
+                          <th>Flight No</th>
+                          <th>Delay Length</th>
+                          <th>ATA</th>
+                          <th>Sub ATA</th>
+                          <th>Problem</th>
+                          <th>Rectification</th>
+                      </tr>
+                  </thead>
+                  <tfoot>
+                      <tr>
+                          <th>A/C Type</th>
+                          <th>A/C Reg</th>
+                          <th>Sta Dep</th>
+                          <th>Flight No</th>
+                          <th>Delay Length</th>
+                          <th>ATA</th>
+                          <th>Sub ATA</th>
+                          <th>Problem</th>
+                          <th>Rectification</th>
+                      </tr>
+                  </tfoot>
+                  <tbody>
+                    <?php
+                      while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
+                      $rowes[4] = $rowes[4]*60;
+                      $rowes[4] = $rowes[4]+$rowes[9];
+                      //print_r($rowes[4]);echo "<br>";
+                      echo "<tr>";
+                        echo "<td>".$rowes[0]."</td>";
+                        echo "<td>".$rowes[1]."</td>";
+                        echo "<td>".$rowes[2]."</td>";
+                        echo "<td>".$rowes[3]."</td>";
+                        echo "<td>".$rowes[4]."</td>";
+                        echo "<td>".$rowes[5]."</td>";
+                        echo "<td>".$rowes[6]."</td>";
+                        echo "<td>".$rowes[7]."</td>";
+                        echo "<td>".$rowes[8]."</td>";
+                      echo "</tr>";
+                    }
+                   ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">
+            $(document).ready(function() {
+            $('#table_delay').DataTable({
+            });
             } );
           </script>
 
@@ -298,8 +315,17 @@
               });
             });
           </script>
-          <div id="chart-container">
-            <canvas id="graf_data_delay"></canvas>
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Grafik</h4>
+              </div>
+              <div class="panel-body">
+                <div id="chart-container">
+                  <canvas id="graf_data_delay"></canvas>
+                </div>
+              </div>
+            </div>
           </div>
 
         </section>

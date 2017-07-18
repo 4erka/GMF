@@ -125,68 +125,84 @@
         <section class="wrapper" style="text-align: centered">
 
           <!-- filter form -->
-			<?php 
-				include "input_graph_delay_pirep.php"; 
-			?>
+			<div class="col-md-12 mt">
+	            <div class="panel panel-default">
+	              <div class="panel-heading">
+	                <h4><i class="fa fa-angle-right"></i> Filter Graph Delay / Pirep</h4>
+	              </div>
+	              <div class="panel-body">
+	                <?php 
+	                  include "input_graph_delay_pirep.php"; 
+	                ?>
+	              </div>
+	            </div>
+	        </div>
 
-			<h1 style="text-align: center;">Table Pirep</h1>
 			<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 			<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-			<div style="margin-bottom: 50px"></div>
-			<table id="table_pirep" class="display cell-border" cellspacing="0" width="100%">
-			    <thead>
-			        <tr>
-			        	<th>Date</th>
-			        	<th>Sequence</th>
-			            <th>Notification Number</th>
-			            <th>A/C Type</th>
-			            <th>A/C Reg</th>
-			            <th>Sta Dep</th>
-			            <th>Flight No</th>
-			            <th>ATA</th>
-			            <th>Sub ATA</th>
-			            <th>Problem</th>
-			            <th>Rectification</th>
-			            <th>Coding</th>
-			        </tr>
-			    </thead>
-			    <tfoot>
-			        <tr>
-			        	<th>Date</th>
-			        	<th>Sequence</th>
-			            <th>Notification Number</th>
-			            <th>A/C Type</th>
-			            <th>A/C Reg</th>
-			            <th>Sta Dep</th>
-			            <th>Flight No</th>
-			            <th>ATA</th>
-			            <th>Sub ATA</th>
-			            <th>Problem</th>
-			            <th>Rectification</th>
-			            <th>Coding</th>
-			        </tr>
-			    </tfoot>
-			    <tbody>
-			    	<?php
-						while ($rowes = $res_pirep->fetch_array(MYSQLI_NUM)) {
-							echo "<tr>";
-								echo "<td>".$rowes[0]."</td>";
-								echo "<td>".$rowes[1]."</td>";
-								echo "<td>".$rowes[2]."</td>";
-								echo "<td>".$rowes[3]."</td>";
-								echo "<td>".$rowes[4]."</td>";
-								echo "<td>".$rowes[5]."</td>";
-								echo "<td>".$rowes[6]."</td>";
-								echo "<td>".$rowes[7]."</td>";
-								echo "<td>".$rowes[8]."</td>";
-								echo "<td>".$rowes[9]."</td>";
-								echo "<td>".$rowes[10]."</td>";
-								echo "<td>".$rowes[11]."</td>";
-							echo "</tr>";
-						}
-					 ?>
-			    </tbody>
-			</table>
+			<div class="col-md-12 mt">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4><i class="fa fa-angle-right"></i> Table Pirep</h4>
+					</div>
+					<div class="panel-body">
+						<table id="table_pirep" class="display cell-border" cellspacing="0" width="100%">
+						    <thead>
+						        <tr>
+						        	<th>Date</th>
+						        	<th>Sequence</th>
+						            <th>Notification Number</th>
+						            <th>A/C Type</th>
+						            <th>A/C Reg</th>
+						            <th>Sta Dep</th>
+						            <th>Flight No</th>
+						            <th>ATA</th>
+						            <th>Sub ATA</th>
+						            <th>Problem</th>
+						            <th>Rectification</th>
+						            <th>Coding</th>
+						        </tr>
+						    </thead>
+						    <tfoot>
+						        <tr>
+						        	<th>Date</th>
+						        	<th>Sequence</th>
+						            <th>Notification Number</th>
+						            <th>A/C Type</th>
+						            <th>A/C Reg</th>
+						            <th>Sta Dep</th>
+						            <th>Flight No</th>
+						            <th>ATA</th>
+						            <th>Sub ATA</th>
+						            <th>Problem</th>
+						            <th>Rectification</th>
+						            <th>Coding</th>
+						        </tr>
+						    </tfoot>
+						    <tbody>
+						    	<?php
+									while ($rowes = $res_pirep->fetch_array(MYSQLI_NUM)) {
+										echo "<tr>";
+											echo "<td>".$rowes[0]."</td>";
+											echo "<td>".$rowes[1]."</td>";
+											echo "<td>".$rowes[2]."</td>";
+											echo "<td>".$rowes[3]."</td>";
+											echo "<td>".$rowes[4]."</td>";
+											echo "<td>".$rowes[5]."</td>";
+											echo "<td>".$rowes[6]."</td>";
+											echo "<td>".$rowes[7]."</td>";
+											echo "<td>".$rowes[8]."</td>";
+											echo "<td>".$rowes[9]."</td>";
+											echo "<td>".$rowes[10]."</td>";
+											echo "<td>".$rowes[11]."</td>";
+										echo "</tr>";
+									}
+								 ?>
+						    </tbody>
+						</table>
+					</div>
+				</div>
+            </div>
 			<script type="text/javascript">
 					$(document).ready(function() {
 				$('#table_pirep').DataTable({
@@ -273,8 +289,18 @@
 					});
 				});
 			</script>
-			<div id="chart-container">
-				<canvas id="graf_data_pirep"></canvas>
+
+			<div class="col-md-12 mt">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4><i class="fa fa-angle-right"></i> Grafik</h4>
+					</div>
+					<div class="panel-body">
+						<div id="chart-container">
+							<canvas id="graf_data_pirep"></canvas>
+						</div>
+					</div>
+				</div>
 			</div>
 
         </section>
