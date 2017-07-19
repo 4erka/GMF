@@ -74,12 +74,8 @@
 
   include "config/connect.php";
 
-  $sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$DateStart2."".$DateEnd."";
+  $sql_delay = "SELECT ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot, DCP, RtABO FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$DateStart2."".$DateEnd."";
   $res_delay = mysqli_query($link, $sql_delay);
-  //print_r($sql_delay);
-  //print_r($query);
-  // echo "<br>";
-  // print_r($sql_pirep);
 ?>
 
 <html>
@@ -182,12 +178,15 @@
                           <th>A/C Type</th>
                           <th>A/C Reg</th>
                           <th>Sta Dep</th>
+                          <th>Sta Arr</th>
                           <th>Flight No</th>
                           <th>Delay Length</th>
                           <th>ATA</th>
                           <th>Sub ATA</th>
                           <th>Problem</th>
                           <th>Rectification</th>
+                          <th>DCP</th>
+                          <th>RTB/RTA/RTO</th>
                       </tr>
                   </thead>
                   <tfoot>
@@ -195,12 +194,15 @@
                           <th>A/C Type</th>
                           <th>A/C Reg</th>
                           <th>Sta Dep</th>
+                          <th>Sta Arr</th>
                           <th>Flight No</th>
-                          <th>Delay Length</th>
+                          <th>Technical Delay Length</th>
                           <th>ATA</th>
                           <th>Sub ATA</th>
                           <th>Problem</th>
                           <th>Rectification</th>
+                          <th>DCP</th>
+                          <th>RTB/RTA/RTO</th>
                       </tr>
                   </tfoot>
                   <tbody>
@@ -219,6 +221,9 @@
                         echo "<td>".$rowes[6]."</td>";
                         echo "<td>".$rowes[7]."</td>";
                         echo "<td>".$rowes[8]."</td>";
+                        echo "<td>".$rowes[9]."</td>";
+                        echo "<td>".$rowes[11]."</td>";
+                        echo "<td>".$rowes[12]."</td>";
                       echo "</tr>";
                     }
                    ?>
