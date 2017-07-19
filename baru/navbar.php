@@ -80,7 +80,7 @@
                   echo "<a href='oil_consumption.php'>";
                 }
               ?>
-                    <i class="fa fa-database"></i>
+                    <i class="fa fa-fire"></i>
                     <span>Oil Consumption</span>
                 </a>
             </li>
