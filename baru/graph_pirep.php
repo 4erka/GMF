@@ -46,7 +46,7 @@
 
 	include "config/connect.php";
 
-	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$DateStart."".$DateEnd."";
+	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, STAARR, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$DateStart."".$DateEnd."";
 		
 	$res_pirep = mysqli_query($link, $sql_pirep);
 ?>
@@ -155,6 +155,7 @@
 						            <th>A/C Type</th>
 						            <th>A/C Reg</th>
 						            <th>Sta Dep</th>
+						            <th>Sta Arr</th>
 						            <th>Flight No</th>
 						            <th>ATA</th>
 						            <th>Sub ATA</th>
@@ -171,6 +172,7 @@
 						            <th>A/C Type</th>
 						            <th>A/C Reg</th>
 						            <th>Sta Dep</th>
+						            <th>Sta Arr</th>
 						            <th>Flight No</th>
 						            <th>ATA</th>
 						            <th>Sub ATA</th>
@@ -195,6 +197,7 @@
 											echo "<td>".$rowes[9]."</td>";
 											echo "<td>".$rowes[10]."</td>";
 											echo "<td>".$rowes[11]."</td>";
+											echo "<td>".$rowes[12]."</td>";
 										echo "</tr>";
 									}
 								 ?>

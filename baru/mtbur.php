@@ -39,7 +39,7 @@
 
 	$sql_qty = "SELECT DateRem, PartNo, QTY FROM tblcompremoval WHERE Aircraft = ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." ORDER BY DateRem DESC LIMIT 1";
 
-	$sql_tbl = "SELECT PartNo, SerialNo, PartName, Reg FROM tblcompremoval WHERE Aircraft = ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2;
+	$sql_tbl = "SELECT DateRem, PartNo, SerialNo, PartName, Reg FROM tblcompremoval WHERE Aircraft = ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2;
 
 	$res_fh = mysqli_query($link, $sql_fh);
 	$res_rm = mysqli_query($link, $sql_rm);
@@ -50,6 +50,7 @@
 		$rowes[1] = $rowes[1]/60;
 		$fhours = $fhours+$rowes[0]+$rowes[1];
 	}
+	$fhours = number_format($fhours, 2, '.', '');
 ?>
 
 <html lang="en">
@@ -147,15 +148,16 @@
 									<?php
 											$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
 											$mtbur = $fhours*$qty/$rm;
+											$mtbur = number_format($mtbur, 0, '.', '');
 											echo "$mtbur";
 										?>
 								</div><br><br>
-								<label class="col-sm-1 control-label">Perhitungan MTBUR</label>
+								<!-- <label class="col-sm-1 control-label">Perhitungan MTBUR</label>
 								<div class="col-sm-2">
 									<?php  
 										print_r($fhours); echo "*"; print_r($qty); echo "/"; print_r($rm);
 									?>
-								</div><br><br>
+								</div><br><br> -->
         					</div>
         				</div>
         			</div>
@@ -173,6 +175,7 @@
         						<table id="table_mtbur" class="table table-bordered table-striped table-condensed">
 								        <thead>
 								            <tr>
+								            	<th>Date Removal</th>
 								                <th>Part Number</th>
 								                <th>Serial Number</th>
 								                <th>Part Name</th>
@@ -181,6 +184,7 @@
 								        </thead>
 								        <tfoot>
 								            <tr>
+								            	<th>Date Removal</th>
 								                <th>Part Number</th>
 								                <th>Serial Number</th>
 								                <th>Part Name</th>
@@ -195,6 +199,7 @@
 														echo "<td>".$rowes[1]."</td>";
 														echo "<td>".$rowes[2]."</td>";
 														echo "<td>".$rowes[3]."</td>";
+														echo "<td>".$rowes[4]."</td>";
 													echo "</tr>";
 												}
 										 	?>

@@ -71,6 +71,20 @@
                 </a>
             </li>
 
+            <li class="sub-menu">
+              <?php
+                if($page_now == "oil"){
+                  echo "<a class='active' href='oil_consumption.php'>";
+                }
+                else {
+                  echo "<a href='oil_consumption.php'>";
+                }
+              ?>
+                    <i class="fa fa-database"></i>
+                    <span>Oil Consumption</span>
+                </a>
+            </li>
+
             <!--
             <li class="sub-menu">
                 <a href="javascript:;" >
