@@ -127,11 +127,12 @@
       <!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
       *********************************************************************************************************************************************************** -->
-
-      <?php
-        $page_now = "graph";
-        include 'header.php';
-      ?>
+      <div class="row no-print">
+        <?php
+          $page_now = "graph";
+          include 'header.php';
+        ?>
+      </div>
 
       <!-- **********************************************************************************************************************************************************
       MAIN SIDEBAR MENU
@@ -164,6 +165,23 @@
           </div>
 
           <!-- Table delay and pirep -->
+          <script type="text/javascript">
+            function printElem(divId) {
+                var content = document.getElementById(divId).innerHTML;
+                var mywindow = window.open('', 'Print', 'height=600,width=800');
+
+                mywindow.document.write('<html><head><title>Print</title>');
+                mywindow.document.write('</head><body >');
+                mywindow.document.write(content);
+                mywindow.document.write('</body></html>');
+
+                mywindow.document.close();
+                mywindow.focus()
+                mywindow.print();
+                mywindow.close();
+                return true;
+            }
+          </script>
           <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
           <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
           <div class="col-md-12 mt">
@@ -172,7 +190,17 @@
                 <h4><i class="fa fa-angle-right"></i> Table Delay</h4>
               </div>
               <div class="panel-body">
-                <table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
+                <!-- <div class="col-md-12 text-right">
+                  <a href="graph_delay_pdf.php"<button type="button" class="btn btn-default pull-left"/><i class="fa fa-print"></i> Cetak</button></a>
+                </div> -->
+                <!-- <form action="graph_delay_pdf.php" method="post">
+                  <?php
+                    echo '<button type="submit" name="data_table" value=""'.$res_delay->fetch_array(MYSQLI_NUM).' class="btn-link">Go</button>';
+                  ?>
+                </form> -->
+                <button type="button" onclick= "printElem('table_print')"">Butt</button>
+                <div id="table_print">
+                <table id="table_delay" class="display cell-border" cellspacing="0" width="100%"">
                   <thead>
                       <tr>
                           <th>A/C Type</th>
@@ -229,6 +257,7 @@
                    ?>
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           </div>
