@@ -82,6 +82,7 @@ if(!empty($_POST["remcode"])){
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
   </head>
 
   <body>
@@ -313,7 +314,10 @@ if(!empty($_POST["remcode"])){
       $('#comp_table').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            'excelHtml5', 'pdfHtml5'
+          {
+            extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+          }
+          //  'excelHtml5', 'pdfHtml5'
             //'copy', 'csv', 'excel', 'pdf', 'print'
         ],
         responsive: true
