@@ -366,21 +366,6 @@ $Graph_type = $_POST['graph'];
          Morris_data.push({option: arr_delay[z][0], value: arr_delay[z][1]});
       }
 
-/*
-        for(var i=0; i<arr_delay.lenght; i++0{
-          Morris_data[i][0].push(arr_delay[i][0]);
-          Morris_data[i][1].push(arr_delay[i][1]);
-        })
-        /*
-        $.each(arr_delay, function(index, obj){
-          $.each(obj, function(key, val){
-            Morris_data.push({'option': key, 'value': val});
-            console.log(val);
-            console.log(key);
-          })
-        });
-        */
-
     		new Morris.Bar({
 
     		// ID of the element in which to draw the chart.

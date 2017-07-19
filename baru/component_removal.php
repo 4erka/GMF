@@ -33,6 +33,14 @@ if(!empty($_POST["dateto"])){
 else
   $DateEnd = "";
 
+if(!empty($_POST["remcode"])){
+  $i = 0;
+  foreach ($_POST['remcode'] as $val) {
+    $RemCode[$i] = $val;
+    $i++;
+  }
+}
+
   include 'config/connect.php';
  ?>
 
@@ -74,18 +82,9 @@ else
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <?php
-      include 'loader_style.php';
-    ?>
   </head>
 
-  <body onload="myFunction()" style="margin:0;">
-
-    <?php
-        include 'loader.php';
-      ?>
-
-    <div style="display:none;" id="myDiv" class="animate-bottom">
+  <body>
 
   <section id="container" >
       <!-- **********************************************************************************************************************************************************
@@ -125,181 +124,172 @@ else
             </div>
           </div>
 
-      <!-- Ini isi tabel -->
-      <!-- Tabel Component Removal -->
 
-      <br>
-      <br>
-      <div class="col-md-12 mt">
-        <div class="content-panel">
-<!--
-            <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-            <table id="comp_table" class="displayr" cellspacing="0" width="100%">\
+          <div class="col-md-12 mt">
+            <div class="content-panel">
+                  <h4><i class="fa fa-angle-right"></i> Tabel</h4>
+                  <section id="unseen" style="padding: 10px">
+                  <table id="comp_table" class="table table-bordered table-striped table-condensed">
+                    <hr>
+                        <thead>
+                        <tr>
+                            <th>Notification</th>
+                            <th>ATA</th>
+                            <th>Equipment</th>
+                            <th>Part Number</th>
+                            <th>Serial Number</th>
+                            <th>Part Name</th>
+                            <th>Register</th>
+                            <th>A/C Type</th>
+                            <th>Rem Code</th>
+                            <th>Real Reason</th>
+                            <th>Date Removal</th>
+                            <th>TSN</th>
+                            <th>TSI</th>
+                            <th>CSN</th>
+                            <th>CSI</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-          <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
-          <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
-          <div class="adv-table">
-              <table id="comp_table" class="table table-hover">
-              -->
-              <h4><i class="fa fa-angle-right"></i> Tabel</h4>
-              <section id="unseen" style="padding: 10px">
-              <table id="comp_table" class="table table-bordered table-striped table-condensed">
-                <hr>
-                    <thead>
-                    <tr>
-                        <th>Notification</th>
-                        <th>ATA</th>
-                        <th>Equipment</th>
-                        <th>Part Number</th>
-                        <th>Serial Number</th>
-                        <th>Part Name</th>
-                        <th>Register</th>
-                        <th>A/C Type</th>
-                        <th>Rem Code</th>
-                        <th>Real Reason</th>
-                        <th>Date Removal</th>
-                        <th>TSN</th>
-                        <th>TSI</th>
-                        <th>CSN</th>
-                        <th>CSI</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                        <?php
 
-                    <?php
-/*
-          //                  echo "Sebelum: ".$DateStart;
-          //                  echo "<br>";
-
-                    $Date_temp = explode("-", $DateStart);
-                    $DateStart = $Date_temp[0].$Date_temp[1];
-
-                    $Date_temp = explode("-", $DateEnd);
-                    $DateEnd =$Date_temp[0].$Date_temp[1];
-
-                    echo "Month date :". $MonthDate[0].$MonthDate[1]."<br>";
-
-                    echo "Terbaruuu : ".$DateStart;
-                    echo "<br>";
-                    */
-
-                    $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
-                            FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."'";
-/*
-                      if(!empty($RemCode[1])){
-                        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
-                                FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
-                      }
-                      if(!empty($RemCode[0])){
-                        if ($RemCode[0] == "D") {
-                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
-                                  FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                        if(!empty($RemCode)){
+                          if(!empty($RemCode[1])){
+                            $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
+                                    FROM tblcompremoval
+                                    WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
+                                    "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' AND (RemCode = '".$RemCode[0]."' OR RemCode = '".$RemCode[1]."')";
+                          }
+                          else {
+                            $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
+                                    FROM tblcompremoval
+                                    WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
+                                    "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' AND RemCode = '".$RemCode[0]."'";
+                          }
                         }
-                        else if ($RemCode[0]=="W") {
-                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
-                                  FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
+                        else {
+                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
+                                  FROM tblcompremoval
+                                  WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
+                                  "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."'";
                         }
-                      }
-                      else {
-                        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, MONTH, Qty, RemCode, Reason, 'Real Reason', DateRem, TSN, TSI, CSN, CSI
-                                FROM tblcompremoval WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%'AND MONTH BETWEEN ".$DateStart." AND ".$DateEnd."";
-                      }
-                      */
-
-                      $res_rem = mysqli_query($link, $sql_rem);
-
-                      print_r($sql_rem);
-
-                      while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
-                        echo "<tr>";
-                          echo "<td>".$rowes[0]."</td>"; //ID
-                          echo "<td>".$rowes[1]."</td>"; //ATA
-                          echo "<td>".$rowes[2]."</td>"; //AIN
-                          echo "<td>".$rowes[3]."</td>"; //Part No
-                          echo "<td>".$rowes[4]."</td>"; //Serial No
-                          echo "<td>".$rowes[5]."</td>"; //Part Name
-                          echo "<td>".$rowes[6]."</td>"; //Reg
-                          echo "<td>".$rowes[7]."</td>"; //Aircraft
-                          echo "<td>".$rowes[8]."</td>"; //Reason
-                          echo "<td>".$rowes[9]."</td>"; //Real Reason
-                          echo "<td>".$rowes[10]."</td>"; //Date Rem
-                          echo "<td>".$rowes[11]."</td>"; //TSN
-                          echo "<td>".$rowes[12]."</td>"; //TSI
-                          echo "<td>".$rowes[13]."</td>"; //CSN
-                          echo "<td>".$rowes[14]."</td>"; //CSI/
-                          //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
-                        echo "</tr>";
-                      }
-
-                     ?>
-
-                    </tbody>
-                </table>
-              </section>
-
-            </div><! --/content-panel -->
-      </div><!-- /col-md-12 -->
 
 
+                        $res_rem = mysqli_query($link, $sql_rem);
+
+                        //  print_r($sql_rem);
+
+                          while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
+                            echo "<tr>";
+                              echo "<td>".$rowes[0]."</td>"; //ID
+                              echo "<td>".$rowes[1]."</td>"; //ATA
+                              echo "<td>".$rowes[2]."</td>"; //AIN
+                              echo "<td>".$rowes[3]."</td>"; //Part No
+                              echo "<td>".$rowes[4]."</td>"; //Serial No
+                              echo "<td>".$rowes[5]."</td>"; //Part Name
+                              echo "<td>".$rowes[6]."</td>"; //Reg
+                              echo "<td>".$rowes[7]."</td>"; //Aircraft
+                              echo "<td>".$rowes[8]."</td>"; //Reason
+                              echo "<td>".$rowes[9]."</td>"; //Real Reason
+                              echo "<td>".$rowes[10]."</td>"; //Date Rem
+                              echo "<td>".$rowes[11]."</td>"; //TSN
+                              echo "<td>".$rowes[12]."</td>"; //TSI
+                              echo "<td>".$rowes[13]."</td>"; //CSN
+                              echo "<td>".$rowes[14]."</td>"; //CSI/
+                              //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
+                            echo "</tr>";
+                          }
+
+                         ?>
+                        </tbody>
+                    </table>
+                  </section>
+
+                </div><! --/content-panel -->
+          </div><!-- /col-md-12 -->
+
+    	<?php
+
+      $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
+      WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
+
+        $res_comp = mysqli_query($link, $sql_comp);
+
+    		$i = 0;
+    		while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
+    			//if($i > 9) break;
+    			$arr_pirep[$i][0] = $rowes[0];
+    			$arr_pirep[$i][1] = $rowes[1];
+    			$i++;
+    		}
+    	 ?>
+
+       <div class="col-md-12 mt">
+         <div class="panel panel-default">
+           <div class="panel-heading">
+             <h4><i class="fa fa-angle-right"></i>Grafik Component Removal</h4>
+           </div>
+           <div class="panel-body">
+                  <div id="grafik_comp" style="height: 250px; margin-top: 50px"></div>
+           </div>
+         </div>
+       </div>
+
+    	<script type="text/javascript">
+
+        var Morris_data = [];
+        var z=0;
+
+        var arr_pirep = <?php echo json_encode($arr_pirep); ?>;
+
+        for ( tot=arr_pirep.length; z < tot; z++) {
+           Morris_data.push({option: arr_pirep[z][0], value: arr_pirep[z][1]});
+        }
+
+    		new Morris.Line({
+    		// ID of the element in which to draw the chart.
+    		element: 'grafik_comp',
+    		// Chart data records -- each entry in this array corresponds to a point on
+    		// the chart.
+    		data: Morris_data,
+    		// The name of the data record attribute that contains x-values.
+    		xkey: 'option',
+    		// A list of names of data record attributes that contain y-values.
+    		ykeys: ['value'],
+    		// Labels for the ykeys -- will be displayed when you hover over the
+    		// chart.
+    		labels: ['Jumlah Removal'],
+
+    		hideHover:'auto',
+
+    		barColors: ['red'],
+
+        xLabelMargin: 10
+    		});
+
+
+    	</script>
+
+
+      </section>
     </section>
-  </section>
-
-
-          <!--End of table-->
-          <!--
-    			<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-    			<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-    			<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
-    			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
-    			<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
-    			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
-    			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
-    			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
-
-        -->
-
-
-                  <!-- Grafik-->
-
-
 
 <?php
   include 'footer.php';
  ?>
 
-
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
-    <!--
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/jquery-1.8.3.min.js"></script>
-
-      <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-
-    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
--->
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-  <script src="http:////cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
-<!--
-  <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
-  <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
--->
+    <script src="assets/js/bootstrap.min.js"></script>
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <script src="assets/js/jquery.scrollTo.min.js"></script>
     <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="assets/js/jquery.sparkline.js"></script>
+
 
     <!--common script for all pages-->
     <script src="assets/js/common-scripts.js"></script>
@@ -331,5 +321,6 @@ else
   });
   </script>
 
+</div>
   </body>
 </html>

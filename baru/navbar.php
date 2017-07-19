@@ -6,7 +6,7 @@
         <ul class="sidebar-menu" id="nav-accordion">
 
             <p class="centered"><img src="assets/img/logo_gmf.jpg" class="img-circle" width="150"></p>
-            <h5 class="centered">GMF Aeroasia TER 1</h5>
+            <h5 class="centered">GMF Aeroasia</h5>
 
             <li class="mt">
               <?php

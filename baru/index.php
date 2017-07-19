@@ -7,7 +7,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - TER 1</title>
+    <title>Aircraft Reliability</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -56,11 +56,10 @@
       *********************************************************************************************************************************************************** -->
       <!--main content start-->
       <section id="main-content" style="min-height:94vh;">
-        <section class="wrapper" style="text-align: centered">
-              <h2>Selamat datang di halaman TLP Report - TER 1</h2>
-              <br>
-              <embed src="assets/img/report.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="670" height="400">
-              <br>
+        <section class="wrapper" style="text-align: centered; background-image:url('assets/img/landing_gmf1.jpg'); height: 90vh">
+          <h2 style="color:white">Aircraft Reliability Dashboard</h2>
+<!--              <embed src="assets/img/report.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="670" height="400">
+-->
           </section>
       </section>
 

@@ -10,6 +10,47 @@
 
 <br>
 
+<table>
+  <tbody>
+    <tr>
+      <th>
+        A/C Type
+      </th>
+      <th>
+        <select name="actype" class="form-control">
+            <?php
+              while($row = $res0->fetch_array(MYSQLI_NUM))
+                echo "<option value=".$row[0].">".$row[0]."</option>";
+             ?>
+        </select>
+      </th>
+
+    </tr>
+    <tr>
+      <th>
+        A/C Reg
+      </th>
+      <th>
+        <input type="text" name="acreg">
+      </th>
+    </tr>
+    <tr>
+      <th>
+        Date from
+      </th>
+      <th>
+        <input type="date" name="datefrom" id="id_datefrom" required>
+      </th>
+      <th>
+        Date to
+      </th>
+      <th>
+        <input type="date" name="dateto" id="id_dateto" required>
+      </th>
+    </tr>
+  </tbody>
+</table>
+
   <div class="form-group">
   <label class="col-sm-2 col-sm-2 control-label">A/C Type</label>
     <div class="col-sm-10">
@@ -59,6 +100,51 @@
     <label class="col-sm-2 col-sm-2 control-label">Date to</label>
       <div class="col-sm-10">
         <input type="date" class="form-control" name="dateto" value="<?php if(isset($DateEnd))echo $_POST['dateto'] ?>" required>
+      </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 col-sm-2 control-label">Removal Code</label>
+      <div class="col-sm-10">
+        <label class="checkbox-inline">
+          <?php
+            if(isset($RemCode)){
+              $sign = false;
+              $unsign = false;
+              foreach ($RemCode as $key) {
+                if($key == "u") $unsign = true;
+                if($key == "s") $sign = true;
+              }
+              if($unsign){
+                echo "<input type='checkbox' name='remcode[]' value='u' checked>";
+              }
+              else {
+                echo "<input type='checkbox' name='remcode[]' value='u'>";
+              }
+            }
+            else {
+              echo "<input type='checkbox' name='remcode[]' value='u'>";
+            }
+           ?>
+					 Unscheduled
+				</label>
+				<label class="checkbox-inline">
+          <?php
+          if(isset($RemCode)){
+              if($sign){
+                  echo "<input type='checkbox' name='remcode[]' value='s' checked>";
+              }
+              else {
+                echo "<input type='checkbox' name='remcode[]' value='s'>";
+              }
+
+            }
+          else {
+            echo "<input type='checkbox' name='remcode[]' value='s'>";
+          }
+           ?>
+					Scheduled
+				</label>
       </div>
   </div>
 
