@@ -190,16 +190,7 @@
                 <h4><i class="fa fa-angle-right"></i> Table Delay</h4>
               </div>
               <div class="panel-body">
-                <!-- <div class="col-md-12 text-right">
-                  <a href="graph_delay_pdf.php"<button type="button" class="btn btn-default pull-left"/><i class="fa fa-print"></i> Cetak</button></a>
-                </div> -->
-                <!-- <form action="graph_delay_pdf.php" method="post">
-                  <?php
-                    echo '<button type="submit" name="data_table" value=""'.$res_delay->fetch_array(MYSQLI_NUM).' class="btn-link">Go</button>';
-                  ?>
-                </form> -->
-                <button type="button" onclick= "printElem('table_print')"">Butt</button>
-                <div id="table_print">
+                <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
                 <table id="table_delay" class="display cell-border" cellspacing="0" width="100%"">
                   <thead>
                       <tr>
@@ -217,22 +208,6 @@
                           <th>RTB/RTA/RTO</th>
                       </tr>
                   </thead>
-                  <tfoot>
-                      <tr>
-                          <th>A/C Type</th>
-                          <th>A/C Reg</th>
-                          <th>Sta Dep</th>
-                          <th>Sta Arr</th>
-                          <th>Flight No</th>
-                          <th>Technical Delay Length</th>
-                          <th>ATA</th>
-                          <th>Sub ATA</th>
-                          <th>Problem</th>
-                          <th>Rectification</th>
-                          <th>DCP</th>
-                          <th>RTB/RTA/RTO</th>
-                      </tr>
-                  </tfoot>
                   <tbody>
                     <?php
                       while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
@@ -240,6 +215,10 @@
                       $rowes[4] = $rowes[4]+$rowes[9];
                       //print_r($rowes[4]);echo "<br>";
                       echo "<tr>";
+                        $longtext = $rowes[9];
+                        $rowes[9] = wordwrap($longtext, 50, "\n");
+                        $longtext = $rowes[8];
+                        $rowes[8] = wordwrap($longtext, 20, "\n");
                         echo "<td>".$rowes[0]."</td>";
                         echo "<td>".$rowes[1]."</td>";
                         echo "<td>".$rowes[2]."</td>";
@@ -257,7 +236,6 @@
                    ?>
                   </tbody>
                 </table>
-                </div>
               </div>
             </div>
           </div>
@@ -270,6 +248,13 @@
 
           <script type="text/javascript" src="js/Chart.min.js"></script>
           <script type="text/javascript">
+            Chart.plugins.register({
+              beforeDraw: function(chartInstance) {
+                var ctx = chartInstance.chart.ctx;
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+              }
+            });
             var actype = <?php echo(json_encode($ACType)); ?>;
             var acreg = <?php echo(json_encode($ACReg)); ?>;
             var datestart = <?php echo(json_encode($DateStart2)); ?>;
@@ -304,7 +289,7 @@
                       {
                         label: 'Delay',
                         fill: 'false',
-                        backgroundColor: 'rgba(200, 200, 200, 0.75)',
+                        backgroundColor: 'rgba(200, 200, 200, 0)',
                         borderColor: 'rgba(0, 0, 255, 1)',
                         pointBackgroundColor: 'rgba(255, 0, 0, 1)',
                         pointBorderColor: 'rgba(255, 0, 0, 1)',
@@ -361,6 +346,50 @@
               </div>
             </div>
           </div>
+          <!-- <script src="https://rawgit.com/MrRio/jsPDF/master/dist/jspdf.debug.js"> </script>
+          <script src="https://rawgit.com/simonbengtsson/jsPDF-AutoTable/master/dist/jspdf.plugin.autotable.src.js"> </script> -->
+          <script src="js/jspdf.min.js"></script>
+          <script src="js/jspdf.plugin.autotable.js"></script>
+          <script type="text/javascript">
+            // this function generates the pdf using the table
+            function generate() {
+              var pdfsize = 'a4';
+              var columns = ["A/C Type", "A/C REG", "STA DEP", "STA ARR", "Flight No", "Delay Length", "ATA", "SUB ATA", "Problem", "Rectification", "DCP", "RTB/RTA/RTO"];
+              var data = tableToJson($("#table_delay").get(0), columns);
+              console.log(data);
+              var canvas = document.querySelector('#graf_data_delay');
+              var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+              var doc = new jsPDF('l', 'pt', pdfsize);
+              var width = doc.internal.pageSize.width;
+              doc.autoTable(columns, data, {
+                theme: 'grid',
+                styles: {
+                  overflow: 'linebreak'
+                },
+                pageBreak: 'always',
+                tableWidth: 'auto'
+              });
+              let finalY = doc.autoTable.previous.finalY;
+              doc.addPage();
+              doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
+              doc.save("table.pdf");
+            }
+            // This function will return table data in an Array format
+            function tableToJson(table, columns) {
+              var data = [];
+              // go through cells
+              for (var i = 1; i < table.rows.length; i++) {
+                var tableRow = table.rows[i];
+                var rowData = [];
+                for (var j = 0; j < tableRow.cells.length; j++) {
+                  rowData.push(tableRow.cells[j].innerHTML)
+                }
+                data.push(rowData);
+              }
+                
+              return data;
+            }
+          </script>
 
         </section>
       </section>

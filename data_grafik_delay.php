@@ -15,16 +15,17 @@ if(!$mysqli){
 	die("Connection failed: " . $mysqli->error);
 }
 
-$ACType = $_POST["actype"];
-$ACReg = $_POST["acreg"];
-$DateStart = $_POST["datestart"];
-$DateEnd = $_POST["dateend"];
-$ATA = $_POST["ata"];
-$Fault_code = $_POST["fault_code"];
-$Keyword = $_POST["keyword"];
-$DCPs = $_POST["dcp"];
+// $ACType = $_POST["actype"];
+// $ACReg = $_POST["acreg"];
+// $DateStart = $_POST["datestart"];
+// $DateEnd = $_POST["dateend"];
+// $ATA = $_POST["ata"];
+// $Fault_code = $_POST["fault_code"];
+// $Keyword = $_POST["keyword"];
+// $DCPs = $_POST["dcp"];
 
-$query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DCPs."".$Keyword."".$DateStart."".$DateEnd." GROUP BY DateEvent";
+// $query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DCPs."".$Keyword."".$DateStart."".$DateEnd." GROUP BY DateEvent";
+$query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = 'B737-800' AND DateEvent BETWEEN '2017-01-01' AND '2017-02-01' GROUP BY DateEvent";
 
 //execute query
 $result = $mysqli->query($query);
