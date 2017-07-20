@@ -12,8 +12,6 @@
 </head>
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"> </script>
-	<script src="https://rawgit.com/MrRio/jsPDF/master/dist/jspdf.debug.js"> </script>
-	<script src="https://rawgit.com/simonbengtsson/jsPDF-AutoTable/master/dist/jspdf.plugin.autotable.src.js"> </script>
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -53,6 +51,8 @@
 	<a href="#" id="generate-report-button" class="btn">Run Code</a>
 	<button id="exportButton" type="button">Export as PDF</button>
 	<div id="chartContainer" style="height: 360px; width: 100%;"></div>
+	<script src="https://rawgit.com/MrRio/jsPDF/master/dist/jspdf.debug.js"> </script>
+	<script src="https://rawgit.com/simonbengtsson/jsPDF-AutoTable/master/dist/jspdf.plugin.autotable.src.js"> </script>
     <script type="text/javascript">
 		// this function generates the pdf using the table
 		function generate() {
