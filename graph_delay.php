@@ -76,10 +76,22 @@
 
 	$sql_delay = "SELECT ACtype, Reg, DepSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$DateStart2."".$DateEnd."";
 	$res_delay = mysqli_query($link, $sql_delay);
-	//print_r($sql_delay);
-	//print_r($query);
-	// echo "<br>";
-	// print_r($sql_pirep);
+
+	// $data_pdf = array();
+	// $i = 0;
+	// while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
+	// 	$data_pdf[$i][0] = $rowes[0];
+	// 	$data_pdf[$i][1] = $rowes[1];
+	// 	$data_pdf[$i][2] = $rowes[2];
+	// 	$data_pdf[$i][3] = $rowes[3];
+	// 	$data_pdf[$i][4] = $rowes[4];
+	// 	$data_pdf[$i][5] = $rowes[5];
+	// 	$data_pdf[$i][6] = $rowes[6];
+	// 	$data_pdf[$i][7] = $rowes[7];
+	// 	$data_pdf[$i][8] = $rowes[8];
+	// 	$data_pdf[$i][9] = $rowes[9];
+	// 	$i++;
+	// }
 ?>
 
 <html>
@@ -93,12 +105,13 @@
 	<?php 
 		include "input_graph_delay_pirep.php"; 
 	?>
+	<a href="#" onclick="generate()" id="generate-report-button" class="btn">Run Code</a>
 
 	<!-- Table delay and pirep -->
     <h1 style="text-align: center;">Table Delay</h1>
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-	<table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
+	<table id="table_delay" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>A/C Type</th>
@@ -237,5 +250,33 @@
 	<div id="chart-container">
 		<canvas id="graf_data_delay"></canvas>
 	</div>
+	<script src="https://rawgit.com/MrRio/jsPDF/master/dist/jspdf.debug.js"> </script>
+	<script src="https://rawgit.com/simonbengtsson/jsPDF-AutoTable/master/dist/jspdf.plugin.autotable.src.js"> </script>
+	<script type="text/javascript">
+		// this function generates the pdf using the table
+		function generate() {
+		  var columns = ["A/C Type", "A/C Reg"];
+		  var data = tableToJson($("#table-delay").get(0), columns);
+		  var doc = new jsPDF('p', 'pt');
+		  doc.autoTable(columns, data);
+		  doc.save("table.pdf");
+		}
+		function tableToJson(table, columns) {
+		  var data = [];
+		  // go through cells
+		  for (var i = 1; i < table.rows.length; i++) {
+		    var tableRow = table.rows[i];
+
+		    // create an array rather than an object
+		    var rowData = [];
+		    for (var j = 0; j < tableRow.cells.length; j++) {
+		        rowData.push(tableRow.cells[j].innerHTML)
+		    }
+		    data.push(rowData);
+		  }
+
+		  return data;
+		}
+	</script>
 </body>
 </html>
