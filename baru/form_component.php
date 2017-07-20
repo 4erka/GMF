@@ -10,144 +10,121 @@
 
 <br>
 
-<table>
+<table style="width: 95%; margin: 10px">
   <tbody>
     <tr>
-      <th>
-        A/C Type
-      </th>
-      <th>
-        <select name="actype" class="form-control">
-            <?php
-              while($row = $res0->fetch_array(MYSQLI_NUM))
-                echo "<option value=".$row[0].">".$row[0]."</option>";
-             ?>
-        </select>
-      </th>
+      <td style="width:50%">
+        <div class="form-group">
+          <label class="control-label">A/C Type</label>
+            <div style="padding-left: 50px">
+              <label class="checkbox-inline">
+                <?php
+                  if(isset($_POST['actype'])){
+                    for($i=0; $i<10; $i++){
+                        $ac_code[$i] = "";
+                    }
 
+                    foreach ($_POST['actype'] as $key) {
+
+                      if($key == 'A330') $ac_code[0] = "checked";
+                      if($key == 'B737-800E') $ac_code[1] = "checked";
+                      if($key == 'B737-800E-M') $ac_code[2] = "checked";
+                      if($key == 'B737-800') $ac_code[3] = "checked";
+                      if($key == 'B747-400') $ac_code[4] = "checked";
+                      if($key == 'B777-300') $ac_code[5] = "checked";
+                      if($key == 'ATR72-600') $ac_code[6] = "checked";
+                      if($key == 'CRJ-10000') $ac_code[7] = "checked";
+                      if($key == 'A320-200') $ac_code[8] = "checked";
+                      if($key == 'A320-NEO') $ac_code[9] = "checked";
+                    }
+                  }
+                ?>
+
+                <input type='checkbox' name='actype[]' value='A330' <?php if(isset($_POST['actype'])) echo $ac_code[0]; ?>>A330</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='B737-800E' <?php if(isset($_POST['actype'])) echo $ac_code[1]; ?>>B737-800E</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='B737-800E-M' <?php if(isset($_POST['actype'])) echo $ac_code[2]; ?>>B737-800E-M</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='B737-800' <?php if(isset($_POST['actype'])) echo $ac_code[3]; ?>>B737-800</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='B747-400' <?php if(isset($_POST['actype'])) echo $ac_code[4]; ?>>B747-400</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='B777-300' <?php if(isset($_POST['actype'])) echo $ac_code[5]; ?>>B777-300</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='ATR72-600' <?php if(isset($_POST['actype'])) echo $ac_code[6]; ?>>ATR72-600</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='CRJ-10000' <?php if(isset($_POST['actype'])) echo $ac_code[7]; ?>>CRJ-10000</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='A320-200' <?php if(isset($_POST['actype'])) echo $ac_code[8]; ?>>A320-200</label>
+              <label class="checkbox-inline">
+                <input type='checkbox' name='actype[]' value='A320-NEO' <?php if(isset($_POST['actype'])) echo $ac_code[9]; ?>>A320-NEO</label>
+              <label class="checkbox-inline">
+              </label>
+            </div>
+        </div>
+      </td>
+      <td style="padding-left:50px; width:50%">
+        <div class="form-group">
+          <label class="control-label">A/C Registration</label>
+            <input type="text" class="form-control" name="acreg" value="<?php if(isset($ACReg))echo $_POST["acreg"] ?>">
+        </div>
+      </td>
     </tr>
     <tr>
-      <th>
-        A/C Reg
-      </th>
-      <th>
-        <input type="text" name="acreg">
-      </th>
+      <td style="width:50%">
+        <div class="form-group">
+          <label class="control-label">Part Number</label>
+              <input type="text" class="form-control" name="part_no" value="<?php if(isset($PartNum))echo $_POST["part_no"] ?>">
+        </div>
+      </td>
+      <td style="width:50%; padding-left:50px">
+        <div class="form-group">
+          <label class="control-label">Removal Code</label>
+            <div style="padding-left:50px">
+              <?php
+                if(isset($_POST['remcode'])){
+                  for($i=0; $i<2; $i++){
+                    $rem_code[$i] = "";
+                  }
+
+                  foreach ($_POST['remcode'] as $key) {
+                    if($key == "u") $rem_code[0] = "checked";
+                    if($key == "s") $rem_code[1] = "checked";
+                  }
+                }
+                ?>
+              <label class="checkbox-inline">
+                 <input type='checkbox' name='remcode[]' value='u' <?php if(isset($_POST['remcode'])) echo $rem_code[0];?>>Unscheduled
+      				</label>
+      				<label class="checkbox-inline">
+      					  <input type='checkbox' name='remcode[]' value='s' <?php if(isset($_POST['remcode'])) echo $rem_code[1];?>>Scheduled
+      				</label>
+            </div>
+        </div>
+      </td>
     </tr>
     <tr>
-      <th>
-        Date from
-      </th>
-      <th>
-        <input type="date" name="datefrom" id="id_datefrom" required>
-      </th>
-      <th>
-        Date to
-      </th>
-      <th>
-        <input type="date" name="dateto" id="id_dateto" required>
-      </th>
+      <td style="width:50%">
+        <div class="form-group">
+          <label class="control-label">Date from</label>
+            <input type="date" class="form-control" name="datefrom" value="<?php if(isset($DateStart))echo $_POST['datefrom'] ?>" required>
+        </div>
+      </td>
+      <td style="padding-left:50px; width:50%">
+        <div class="form-group">
+          <label class="control-label">Date To</label>
+            <input type="date" class="form-control" name="dateto" value="<?php if(isset($DateEnd))echo $_POST['dateto'] ?>" required>
+        </div>
+      </td>
     </tr>
+    <tr>
+      <td style="width:50%">
+        <input type="submit" value="Display Report" class="btn btn-default">
+      </td>
+    </tr>
+
   </tbody>
 </table>
-
-  <div class="form-group">
-  <label class="col-sm-2 col-sm-2 control-label">A/C Type</label>
-    <div class="col-sm-10">
-      <select name="actype" class="form-control">
-        <?php
-          if(isset($ACType)){
-            while($row = $res0->fetch_array(MYSQLI_NUM)){
-              if($_POST["actype"] == $row[0]){
-                  echo "<option value=".$row[0]." selected>".$row[0]."</option>";
-              }
-              else {
-                echo "<option value=".$row[0].">".$row[0]."</option>";
-              }
-            }
-          }
-          else{
-            while($row = $res0->fetch_array(MYSQLI_NUM))
-              echo "<option value=".$row[0].">".$row[0]."</option>";
-          }
-         ?>
-      </select>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">A/C Registration</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" name="acreg" value="<?php if(isset($ACReg))echo $_POST["acreg"] ?>">
-      </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">Part Number</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" name="part_no" value="<?php if(isset($PartNum))echo $_POST["part_no"] ?>">
-      </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">Date from</label>
-      <div class="col-sm-10">
-        <input type="date" class="form-control" name="datefrom" value="<?php if(isset($DateStart))echo $_POST["datefrom"] ?>" required>
-      </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">Date to</label>
-      <div class="col-sm-10">
-        <input type="date" class="form-control" name="dateto" value="<?php if(isset($DateEnd))echo $_POST['dateto'] ?>" required>
-      </div>
-  </div>
-
-  <div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">Removal Code</label>
-      <div class="col-sm-10">
-        <label class="checkbox-inline">
-          <?php
-            if(isset($RemCode)){
-              $sign = false;
-              $unsign = false;
-              foreach ($RemCode as $key) {
-                if($key == "u") $unsign = true;
-                if($key == "s") $sign = true;
-              }
-              if($unsign){
-                echo "<input type='checkbox' name='remcode[]' value='u' checked>";
-              }
-              else {
-                echo "<input type='checkbox' name='remcode[]' value='u'>";
-              }
-            }
-            else {
-              echo "<input type='checkbox' name='remcode[]' value='u'>";
-            }
-           ?>
-					 Unscheduled
-				</label>
-				<label class="checkbox-inline">
-          <?php
-          if(isset($RemCode)){
-              if($sign){
-                  echo "<input type='checkbox' name='remcode[]' value='s' checked>";
-              }
-              else {
-                echo "<input type='checkbox' name='remcode[]' value='s'>";
-              }
-
-            }
-          else {
-            echo "<input type='checkbox' name='remcode[]' value='s'>";
-          }
-           ?>
-					Scheduled
-				</label>
-      </div>
-  </div>
-
-  <input type="submit" value="Display Report" class="btn btn-default">
 
 </form>

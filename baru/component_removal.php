@@ -7,6 +7,8 @@ if(empty($_POST["actype"])){
   $ACType = "";
 }
 else{
+  $data = implode("','",$_POST["actype"]);
+  $where_actype = "Aircraft IN ('$data')";
   $ACType = "'".$_POST['actype']."'";
 }
 if(empty($_POST["acreg"])){
@@ -35,6 +37,8 @@ else
 
 if(!empty($_POST["remcode"])){
   $i = 0;
+  $data = implode("','",$_POST["remcode"]);
+  $where_remcode = "AND RemCode IN ('$data')";
   foreach ($_POST['remcode'] as $val) {
     $RemCode[$i] = $val;
     $i++;
@@ -81,6 +85,7 @@ if(!empty($_POST["remcode"])){
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 
   </head>
 
@@ -155,6 +160,13 @@ if(!empty($_POST["remcode"])){
                         <?php
 
                         if(!empty($RemCode)){
+
+                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
+                                  FROM tblcompremoval
+                                  WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
+                                  "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_remcode;
+
+/*
                           if(!empty($RemCode[1])){
                             $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
                                     FROM tblcompremoval
@@ -167,18 +179,19 @@ if(!empty($_POST["remcode"])){
                                     WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
                                     "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' AND RemCode = '".$RemCode[0]."'";
                           }
+                          */
                         }
                         else {
                           $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
                                   FROM tblcompremoval
-                                  WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
+                                  WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
                                   "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."'";
                         }
 
 
                         $res_rem = mysqli_query($link, $sql_rem);
 
-                        //  print_r($sql_rem);
+                          //print_r($sql_rem);
 
                           while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
                             echo "<tr>";
@@ -212,7 +225,7 @@ if(!empty($_POST["remcode"])){
     	<?php
 
       $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
-      WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
+      WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
 
         $res_comp = mysqli_query($link, $sql_comp);
 
@@ -313,7 +326,10 @@ if(!empty($_POST["remcode"])){
       $('#comp_table').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            'excelHtml5', 'pdfHtml5'
+          {
+            extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+          }
+          //  'excelHtml5', 'pdfHtml5'
             //'copy', 'csv', 'excel', 'pdf', 'print'
         ],
         responsive: true
