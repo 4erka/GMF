@@ -16,52 +16,24 @@
       <td style="width:50%">
         <div class="form-group">
           <label class="control-label">A/C Type</label>
-            <div style="padding-left: 50px">
-              <label class="checkbox-inline">
-                <?php
-                  if(isset($_POST['actype'])){
-                    for($i=0; $i<10; $i++){
-                        $ac_code[$i] = "";
-                    }
-
-                    foreach ($_POST['actype'] as $key) {
-
-                      if($key == 'A330') $ac_code[0] = "checked";
-                      if($key == 'B737-800E') $ac_code[1] = "checked";
-                      if($key == 'B737-800E-M') $ac_code[2] = "checked";
-                      if($key == 'B737-800') $ac_code[3] = "checked";
-                      if($key == 'B747-400') $ac_code[4] = "checked";
-                      if($key == 'B777-300') $ac_code[5] = "checked";
-                      if($key == 'ATR72-600') $ac_code[6] = "checked";
-                      if($key == 'CRJ-10000') $ac_code[7] = "checked";
-                      if($key == 'A320-200') $ac_code[8] = "checked";
-                      if($key == 'A320-NEO') $ac_code[9] = "checked";
-                    }
+            <select name="actype" class="form-control">
+              <?php
+              if(isset($ACType)){
+                while($row = $res0->fetch_array(MYSQLI_NUM)){
+                  if($_POST["actype"] == $row[0]){
+                      echo "<option value=".$row[0]." selected>".$row[0]."</option>";
                   }
-                ?>
-
-                <input type='checkbox' name='actype[]' value='A330' <?php if(isset($_POST['actype'])) echo $ac_code[0]; ?>>A330</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='B737-800E' <?php if(isset($_POST['actype'])) echo $ac_code[1]; ?>>B737-800E</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='B737-800E-M' <?php if(isset($_POST['actype'])) echo $ac_code[2]; ?>>B737-800E-M</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='B737-800' <?php if(isset($_POST['actype'])) echo $ac_code[3]; ?>>B737-800</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='B747-400' <?php if(isset($_POST['actype'])) echo $ac_code[4]; ?>>B747-400</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='B777-300' <?php if(isset($_POST['actype'])) echo $ac_code[5]; ?>>B777-300</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='ATR72-600' <?php if(isset($_POST['actype'])) echo $ac_code[6]; ?>>ATR72-600</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='CRJ-10000' <?php if(isset($_POST['actype'])) echo $ac_code[7]; ?>>CRJ-10000</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='A320-200' <?php if(isset($_POST['actype'])) echo $ac_code[8]; ?>>A320-200</label>
-              <label class="checkbox-inline">
-                <input type='checkbox' name='actype[]' value='A320-NEO' <?php if(isset($_POST['actype'])) echo $ac_code[9]; ?>>A320-NEO</label>
-              <label class="checkbox-inline">
-              </label>
-            </div>
+                  else {
+                    echo "<option value=".$row[0].">".$row[0]."</option>";
+                  }
+                }
+              }
+              else{
+                while($row = $res0->fetch_array(MYSQLI_NUM))
+                  echo "<option value=".$row[0].">".$row[0]."</option>";
+              }
+               ?>
+            </select>
         </div>
       </td>
       <td style="padding-left:50px; width:50%">

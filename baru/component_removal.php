@@ -7,9 +7,10 @@ if(empty($_POST["actype"])){
   $ACType = "";
 }
 else{
-  $data = implode("','",$_POST["actype"]);
-  $where_actype = "Aircraft IN ('$data')";
+//  $data = implode("','",$_POST["actype"]);
+//  $where_actype = "Aircraft IN ('$data')";
   $ACType = "'".$_POST['actype']."'";
+  $where_actype = "Aircraft = ".$ACType;
 }
 if(empty($_POST["acreg"])){
   $ACReg = "";
@@ -225,9 +226,11 @@ if(!empty($_POST["remcode"])){
     	<?php
 
       $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
-      WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
+      WHERE ".$where_actype." ".$where_remcode." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
 
         $res_comp = mysqli_query($link, $sql_comp);
+
+        //print_r($sql_comp);
 
     		$i = 0;
     		while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {

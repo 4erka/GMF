@@ -7,9 +7,10 @@ if(empty($_POST["actype"])){
   $ACType = "";
 }
 else{
-  $data = implode("','",$_POST["actype"]);
-  $where_actype = "ACType IN ('$data')";
+//  $data = implode("','",$_POST["actype"]);
+//  $where_actype = "ACType IN ('$data')";
   $ACType = "'".$_POST['actype']."'";
+  $where_actype = "ACType = '".$_POST['actype']."'";
 }
 if(empty($_POST["acreg"])){
   $ACReg = "";

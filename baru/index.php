@@ -23,6 +23,17 @@
 
     <script src="assets/js/chart-master/Chart.js"></script>
 
+    <style>
+    .my_style{
+      background: url(assets/img/landing_gmf1.jpg) no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      height: 90vh;
+    }
+    </style>
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -56,7 +67,7 @@
       *********************************************************************************************************************************************************** -->
       <!--main content start-->
       <section id="main-content" style="min-height:94vh;">
-        <section class="wrapper" style="text-align: centered; background-image:url('assets/img/landing_gmf1.jpg'); height: 90vh">
+        <section class="wrapper my_style">
           <h2 style="color:white">Aircraft Reliability Dashboard</h2>
 <!--              <embed src="assets/img/report.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="670" height="400">
 -->
