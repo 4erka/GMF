@@ -17,22 +17,21 @@
         <div class="form-group">
           <label class="control-label">A/C Type</label>
             <select name="actype" class="form-control">
-              <?php
-              if(isset($ACType)){
-                while($row = $res0->fetch_array(MYSQLI_NUM)){
-                  if($_POST["actype"] == $row[0]){
-                      echo "<option value=".$row[0]." selected>".$row[0]."</option>";
+                <?php
+                  if(isset($ACType)){
+                    if($row[0]==$_POST["actype"]){
+          						$isSelect="selected";
+          						echo "<option value=".$row[0]." ".$isSelect.">".$row[0]."</option>";
+          					}
+          					else{
+          						echo "<option value=".$row[0].">".$row[0]."</option>";
+          					}
                   }
-                  else {
-                    echo "<option value=".$row[0].">".$row[0]."</option>";
+                  else{
+                    while($row = $res0->fetch_array(MYSQLI_NUM))
+                      echo "<option value=".$row[0].">".$row[0]."</option>";
                   }
-                }
-              }
-              else{
-                while($row = $res0->fetch_array(MYSQLI_NUM))
-                  echo "<option value=".$row[0].">".$row[0]."</option>";
-              }
-               ?>
+                 ?>
             </select>
         </div>
       </td>

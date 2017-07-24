@@ -8,7 +8,7 @@
       <!--logo end-->
 
       <div class="logo" style="padding-left: 70%; margin-top: 1%;">
-              <img src="assets/img/logo_all_w.png" style="width: 100%;padding: 0.5%">
+              <img src="assets/img/logo_all_w1.png" style="width: 100%;padding: 0.5%">
       </div>
 
   </header>

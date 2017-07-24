@@ -25,7 +25,7 @@
 
     <style>
     .my_style{
-      background: url(assets/img/landing_gmf1.jpg) no-repeat center center fixed;
+      background: url(assets/img/hangar4_gmf1.jpg) no-repeat center center fixed;
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -50,7 +50,7 @@
 
       <?php
         $page_now = "index";
-        include 'header.php';
+        include 'header2.php';
        ?>
 
       <!-- **********************************************************************************************************************************************************
