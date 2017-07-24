@@ -43,8 +43,7 @@
   else{
     $Keyword = " AND (PROBLEM LIKE '%".$_POST['keyword']."%' OR RECTIFICATION LIKE '%".$_POST['keyword']."%')";
   }
-  if(empty($_POST["dcp"])){
-    $DCP[4] = "";
+  if(empty($_POST["dcp"]) or $_POST["dcp"] == "c"){
     $DCPs="";
   }
   else{
@@ -70,11 +69,39 @@
       $i++;
     }
   }
-  //print_r($DCP);
+  if(empty($_POST["rtabo"])){
+    $RTABOs="";
+  }
+  else{
+    $RTABO = $_POST['rtabo'];
+    $i = 0;
+    foreach ($RTABO as &$value) {
+      if($i == 0){
+        $RTABO[$i] = " AND RtABO IN ('".$RTABO[$i]."'";
+      }
+      else if($i == 1){
+        $RTABO[$i] = ",'".$RTABO[$i]."'";
+      }
+      else if($i == 2){
+        $RTABO[$i] = ",'".$RTABO[$i]."'";
+      }
+      else{
+        $RTABO[$i] = ",'".$RTABO[$i]."'";
+      }
+      $i++;
+    }
+    $RTABO[$i-1]=$RTABO[$i-1].")";
+    $i = 0;
+    $RTABOs="";
+    foreach ($RTABO as &$value) {
+      $RTABOs = $RTABOs.$RTABO[$i];
+      $i++;
+    }
+  }
 
   include "config/connect.php";
 
-  $sql_delay = "SELECT ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot, DCP, RtABO FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$DateStart2."".$DateEnd."";
+  $sql_delay = "SELECT ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot, DCP, RtABO FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$RTABOs."".$DateStart2."".$DateEnd."";
   $res_delay = mysqli_query($link, $sql_delay);
 ?>
 
@@ -165,23 +192,6 @@
           </div>
 
           <!-- Table delay and pirep -->
-          <script type="text/javascript">
-            function printElem(divId) {
-                var content = document.getElementById(divId).innerHTML;
-                var mywindow = window.open('', 'Print', 'height=600,width=800');
-
-                mywindow.document.write('<html><head><title>Print</title>');
-                mywindow.document.write('</head><body >');
-                mywindow.document.write(content);
-                mywindow.document.write('</body></html>');
-
-                mywindow.document.close();
-                mywindow.focus()
-                mywindow.print();
-                mywindow.close();
-                return true;
-            }
-          </script>
           <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
           <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
           <div class="col-md-12 mt">
@@ -263,11 +273,12 @@
             var fault_code = <?php echo(json_encode($Fault_code2)); ?>;
             var keyword = <?php echo(json_encode($Keyword)); ?>;
             var dcp = <?php echo(json_encode($DCPs)); ?>;
+            var rtabo = <?php echo(json_encode($RTABOs)); ?>;
             $(document).ready(function(){
               $.ajax({
                 url: "data_grafik_delay.php",
                 method: "POST",
-                data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword, dcp: dcp},
+                data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword, dcp: dcp, rtabo: rtabo},
                 success: function(data) {
                   console.log(data);
                   var date = {
@@ -346,8 +357,7 @@
               </div>
             </div>
           </div>
-          <!-- <script src="https://rawgit.com/MrRio/jsPDF/master/dist/jspdf.debug.js"> </script>
-          <script src="https://rawgit.com/simonbengtsson/jsPDF-AutoTable/master/dist/jspdf.plugin.autotable.src.js"> </script> -->
+          
           <script src="js/jspdf.min.js"></script>
           <script src="js/jspdf.plugin.autotable.js"></script>
           <script type="text/javascript">

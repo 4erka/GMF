@@ -22,6 +22,7 @@ $DateEnd = $_POST["dateend"];
 $ATA = $_POST["ata"];
 $Fault_code = $_POST["fault_code"];
 $Keyword = $_POST["keyword"];
+$Pimas = $_POST["pima"]
 
 $query = "SELECT COUNT(DATE) as pirep, DATE FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$DateStart."".$DateEnd." GROUP BY DATE";
 

@@ -43,10 +43,33 @@
 	else{
 		$Keyword = " AND (PROBLEM LIKE '%".$_POST['keyword']."%' OR ACTION LIKE '%".$_POST['keyword']."%')";
 	}
+	if(empty($_POST["pima"])){
+    	$Pimas="";
+	}
+	else{
+		$Pima = $_POST['pima'];
+		$i = 0;
+		foreach ($Pima as &$value) {
+		  if($i == 0){
+		    $Pima[$i] = " AND PirepMarep IN ('".$Pima[$i]."'";
+		  }
+		  else{
+		    $Pima[$i] = ",'".$Pima[$i]."'";
+		  }
+		  $i++;
+		}
+		$Pima[$i-1]=$Pima[$i-1].")";
+		$i = 0;
+		$Pimas="";
+		foreach ($Pima as &$value) {
+		  $Pimas = $Pimas.$Pima[$i];
+		  $i++;
+		}
+	}
 
 	include "config/connect.php";
 
-	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, STAARR, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$DateStart."".$DateEnd."";
+	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, STAARR, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd."";
 		
 	$res_pirep = mysqli_query($link, $sql_pirep);
 ?>
@@ -146,6 +169,7 @@
 						<h4><i class="fa fa-angle-right"></i> Table Pirep</h4>
 					</div>
 					<div class="panel-body">
+						<button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
 						<table id="table_pirep" class="display cell-border" cellspacing="0" width="100%">
 						    <thead>
 						        <tr>
@@ -214,6 +238,13 @@
 			</script>
 			<script type="text/javascript" src="js/Chart.min.js"></script>
 			<script type="text/javascript">
+				Chart.plugins.register({
+	              beforeDraw: function(chartInstance) {
+	                var ctx = chartInstance.chart.ctx;
+	                ctx.fillStyle = "white";
+	                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+	              }
+	            });
 				var actype1 = <?php echo(json_encode($ACType)); ?>;
 				var acreg1 = <?php echo(json_encode($ACReg)); ?>;
 				var datestart1 = <?php echo(json_encode($DateStart)); ?>;
@@ -221,11 +252,12 @@
 				var ata1 = <?php echo(json_encode($ATA)); ?>;
 				var fault_code1 = <?php echo(json_encode($Fault_code)); ?>;
 				var keyword1 = <?php echo(json_encode($Keyword)); ?>;
+				var pima = <?php echo(json_encode($Pimas)); ?>;
 				$(document).ready(function(){
 					$.ajax({
-						url: "http://localhost/GMF/data_grafik_pirep.php",
+						url: "data_grafik_pirep.php",
 						method: "POST",
-						data: {actype: actype1, acreg: acreg1, datestart: datestart1, dateend: dateend1, ata: ata1, fault_code: fault_code1, keyword: keyword1},
+						data: {actype: actype1, acreg: acreg1, datestart: datestart1, dateend: dateend1, ata: ata1, fault_code: fault_code1, keyword: keyword1, pima: pima},
 						success: function(data) {
 							console.log(data);
 							var date = {
@@ -305,6 +337,49 @@
 					</div>
 				</div>
 			</div>
+
+			<script src="js/jspdf.min.js"></script>
+	          <script src="js/jspdf.plugin.autotable.js"></script>
+	          <script type="text/javascript">
+	            // this function generates the pdf using the table
+	            function generate() {
+	              var pdfsize = 'a4';
+	              var columns = ["Date", "Sequence", "Notification Number", "A/C Type", "A/C Reg", "Sta Dep", "Sta Arr", "Flight No", "ATA", "SUB ATA", "Problem", "Rectification", "Coding"];
+	              var data = tableToJson($("#table_pirep").get(0), columns);
+	              console.log(data);
+	              var canvas = document.querySelector('#graf_data_pirep');
+	              var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+	              var doc = new jsPDF('l', 'pt', pdfsize);
+	              var width = doc.internal.pageSize.width;
+	              doc.autoTable(columns, data, {
+	                theme: 'grid',
+	                styles: {
+	                  overflow: 'linebreak'
+	                },
+	                pageBreak: 'always',
+	                tableWidth: 'auto'
+	              });
+	              let finalY = doc.autoTable.previous.finalY;
+	              doc.addPage();
+	              doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
+	              doc.save("table.pdf");
+	            }
+	            // This function will return table data in an Array format
+	            function tableToJson(table, columns) {
+	              var data = [];
+	              // go through cells
+	              for (var i = 1; i < table.rows.length; i++) {
+	                var tableRow = table.rows[i];
+	                var rowData = [];
+	                for (var j = 0; j < tableRow.cells.length; j++) {
+	                  rowData.push(tableRow.cells[j].innerHTML)
+	                }
+	                data.push(rowData);
+	              }
+	                
+	              return data;
+	            }
+	          </script>
 
         </section>
       </section>
