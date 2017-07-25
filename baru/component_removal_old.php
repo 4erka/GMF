@@ -47,7 +47,6 @@ if(!empty($_POST["remcode"])){
 }
 
   include 'config/connect.php';
-  include 'jsonwrapper.php';
  ?>
 
 <html lang="en">
@@ -88,19 +87,10 @@ if(!empty($_POST["remcode"])){
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <?php
-      include 'loader_style.php';
-    ?>
-</head>
 
-<body onload="myFunction()" style="margin:0;">
+  </head>
 
-    <?php
-      include 'loader.php';
-    ?>
-
-
-    <div style="display:none;" id="myDiv" class="animate-bottom">
+  <body>
 
   <section id="container" >
       <!-- **********************************************************************************************************************************************************
@@ -245,8 +235,8 @@ if(!empty($_POST["remcode"])){
     		$i = 0;
     		while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
     			//if($i > 9) break;
-    			$arr_comp[$i][0] = $rowes[0];
-    			$arr_comp[$i][1] = $rowes[1];
+    			$arr_pirep[$i][0] = $rowes[0];
+    			$arr_pirep[$i][1] = $rowes[1];
     			$i++;
     		}
     	 ?>
@@ -261,6 +251,42 @@ if(!empty($_POST["remcode"])){
            </div>
          </div>
        </div>
+
+    	<script type="text/javascript">
+
+        var Morris_data = [];
+        var z=0;
+
+        var arr_pirep = <?php echo json_encode($arr_pirep); ?>;
+
+        for ( tot=arr_pirep.length; z < tot; z++) {
+           Morris_data.push({option: arr_pirep[z][0], value: arr_pirep[z][1]});
+        }
+
+    		new Morris.Line({
+    		// ID of the element in which to draw the chart.
+    		element: 'grafik_comp',
+    		// Chart data records -- each entry in this array corresponds to a point on
+    		// the chart.
+    		data: Morris_data,
+    		// The name of the data record attribute that contains x-values.
+    		xkey: 'option',
+    		// A list of names of data record attributes that contain y-values.
+    		ykeys: ['value'],
+    		// Labels for the ykeys -- will be displayed when you hover over the
+    		// chart.
+    		labels: ['Jumlah Removal'],
+
+    		hideHover:'auto',
+
+    		barColors: ['red'],
+
+        xLabelMargin: 10
+    		});
+
+
+    	</script>
+
 
       </section>
     </section>
@@ -312,84 +338,6 @@ if(!empty($_POST["remcode"])){
         responsive: true
       });
   });
-  </script>
-
-  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-  <script type="text/javascript" src="js/Chart.min.js"></script>
-
-  <script type="text/javascript">
-      var label_data = [];
-      var jumlah_pirep = [];
-      var z=0;
-
-      var arr_pirep = <?php echo json_encode($arr_comp); ?>;
-
-      for ( tot=arr_pirep.length; z < tot; z++) {
-         label_data.push(arr_pirep[z][0]);
-         jumlah_pirep.push(arr_pirep[z][1]);
-      };
-
-      Chart.plugins.register({
-        beforeDraw: function(chartInstance) {
-          var ctx = chartInstance.chart.ctx;
-          ctx.fillStyle = "white";
-          ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
-        }
-      });
-
-      var ctx = document.getElementById("grafik_comp").getContext("2d");
-
-      var data = {
-        labels: label_data,//["dD 1", "dD 2", "dD 3", "dD 4", "dD 5", "dD 6", "dD 7", "dD 8", "dD 9", "dD 10"],
-        datasets: [{
-          label: "Jumlah Component Removal",
-          fill: 'false',
-          backgroundColor: 'rgba(200, 200, 200, 0)',
-          borderColor: 'rgba(0, 0, 255, 1)',
-          pointBackgroundColor: 'rgba(255, 0, 0, 1)',
-          pointBorderColor: 'rgba(255, 0, 0, 1)',
-          lineTension: '0',
-          data: jumlah_pirep
-        }]
-      };
-
-      var options = {
-        title : {
-          display : true,
-          position : "top",
-          text : "Component Removal",
-          fontSize : 18,
-          fontColor : "#111"
-        },
-        legend : {
-          display : true,
-          position : "bottom"
-        },
-        scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero: true
-                  }
-              }]
-          }
-      };
-
-      var myBarChart = new Chart(ctx, {
-          type: 'line',
-          data: data,
-          options: options
-/*          {
-              barValueSpacing: 20,
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true,
-                      }
-                  }]
-              }
-          }
-          */
-      });
   </script>
 
 </div>
