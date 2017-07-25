@@ -1,0 +1,58 @@
+CREATE TABLE `tbl_kriteria` (
+  `id_kriteria` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id_kriteria`)
+)
+
+CREATE TABLE `tbl_actype_kriteria` (
+  `id_actype` int(11) NOT NULL AUTO_INCREMENT,
+  `id_kriteria` int(11) NOT NULL,
+  `actype` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id_actype`)
+)
+
+CREATE TABLE `tbl_reg_kriteria` (
+  `id_reg` int(11) NOT NULL AUTO_INCREMENT,
+  `id_actype` int(11) NOT NULL,
+  `reg` varchar(7) DEFAULT NULL,
+  `like` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id_reg`)
+)
+
+INSERT INTO tbl_kriteria (nama) values ("B737-800");
+INSERT INTO tbl_kriteria (nama) values ("B737-800-E");
+INSERT INTO tbl_kriteria (nama) values ("B737-800-M");
+INSERT INTO tbl_kriteria (nama) values ("B777-300");
+INSERT INTO tbl_kriteria (nama) values ("B747-400");
+INSERT INTO tbl_kriteria (nama) values ("B737-CL");
+INSERT INTO tbl_kriteria (nama) values ("A330-200");
+INSERT INTO tbl_kriteria (nama) values ("A330-300");
+INSERT INTO tbl_kriteria (nama) values ("A330");
+INSERT INTO tbl_kriteria (nama) values ("A330-NEO");
+INSERT INTO tbl_kriteria (nama) values ("A330-CEO");
+INSERT INTO tbl_kriteria (nama) values ("ATR72-600");
+INSERT INTO tbl_kriteria (nama) values ("CRJ-1000");
+
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (1,"B737-800");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (2,"B737-800");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (3,"B737-800");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (4,"B777-300");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (5,"B747-400");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (6,"B737-CL");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (7,"A320-200");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (8,"A330-300");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (9,"A330-200");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (9,"A330-300");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (11,"A320-200");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (12,"A320-200");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (13,"ATR72-600");
+INSERT INTO tbl_actype_kriteria (id_kriteria, actype) VALUES (14,"CRJ-1000");
+
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (2, "GE", 1);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (3, "GE", 0);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (9, "GP", 1);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (10, "GP", 1);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (10, "GH", 1);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (12, "GT", 1);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (13, "GL", 1);
+INSERT INTO tbl_reg_kriteria (id_actype, reg, `like`) VALUES (13, "GQ", 1);
