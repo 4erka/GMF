@@ -19,13 +19,15 @@
             <select name="actype" class="form-control">
                 <?php
                   if(isset($ACType)){
-                    if($row[0]==$_POST["actype"]){
-          						$isSelect="selected";
-          						echo "<option value=".$row[0]." ".$isSelect.">".$row[0]."</option>";
-          					}
-          					else{
-          						echo "<option value=".$row[0].">".$row[0]."</option>";
-          					}
+                    while($row = $res0->fetch_array(MYSQLI_NUM)){
+                      if($row[0]==$_POST['actype']){
+                        $isSelect="selected";
+                        echo "<option value=".$row[0]." ".$isSelect.">".$row[0]."</option>";
+                      }
+                      else{
+                        echo "<option value=".$row[0].">".$row[0]."</option>";
+                      }
+                    }
                   }
                   else{
                     while($row = $res0->fetch_array(MYSQLI_NUM))

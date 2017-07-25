@@ -71,20 +71,9 @@ $Graph_type = $_POST['graph'];
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <?php
-      include 'loader_style.php';
-    ?>
-    </head>
+  </head>
 
-    <body onload="myFunction()" style="margin:0;">
-
-    <?php
-      include 'loader.php';
-    ?>
-
-
-    <div style="display:none;" id="myDiv" class="animate-bottom">
-
+  <body>
   <section id="container" >
       <!-- **********************************************************************************************************************************************************
       TOP BAR CONTENT & NOTIFICATIONS
@@ -122,6 +111,125 @@ $Graph_type = $_POST['graph'];
               </div>
             </div>
           </div>
+
+      <!-- Ini isi tabel -->
+      <!-- Table delay and pirep -->
+      <!--
+      <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    	<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+    	<table id="table_delay" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Notification Number</th>
+                    <th>A/C Type</th>
+                    <th>A/C Reg</th>
+                    <th>Sta Dep</th>
+                    <th>Flight No</th>
+                    <th>Delay Length (D4 Only)</th>
+                    <th>ATA</th>
+                    <th>Sub ATA</th>
+                    <th>Problem</th>
+                    <th>Coding (D2 Only)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            -->
+    			<?php
+    				//	Notif_Number, A/CType, ACREg, StaDep, Flight_Number, delay_lenght (D4), ATA, SubAta, problem, Code(D2)
+    				//	Query untuk Tabel D2 / tblpirep_swift
+
+/*    				$sql_delay = "SELECT Notification, ACTYPE, REG, STADEP, FN, ATA, SUBATA, PROBLEM, 4DigitCode FROM tblpirep_swift
+    				WHERE ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."%' AND DATE BETWEEN ".$DateStart." AND ".$DateEnd."";
+
+    				$res_delay = mysqli_query($link, $sql_delay);
+
+    				//Query untuk tabel D4 / mcdrnew
+    				//tidak ada Notification dan 4digitcode
+    				$sql_mcdrnew = "SELECT ACTYPE, REG, DepSta, FlightNo, HoursTot, MinTot, ATAtdm, Iata, Problem, DateEvent FROM mcdrnew
+    				WHERE ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd."";
+
+    				$res_mcdrnew = mysqli_query($link, $sql_mcdrnew);
+
+    				//print_r($sql_delay);
+
+    				while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
+    					echo "<tr>";
+    						echo "<td>".$rowes[0]."</td>"; //Notification
+    						echo "<td>".$rowes[1]."</td>"; //AcType
+    						echo "<td>".$rowes[2]."</td>"; //REG
+    						echo "<td>".$rowes[3]."</td>"; //STADEP
+    						echo "<td>".$rowes[4]."</td>"; //FN
+    						echo "<td></td>";
+    						echo "<td>".$rowes[5]."</td>"; //ATA
+    						echo "<td>".$rowes[6]."</td>"; //SUBATA
+    						echo "<td>".$rowes[7]."</td>"; //Problem
+    						echo "<td>".$rowes[8]."</td>"; //4DigitCode
+    						//echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
+    					echo "</tr>";
+    				}
+
+    				$i = 0;
+    				while ($rowes = $res_mcdrnew->fetch_array(MYSQLI_NUM)) {
+    					echo "<tr>";
+    						echo "<td></td>";
+    						echo "<td>".$rowes[0]."</td>"; //ACtype
+    						echo "<td>".$rowes[1]."</td>"; //REG
+    						echo "<td>".$rowes[2]."</td>"; //DepSta
+    						echo "<td>".$rowes[3]."</td>"; //FlightNo
+
+    						$temp = ($rowes[4]*60) + $rowes[5];
+    						echo "<td>".$temp."</td>"; //delay_lenght
+    						echo "<td>".$rowes[6]."</td>"; //ATAtdm
+    						echo "<td>".$rowes[7]."</td>"; //Iata
+    						echo "<td>".$rowes[8]."</td>"; //Problem
+    						echo "<td></td>"; //Coding
+    					echo "</tr>";
+    					$delay_lenght[$i] = $temp;
+    					$saved_date[$i] = $rowes[9];
+    //					print_r($delay_lenght[$i]);
+    					$i++;
+    				}
+*/
+    			 ?>
+
+<!--
+            </tbody>
+    			</table>
+
+
+          <!--End of table-->
+          <!--
+    			<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    			<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    			<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+    			<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+    			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+    			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+
+        -->
+
+
+                  <!-- Grafik-->
+
+
+       	<script type="text/javascript">
+       // 		$(document).ready(function() {
+        // 	$('#table_delay').DataTable({
+    		// 		dom: 'Bfrtip',
+        //     buttons: [
+        //         'copyHtml5',
+        //         'excelHtml5',
+        //         'pdfHtml5'
+        //     ]
+        // 	});
+        //
+    		// } );
+       	</script>
+
     	<?php
 
       if($Graph_type == 'ata' || $Graph_type == 'ac_reg'){
@@ -225,7 +333,6 @@ $Graph_type = $_POST['graph'];
         #print_r($sql_graph_delay );
 
     	 ?>
-       <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
        <div class="col-md-12 mt">
          <div class="panel panel-default">
@@ -233,7 +340,7 @@ $Graph_type = $_POST['graph'];
              <h4><i class="fa fa-angle-right"></i>Top 10 Delay</h4>
            </div>
            <div class="panel-body">
-             <canvas id="grafik_delay" style="height: 250px; margin-top: 50px"></canvas>
+                 	<div id="grafik_delay" style="height: 250px; margin-top: 50px"></div>
            </div>
          </div>
        </div>
@@ -244,10 +351,78 @@ $Graph_type = $_POST['graph'];
              <h4><i class="fa fa-angle-right"></i>Top 10 Pirep</h4>
            </div>
            <div class="panel-body">
-             <canvas id="grafik_pirep" style="height: 250px; margin-top: 50px"></canvas>
+                  <div id="grafik_pirep" style="height: 250px; margin-top: 50px"></div>
            </div>
          </div>
        </div>
+
+
+    	<script type="text/javascript">
+      var Morris_data = [];
+      var z=0;
+
+    	arr_delay = <?php echo json_encode($arr_delay); ?>;
+
+      for ( tot=arr_delay.length; z < tot; z++) {
+         Morris_data.push({option: arr_delay[z][0], value: arr_delay[z][1]});
+      }
+
+    		new Morris.Bar({
+
+    		// ID of the element in which to draw the chart.
+    		element: 'grafik_delay',
+    		// Chart data records -- each entry in this array corresponds to a point on
+    		// the chart.
+        data: Morris_data,
+    		// The name of the data record attribute that contains x-values.
+    		xkey: 'option',
+
+    		// A list of names of data record attributes that contain y-values.
+    		ykeys: ['value'],
+    		// Labels for the ykeys -- will be displayed when you hover over the
+    		// chart.
+    		labels: ['Jumlah Delay'],
+
+    		hideHover: 'auto',
+
+        xLabelMargin: 10
+    		});
+    	</script>
+    	<script type="text/javascript">
+
+        var Morris_data = [];
+        var z=0;
+
+        var arr_pirep = <?php echo json_encode($arr_pirep); ?>;
+
+        for ( tot=arr_pirep.length; z < tot; z++) {
+           Morris_data.push({option: arr_pirep[z][0], value: arr_pirep[z][1]});
+        }
+
+    		new Morris.Bar({
+    		// ID of the element in which to draw the chart.
+    		element: 'grafik_pirep',
+    		// Chart data records -- each entry in this array corresponds to a point on
+    		// the chart.
+    		data: Morris_data,
+    		// The name of the data record attribute that contains x-values.
+    		xkey: 'option',
+    		// A list of names of data record attributes that contain y-values.
+    		ykeys: ['value'],
+    		// Labels for the ykeys -- will be displayed when you hover over the
+    		// chart.
+    		labels: ['Jumlah Pirep'],
+
+    		hideHover:'auto',
+
+    		barColors: ['red'],
+
+        xLabelMargin: 10
+    		});
+
+
+    	</script>
+
 
       </section>
     </section>
@@ -278,111 +453,5 @@ $Graph_type = $_POST['graph'];
     <script src="assets/js/sparkline-chart.js"></script>
 	<script src="assets/js/zabuto_calendar.js"></script>
 
-  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-  <script type="text/javascript" src="js/Chart.min.js"></script>
-  <script>
-
-  var label_data = [];
-  var jumlah_pirep = [];
-  var z=0;
-
-  var arr_pirep = <?php echo json_encode($arr_delay); ?>;
-
-  for ( tot=arr_pirep.length; z < tot; z++) {
-     label_data.push(arr_pirep[z][0]);
-     jumlah_pirep.push(arr_pirep[z][1]);
-  };
-
-  Chart.plugins.register({
-    beforeDraw: function(chartInstance) {
-      var ctx = chartInstance.chart.ctx;
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
-    }
-  });
-
-  var ctx = document.getElementById("grafik_delay").getContext("2d");
-
-  var data = {
-    labels: label_data,//["dD 1", "dD 2", "dD 3", "dD 4", "dD 5", "dD 6", "dD 7", "dD 8", "dD 9", "dD 10"],
-    datasets: [{
-      label: "Jumlah Delay",
-//          fillColor: "rgba(0,60,100,1)",
-      backgroundColor: "lightblue",
-//          hoverBackgroundColor: ["#66A2EB", "#FCCE56"],
-      strokeColor: "black",
-      data: jumlah_pirep
-    }]
-  };
-
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                  }
-              }]
-          }
-      }
-  });
-  </script>
-
-  <script>
-
-  var label_data = [];
-  var jumlah_pirep = [];
-  var z=0;
-
-  var arr_pirep = <?php echo json_encode($arr_pirep); ?>;
-
-  for ( tot=arr_pirep.length; z < tot; z++) {
-     label_data.push(arr_pirep[z][0]);
-     jumlah_pirep.push(arr_pirep[z][1]);
-  };
-
-  Chart.plugins.register({
-    beforeDraw: function(chartInstance) {
-      var ctx = chartInstance.chart.ctx;
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
-    }
-  });
-
-  var ctx = document.getElementById("grafik_pirep").getContext("2d");
-
-  var data = {
-    labels: label_data,//["dD 1", "dD 2", "dD 3", "dD 4", "dD 5", "dD 6", "dD 7", "dD 8", "dD 9", "dD 10"],
-    datasets: [{
-      label: "Jumlah Pirep",
-//          fillColor: "rgba(0,60,100,1)",
-      backgroundColor: "red",
-//          hoverBackgroundColor: ["#66A2EB", "#FCCE56"],
-      strokeColor: "black",
-      data: jumlah_pirep
-    }]
-  };
-
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                  }
-              }]
-          }
-      }
-  });
-  </script>
-
-
-</div>
   </body>
 </html>

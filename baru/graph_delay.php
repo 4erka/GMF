@@ -109,18 +109,18 @@
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
-  <?php  
+  <?php
     include 'loader_style.php';
   ?>
 </head>
 
 <body onload="myFunction()" style="margin:0;">
 
-  <?php  
+  <?php
     include 'loader.php';
   ?>
 
-  
+
   <div style="display:none;" id="myDiv" class="animate-bottom">
 
     <section id="container">
@@ -157,8 +157,8 @@
                 <h4><i class="fa fa-angle-right"></i> Filter Graph Delay / Pirep</h4>
               </div>
               <div class="panel-body">
-                <?php 
-                  include "input_graph_delay_pirep.php"; 
+                <?php
+                  include "input_graph_delay_pirep.php";
                 ?>
               </div>
             </div>
@@ -191,7 +191,7 @@
               </div>
               <div class="panel-body">
                 <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
-                <table id="table_delay" class="display cell-border" cellspacing="0" width="100%"">
+                <table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
                   <thead>
                       <tr>
                           <th>A/C Type</th>
@@ -386,7 +386,7 @@
                 }
                 data.push(rowData);
               }
-                
+
               return data;
             }
           </script>
