@@ -22,10 +22,9 @@ $DateEnd = $_POST["dateend"];
 $ATA = $_POST["ata"];
 $Fault_code = $_POST["fault_code"];
 $Keyword = $_POST["keyword"];
-$DCPs = $_POST["dcp"];
-$RTABOs = $_POST["rtabo"];
+$Pimas = $_POST["pima"];
 
-$query = "SELECT COUNT(DateEvent) as delay, DateEvent FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$DCPs."".$RTABOs."".$Keyword."".$DateStart."".$DateEnd." GROUP BY DateEvent";
+$query = "SELECT COUNT(DATE) as pirep, DATE FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd." GROUP BY DATE";
 
 //execute query
 $result = $mysqli->query($query);

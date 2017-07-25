@@ -32,15 +32,12 @@
 	</div>
 
 	<div class="form-group">
-  		<label class="col-sm-2 col-sm-2 control-label">Month from</label>
-		<div class="col-sm-10">
+  		<label class="col-xs-6 col-sm-2 control-label">Month from</label>
+		<div class="col-sm-3">
 			<input type="date" name="monthfrom" id="id_monthfrom" class="form-control">
 		</div>
-	</div>
-
-	<div class="form-group">
-  		<label class="col-sm-2 col-sm-2 control-label">Month to</label>
-		<div class="col-sm-10">
+		<label class="col-xs-6 col-sm-2 control-label">Month to</label>
+		<div class="col-sm-3">
 			<input type="date" name="monthto" id="id_monthto" class="form-control">
 		</div>
 	</div>
