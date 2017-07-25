@@ -188,23 +188,6 @@
 						            <th>Coding</th>
 						        </tr>
 						    </thead>
-						    <tfoot>
-						        <tr>
-						        	<th>Date</th>
-						        	<th>Sequence</th>
-						            <th>Notification Number</th>
-						            <th>A/C Type</th>
-						            <th>A/C Reg</th>
-						            <th>Sta Dep</th>
-						            <th>Sta Arr</th>
-						            <th>Flight No</th>
-						            <th>ATA</th>
-						            <th>Sub ATA</th>
-						            <th>Problem</th>
-						            <th>Rectification</th>
-						            <th>Coding</th>
-						        </tr>
-						    </tfoot>
 						    <tbody>
 						    	<?php
 									while ($rowes = $res_pirep->fetch_array(MYSQLI_NUM)) {
@@ -233,6 +216,7 @@
 			<script type="text/javascript">
 					$(document).ready(function() {
 				$('#table_pirep').DataTable({
+					"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				});
 				} );
 			</script>
@@ -343,7 +327,7 @@
 	          <script type="text/javascript">
 	            // this function generates the pdf using the table
 	            function generate() {
-	              var pdfsize = 'a4';
+	              var pdfsize = 'a3';
 	              var columns = ["Date", "Sequence", "Notification Number", "A/C Type", "A/C Reg", "Sta Dep", "Sta Arr", "Flight No", "ATA", "SUB ATA", "Problem", "Rectification", "Coding"];
 	              var data = tableToJson($("#table_pirep").get(0), columns);
 	              console.log(data);

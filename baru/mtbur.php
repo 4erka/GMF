@@ -172,6 +172,7 @@
         						<h4><i class="fa fa-angle-right"></i> Table MTBUR</h4>
         					</div>
         					<div class="panel-body" style="padding: 10px">
+        						<button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
         						<table id="table_mtbur" class="table table-bordered table-striped table-condensed">
 								        <thead>
 								            <tr>
@@ -182,15 +183,6 @@
 								                <th>Reg</th>
 								            </tr>
 								        </thead>
-								        <tfoot>
-								            <tr>
-								            	<th>Date Removal</th>
-								                <th>Part Number</th>
-								                <th>Serial Number</th>
-								                <th>Part Name</th>
-								                <th>Reg</th>
-								            </tr>
-								        </tfoot>
 								        <tbody>
 											<?php
 												while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
@@ -211,9 +203,58 @@
 				<script type="text/javascript">
 					$(document).ready(function() {
 					$('#table_mtbur').DataTable({
+						"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 					});
 				} );
 				</script>
+
+				<script src="js/jspdf.min.js"></script>
+		          <script src="js/jspdf.plugin.autotable.js"></script>
+		          <script type="text/javascript">
+		            // this function generates the pdf using the table
+		            function generate() {
+		              datatableLength = -1;
+		              var fhour = <?php echo(json_encode($fhours)); ?>;
+		              var rm = <?php echo(json_encode($rm)); ?>;
+		              var mtbur = <?php echo(json_encode($mtbur)); ?>;
+		              var pdfsize = 'a4';
+		              var columns = ["Date Removal", "Part Number", "Serial Number", "Part Name", "Reg"];
+		              var data = tableToJson($("#table_mtbur").get(0), columns);
+		              console.log(data);
+		              var doc = new jsPDF('l', 'pt', pdfsize);
+		              doc.text(40, 40, "FH");
+		              doc.text(40, 70, "Removal");
+		              doc.text(40, 100, "MTBUR");
+		              doc.text(140, 40, fhour);
+		              doc.text(140, 70, rm);
+		              doc.text(140, 100, mtbur);
+		              doc.autoTable(columns, data, {
+		                theme: 'grid',
+		                styles: {
+		                  overflow: 'linebreak'
+		                },
+		                margin: {top: 120},
+		                pageBreak: 'always',
+		                tableWidth: 'auto'
+		              });
+		              doc.save("table.pdf");
+		            }
+		            // This function will return table data in an Array format
+		            function tableToJson(table, columns) {
+		              var data = [];
+		              // go through cells
+		              for (var i = 1; i < table.rows.length; i++) {
+		                var tableRow = table.rows[i];
+		                var rowData = [];
+		                for (var j = 0; j < tableRow.cells.length; j++) {
+		                  rowData.push(tableRow.cells[j].innerHTML)
+		                }
+		                data.push(rowData);
+		              }
+		                
+		              return data;
+		            }
+		          </script>
 
 				</section>
 			</section>

@@ -194,6 +194,10 @@
           <!-- Table delay and pirep -->
           <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
           <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+          <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+          <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+          <script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
           <div class="col-md-12 mt">
             <div class="panel panel-default">
               <div class="panel-heading">
@@ -252,8 +256,14 @@
           <script type="text/javascript">
             $(document).ready(function() {
             $('#table_delay').DataTable({
+              "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+              dom: 'Blfrtip',
+              buttons: [
+                {
+                  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+                }],
             });
-            } );
+            });
           </script>
 
           <script type="text/javascript" src="js/Chart.min.js"></script>
@@ -357,7 +367,7 @@
               </div>
             </div>
           </div>
-          
+
           <script src="js/jspdf.min.js"></script>
           <script src="js/jspdf.plugin.autotable.js"></script>
           <script type="text/javascript">
