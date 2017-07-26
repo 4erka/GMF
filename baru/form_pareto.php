@@ -50,12 +50,14 @@
         <div class="form-group">
           <label class="control-label">Date from</label>
             <input type="date" class="form-control" name="datefrom" value="<?php if(isset($DateStart))echo $_POST['datefrom'] ?>" required>
+            <p>Format: yyyy-mm-dd || Chrome: mm/dd/yyyy</p>
         </div>
       </td>
       <td style="padding-left:50px; width:50%">
         <div class="form-group">
           <label class="control-label">Date To</label>
             <input type="date" class="form-control" name="dateto" value="<?php if(isset($DateEnd))echo $_POST['dateto'] ?>" required>
+            <p>Format: yyyy-mm-dd || Chrome: mm/dd/yyyy</p>
         </div>
       </td>
     </tr>

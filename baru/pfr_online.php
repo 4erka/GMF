@@ -12,7 +12,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Aircraft Reliability - Oil Comsumption</title>
+    <title>Aircraft Reliability - PFR Online</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -39,7 +39,7 @@
        ?>
 
       <?php
-        $page_now = "oil";
+        $page_now = "pfr";
         include 'navbar.php';
        ?>
 
@@ -67,7 +67,7 @@
 
                 </script> -->
 
-                <iframe src="http://192.168.40.101/reliability/Oilcons/bin/Oilcons.php" id="iFrame1" height="600" width="1000"></iframe>
+                <iframe src="http://192.168.40.101/reliability/PFR_new/bin/CRJ.html" id="iFrame1" height="600" width="1000"></iframe>
         </section>
       </section>
 

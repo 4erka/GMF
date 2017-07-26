@@ -9,8 +9,8 @@ if(empty($_POST["actype"])){
 else{
 //  $data = implode("','",$_POST["actype"]);
 //  $where_actype = "ACType IN ('$data')";
-  $ACType = "'".$_POST['actype']."'";
-  $where_actype = "ACType = '".$_POST['actype']."'";
+  $ACType = "'".$_POST['actype']."%'";
+  $where_actype = "ACType LIKE '".$_POST['actype']."%'";
 }
 if(empty($_POST["acreg"])){
   $ACReg = "";
@@ -44,7 +44,7 @@ $Graph_type = $_POST['graph'];
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - Pareto</title>
+    <title>Aircraft Reliability - Pareto</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -126,11 +126,11 @@ $Graph_type = $_POST['graph'];
 
       if($Graph_type == 'ata' || $Graph_type == 'ac_reg'){
         if($Graph_type == 'ata'){
-    			$sql_graph_pirep = "SELECT ata, COUNT(ata) AS number_of_ata FROM tblpirep_swift WHERE ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ata ORDER BY number_of_ata DESC";
+    			$sql_graph_pirep = "SELECT ata, COUNT(ata) AS number_of_ata FROM tblpirep_swift WHERE ".$where_actype." AND ata >= 21 AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ata ORDER BY number_of_ata DESC";
     			$sql_graph_delay = "SELECT ATAtdm, COUNT(Atatdm) AS number_of_ata1 FROM mcdrnew WHERE ".$where_actype." AND DCP <> 'X' AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ATAtdm ORDER BY number_of_ata1 DESC";
     		}
     		else if($Graph_type == 'ac_reg'){
-    			$sql_graph_pirep = "SELECT REG, COUNT(REG) AS number_of_reg FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY REG ORDER BY number_of_reg DESC";
+    			$sql_graph_pirep = "SELECT REG, COUNT(REG) AS number_of_reg FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ata >= 21 AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY REG ORDER BY number_of_reg DESC";
     			$sql_graph_delay = "SELECT Reg, COUNT(Reg) AS number_of_reg FROM mcdrnew WHERE ".$where_actype." AND DCP <> 'X' AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY REG ORDER BY number_of_reg DESC";
     		}
 
@@ -156,29 +156,61 @@ $Graph_type = $_POST['graph'];
       }
 
     	else{
-          $sql_graph_pirep = "SELECT concat(ata, subata) as ata_subata, COUNT(concat(ata, subata)) AS number_of_subata FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY ata_subata ORDER BY number_of_subata DESC";
+#          $sql_graph_pirep = "SELECT concat_ws('-',ata, subata) as ata_subata, COUNT(concat(ata, subata)) AS number_of_subata FROM tblpirep_swift WHERE ata >= 21 AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY ata_subata ORDER BY number_of_subata DESC";
+          $sql_graph_pirep = "SELECT CASE
+            WHEN subata = '0' THEN CONCAT_WS('-',ata, '00')
+            WHEN subata = '' THEN CONCAT_WS('-', ata, '00')
+            ELSE CONCAT_WS('-', ata, subata)
+            END AS ata_subata
+            FROM tblpirep_swift WHERE ata >= 21 AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep'";
           #$sql_graph_delay = "SELECT CONCAT(ATAtdm, COALESCE(NULLIF(SubATAtdm,''),'00')) AS ata_subata, COUNT(CONCAT(ATAtdm, COALESCE(NULLIF(SubATAtdm,''),'00'))) AS number_of_subata FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ata_subata ORDER BY number_of_subata DESC";
           $sql_graph_delay = "SELECT CASE
-          	WHEN ISNULL(SubATAtdm) THEN CONCAT(ATAtdm, '00')
-          	WHEN SubATAtdm = '' THEN CONCAT(ATAtdm, '00')
-          	WHEN SubATAtdm = '00' THEN CONCAT(ATAtdm, '00')
-          	WHEN SubATAtdm = '0' THEN CONCAT(ATAtdm, '00')
-          	ELSE CONCAT(ATAtdm, SubATAtdm)
+          	WHEN ISNULL(SubATAtdm) THEN CONCAT_WS('-' ,ATAtdm, '00')
+          	WHEN SubATAtdm = '' THEN CONCAT_WS('-' ,ATAtdm, '00')
+          	WHEN SubATAtdm = '00' THEN CONCAT_WS('-' ,ATAtdm, '00')
+          	WHEN SubATAtdm = '0' THEN CONCAT_WS('-' ,ATAtdm, '00')
+          	ELSE CONCAT_WS('-' ,ATAtdm, SubATAtdm)
           	END AS new_ata
             FROM mcdrnew WHERE DCP <>'X' AND ".$where_actype." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd."";
 
           $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		  $res_graph_delay = mysqli_query($link, $sql_graph_delay);
 
-          #print_r($sql_graph_delay);
+          //print_r($sql_graph_pirep);
 
           $i = 0;
       		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
-      			if($i > 9) break;
-      			$arr_pirep[$i][0] = $rowes[0];
-      			$arr_pirep[$i][1] = $rowes[1];
-      			$i++;
+      			//if($i > 9) break;
+            $temp_pirep[$i] = $rowes[0];
+            $i++;
+
+//            $arr_pirep[$i][0] = $rowes[0];
+//      			$arr_pirep[$i][1] = $rowes[1];
+  //    			$i++;
       		}
+
+          for($i=0; $i<sizeof($temp_pirep); $i++){
+            if($temp_pirep[$i] == NULL){
+              $ar[$i] = '0000';
+            }
+            else {
+              $ar[$i] = $temp_pirep[$i];
+            }
+          }
+
+          $ar0 = array_count_values($ar);
+
+          arsort($ar0);
+
+          $keys=array_keys($ar0);//Split the array so we can find the most occuring key
+
+          $arr_pirep = Array();
+          for($i=0; $i<10; $i++){
+            $arr_pirep[$i][0] = $keys[$i];
+            $arr_pirep[$i][1] = $ar0[$keys[$i]];
+          }
+
+          //======================================================================Delay=======================================================
 
       		$i = 0;
       		while ($rowes = $res_graph_delay->fetch_array(MYSQLI_NUM)) {
@@ -188,7 +220,6 @@ $Graph_type = $_POST['graph'];
 
           for($i=0; $i<sizeof($temp_delay); $i++){
             if($temp_delay[$i] == NULL){
-            //  echo "Null rek";
               $ar[$i] = '0000';
             }
             else {

@@ -9,8 +9,8 @@ if(empty($_POST["actype"])){
 else{
 //  $data = implode("','",$_POST["actype"]);
 //  $where_actype = "Aircraft IN ('$data')";
-  $ACType = "'".$_POST['actype']."'";
-  $where_actype = "Aircraft = ".$ACType;
+  $ACType = "'".$_POST['actype']."%'";
+  $where_actype = "Aircraft LIKE ".$ACType;
 }
 if(empty($_POST["acreg"])){
   $ACReg = "";
@@ -26,12 +26,17 @@ else{
 }
 if(!empty($_POST["datefrom"])){
   $DateStart = "".$_POST['datefrom']."";
+  //$temp = explode('/', $_POST["datefrom"]);
+//  echo $_POST['datefrom'];
+  //$DateStart = $temp[2]."-".$temp[1]."-".$temp[0];
 }
 else{
   $DateStart = "";
 }
 if(!empty($_POST["dateto"])){
   $DateEnd = "".$_POST['dateto']."";
+//  $temp = explode('/', $_POST["dateto"]);
+  //$DateEnd = $temp[2]."-".$temp[1]."-".$temp[0];
 }
 else
   $DateEnd = "";
@@ -58,7 +63,7 @@ if(!empty($_POST["remcode"])){
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - Component Removal</title>
+    <title>Aircraft Reliability - Component Removal</title>
 
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
     <link rel-"stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
@@ -143,9 +148,10 @@ if(!empty($_POST["remcode"])){
 
           <div class="col-md-12 mt">
             <div class="content-panel">
-                  <h4><i class="fa fa-angle-right"></i> Tabel</h4>
+                <h4><i class="fa fa-angle-right"></i> Tabel</h4>
                   <section id="unseen" style="padding: 10px">
                   <table id="comp_table" class="table table-bordered table-striped table-condensed">
+                    <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
                     <hr>
                         <thead>
                         <tr>
@@ -170,27 +176,12 @@ if(!empty($_POST["remcode"])){
 
                         <?php
 
-                        if(!empty($RemCode)){
+                        if(isset($RemCode)){
 
                           $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
                                   FROM tblcompremoval
                                   WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
                                   "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_remcode;
-
-/*
-                          if(!empty($RemCode[1])){
-                            $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
-                                    FROM tblcompremoval
-                                    WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
-                                    "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' AND (RemCode = '".$RemCode[0]."' OR RemCode = '".$RemCode[1]."')";
-                          }
-                          else {
-                            $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
-                                    FROM tblcompremoval
-                                    WHERE Aircraft = ".$ACType." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
-                                    "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' AND RemCode = '".$RemCode[0]."'";
-                          }
-                          */
                         }
                         else {
                           $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
@@ -235,20 +226,66 @@ if(!empty($_POST["remcode"])){
 
     	<?php
 
-      $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
-      WHERE ".$where_actype." ".$where_remcode." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
+      if(isset($where_remcode)){
+        $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
+        WHERE ".$where_actype." ".$where_remcode." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
+      }
+      else {
+        $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
+        WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
+      }
 
         $res_comp = mysqli_query($link, $sql_comp);
 
         //print_r($sql_comp);
 
+        $temp = explode("-", $DateStart);
+        $bln_start = $temp[1];
+        $thn_start = $temp[0];
+        $hari_start = $temp[2];
+
+        $temp = explode("-", $DateEnd);
+        $bln_end = $temp[1];
+        $thn_end = $temp[0];
+        $hari_end = $temp[2];
+
+        $temp_total = 0; //= Array();
+        $before_temp = Array();
+        $last_count;
+
     		$i = 0;
+        $j = 0;
     		while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
-    			//if($i > 9) break;
-    			$arr_comp[$i][0] = $rowes[0];
-    			$arr_comp[$i][1] = $rowes[1];
+          $temp = explode("-", $rowes[0]);
+          //print_r($temp[1]);
+          if($i == 0){
+            $arr_comp[$j][0] = $temp[0]."-".$temp[1];
+            $temp_total = $rowes[1];
+          }
+          else{
+            if($temp[1] == $before_temp[0]){
+              $temp_total += $rowes[1];
+              //print_r($temp_total);
+            }
+            else {
+              $arr_comp[$j][1] = $temp_total;
+              $j++;
+
+              $arr_comp[$j][0] = $temp[0]."-".$temp[1];
+              $temp_total = $rowes[1];
+            }
+          }
+//    			$arr_comp[$i][0] = $rowes[0];
+//    			$arr_comp[$i][1] = $rowes[1];
+//          $before_temp[$i][2] = $temp[0];
+          $before_temp[0] = $temp[1];
+          $before_temp[1] = $rowes[1];
+          $last_count = $rowes[1];
     			$i++;
     		}
+
+        $arr_comp[$j][1] = $temp_total;
+
     	 ?>
 
        <div class="col-md-12 mt">
@@ -317,6 +354,17 @@ if(!empty($_POST["remcode"])){
   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   <script type="text/javascript" src="js/Chart.min.js"></script>
 
+<?php
+  $DateStart = explode("-", $_POST['datefrom']);
+  $tgl_start = $DateStart[2];
+  $bln_start = $DateStart[1];
+  $thn_start = $DateStart[0];
+
+  $DateEnd = explode("-", $_POST['dateto']);
+  $tgl_end = $DateEnd[2];
+  $bln_end = $DateEnd[1];
+  $thn_end = $DateEnd[0];
+ ?>
   <script type="text/javascript">
       var label_data = [];
       var jumlah_pirep = [];
@@ -340,9 +388,9 @@ if(!empty($_POST["remcode"])){
       var ctx = document.getElementById("grafik_comp").getContext("2d");
 
       var data = {
-        labels: label_data,//["dD 1", "dD 2", "dD 3", "dD 4", "dD 5", "dD 6", "dD 7", "dD 8", "dD 9", "dD 10"],
+        labels: label_data,
         datasets: [{
-          label: "Jumlah Component Removal",
+          label: "Number of Component Removal In A Month",
           fill: 'false',
           backgroundColor: 'rgba(200, 200, 200, 0)',
           borderColor: 'rgba(0, 0, 255, 1)',
@@ -367,6 +415,10 @@ if(!empty($_POST["remcode"])){
         },
         scales: {
               yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Number'
+                  },
                   ticks: {
                       beginAtZero: true
                   }
@@ -378,20 +430,51 @@ if(!empty($_POST["remcode"])){
           type: 'line',
           data: data,
           options: options
-/*          {
-              barValueSpacing: 20,
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true,
-                      }
-                  }]
-              }
-          }
-          */
       });
   </script>
+  <script src="js/jspdf.min.js"></script>
+  <script src="js/jspdf.plugin.autotable.js"></script>
+  <script type="text/javascript">
+    // this function generates the pdf using the table
+    function generate() {
+      var pdfsize = 'a4';
+      var columns = ["Notification", "ATA", "Equipment", "Part Number", "Serial Number", "Part Name", "Register", "A/C Type", "Rem Code", "Real Reason", "Date Removal", "TSN", "TSI", "CSN", "CSI"];
+      var data = tableToJson($("#comp_table").get(0), columns);
+      console.log(data);
+      var canvas = document.querySelector('#grafik_comp');
+      var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+      var doc = new jsPDF('l', 'pt', pdfsize);
+      var width = doc.internal.pageSize.width;
+      doc.autoTable(columns, data, {
+        theme: 'grid',
+        styles: {
+          overflow: 'linebreak'
+        },
+        pageBreak: 'always',
+        tableWidth: 'auto'
+      });
+      let finalY = doc.autoTable.previous.finalY;
+      doc.addPage();
+      doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
+      doc.save("table.pdf");
+    }
+    // This function will return table data in an Array format
+    function tableToJson(table, columns) {
+      var data = [];
+      // go through cells
+      for (var i = 1; i < table.rows.length; i++) {
+        var tableRow = table.rows[i];
+        var rowData = [];
+        for (var j = 0; j < tableRow.cells.length; j++) {
+          rowData.push(tableRow.cells[j].innerHTML)
+        }
+        data.push(rowData);
+      }
 
-</div>
+      return data;
+    }
+  </script>
+
+    </div>
   </body>
 </html>

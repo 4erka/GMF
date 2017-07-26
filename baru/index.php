@@ -7,7 +7,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Aircraft Reliability</title>
+    <title>Aircraft Reliability - Dashboard</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -25,7 +25,7 @@
 
     <style>
     .my_style{
-      background: url(assets/img/picture1.jpg) no-repeat center center fixed;
+      background: url(assets/img/bg.jpg) no-repeat center center fixed;
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -68,7 +68,7 @@
       <!--main content start-->
       <section id="main-content" style="min-height:94vh;">
         <section class="wrapper my_style">
-          <h2 style="color:white">Aircraft Reliability Dashboard</h2>
+          <h2 style="color:#333">Aircraft Reliability Dashboard</h2>
 <!--              <embed src="assets/img/report.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="670" height="400">
 -->
           </section>

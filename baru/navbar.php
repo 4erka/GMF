@@ -15,7 +15,7 @@
                 }
               ?>
                     <i class="fa fa-dashboard"></i>
-                    <span>Graph Display</span>
+                    <span>Techlog / Delay</span>
                 </a>
             </li>
 
@@ -29,7 +29,7 @@
                 }
               ?>
                     <i class="fa fa-desktop"></i>
-                    <span>Pareto Display</span>
+                    <span>Pareto Delay / Techlog</span>
                 </a>
                 <!--
                 <ul class="sub">
@@ -50,7 +50,7 @@
                 }
               ?>
                     <i class="fa fa-cogs"></i>
-                    <span>Components Display</span>
+                    <span>Components Removal</span>
                 </a>
             </li>
 
@@ -79,6 +79,48 @@
               ?>
                     <i class="fa fa-fire"></i>
                     <span>Oil Consumption</span>
+                </a>
+            </li>
+
+            <li class="sub-menu">
+              <?php
+                if($page_now == "pfr"){
+                  echo "<a class='active' href='pfr_online.php'>";
+                }
+                else {
+                  echo "<a href='pfr_online.php'>";
+                }
+              ?>
+                    <i class="fa fa-paper-plane"></i>
+                    <span>Pfr Online</span>
+                </a>
+            </li>
+
+            <li class="sub-menu">
+              <?php
+                if($page_now == "mtbur_w"){
+                  echo "<a class='active' href='mtburw.php'>";
+                }
+                else {
+                  echo "<a href='mtburw.php'>";
+                }
+              ?>
+                    <i class="fa fa-folder"></i>
+                    <span>MTBUR WW</span>
+                </a>
+            </li>
+
+            <li class="sub-menu">
+              <?php
+                if($page_now == "help"){
+                  echo "<a class='active' href='help.php'>";
+                }
+                else {
+                  echo "<a href='help.php'>";
+                }
+              ?>
+                    <i class="fa fa-question-circle"></i>
+                    <span>User Guide</span>
                 </a>
             </li>
 

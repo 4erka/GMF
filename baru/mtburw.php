@@ -12,7 +12,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Aircraft Reliability - Oil Comsumption</title>
+    <title>Aircraft Reliability - World Wide MTBUR</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -39,35 +39,24 @@
        ?>
 
       <?php
-        $page_now = "oil";
+        $page_now = "mtbur_w";
         include 'navbar.php';
        ?>
 
       <section id="main-content" style="min-height:94vh">
         <section class="wrapper" style="text-align: centered; top: 50%; left: 50%;">
-                <!-- <script type="application/javascript">
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i>World Wide MTBUR</h4>
+              </div>
+              <div class="panel-body" style="background-color: #f2f2f2;">
 
-                  function resizeIFrameToFitContent( iFrame ) {
+                              <iframe src="https://drive.google.com/embeddedfolderview?id=0BwGUEcfNKl-MODdjYUlvbzR0a2c#grid" style="width:100%; height:600px; border:0;"></iframe>
 
-                      iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
-                      iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
-                  }
-
-                  window.addEventListener('DOMContentLoaded', function(e) {
-
-                      var iFrame = document.getElementById( 'iFrame1' );
-                      resizeIFrameToFitContent( iFrame );
-
-                      // or, to resize all iframes:
-                      var iframes = document.querySelectorAll("iframe");
-                      for( var i = 0; i < iframes.length; i++) {
-                          resizeIFrameToFitContent( iframes[i] );
-                      }
-                  } );
-
-                </script> -->
-
-                <iframe src="http://192.168.40.101/reliability/Oilcons/bin/Oilcons.php" id="iFrame1" height="600" width="1000"></iframe>
+              </div>
+            </div>
+          </div>
         </section>
       </section>
 

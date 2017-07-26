@@ -12,7 +12,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Aircraft Reliability - Oil Comsumption</title>
+    <title>Aircraft Reliability - User Manual</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -39,35 +39,22 @@
        ?>
 
       <?php
-        $page_now = "oil";
+        $page_now = "help";
         include 'navbar.php';
        ?>
 
       <section id="main-content" style="min-height:94vh">
         <section class="wrapper" style="text-align: centered; top: 50%; left: 50%;">
-                <!-- <script type="application/javascript">
-
-                  function resizeIFrameToFitContent( iFrame ) {
-
-                      iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
-                      iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
-                  }
-
-                  window.addEventListener('DOMContentLoaded', function(e) {
-
-                      var iFrame = document.getElementById( 'iFrame1' );
-                      resizeIFrameToFitContent( iFrame );
-
-                      // or, to resize all iframes:
-                      var iframes = document.querySelectorAll("iframe");
-                      for( var i = 0; i < iframes.length; i++) {
-                          resizeIFrameToFitContent( iframes[i] );
-                      }
-                  } );
-
-                </script> -->
-
-                <iframe src="http://192.168.40.101/reliability/Oilcons/bin/Oilcons.php" id="iFrame1" height="600" width="1000"></iframe>
+          <div class="col-md-12 mt">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i>User Guide</h4>
+              </div>
+              <div class="panel-body">
+                <iframe src="https://drive.google.com/file/d/0BwGUEcfNKl-MN21hVzJUTHVzTlk/preview" width="100%" height="480"></iframe>
+              </div>
+            </div>
+          </div>
         </section>
       </section>
 
