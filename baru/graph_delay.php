@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
-  $ACType = "'".$_POST["actype"]."'";
+  $graf_actype = $_POST["actype"];
+  $ACType = "'%".$_POST["actype"]."%'";
   if(empty($_POST["acreg"])){
     $ACReg = "";
   }
@@ -100,9 +101,23 @@
   }
 
   include "config/connect.php";
+  include 'jsonwrapper.php';
 
-  $sql_delay = "SELECT ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, MinTot, DCP, RtABO FROM mcdrnew WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$RTABOs."".$DateStart2."".$DateEnd."";
+  $sql_delay = "SELECT ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, DCP, RtABO, MinTot FROM mcdrnew WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$RTABOs."".$DateStart2."".$DateEnd."";
+  $sql_grafik = "SELECT COUNT(DateEvent) as delay, DATE_FORMAT(DateEvent, '%m-%Y') as DateEvent FROM mcdrnew WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$RTABOs."".$Keyword."".$DateStart2."".$DateEnd." GROUP BY MONTH(DateEvent)";
+
+  mysqli_set_charset($link, "utf8");
+
   $res_delay = mysqli_query($link, $sql_delay);
+
+  $res_grafik = mysqli_query($link, $sql_grafik);
+
+  $arr_x = array();
+  $arr_y = array();
+  while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)){
+    $arr_y[] = $rowes[0];
+    $arr_x[] = $rowes[1];
+  }
 ?>
 
 <html>
@@ -113,7 +128,7 @@
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-  <title>TLP Report - Graph</title>
+  <title>Reliability Dashboard - Graph</title>
 
   <!-- Bootstrap core CSS -->
   <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -204,7 +219,7 @@
                 <h4><i class="fa fa-angle-right"></i> Table Delay</h4>
               </div>
               <div class="panel-body">
-                <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
+                <button onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
                 <table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
                   <thead>
                       <tr>
@@ -213,7 +228,7 @@
                           <th>Sta Dep</th>
                           <th>Sta Arr</th>
                           <th>Flight No</th>
-                          <th>Delay Length</th>
+                          <th>Techical Delay Length</th>
                           <th>ATA</th>
                           <th>Sub ATA</th>
                           <th>Problem</th>
@@ -224,29 +239,32 @@
                   </thead>
                   <tbody>
                     <?php
+                      $arr_delay = array();
                       while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
-                      $rowes[4] = $rowes[4]*60;
-                      $rowes[4] = $rowes[4]+$rowes[9];
-                      //print_r($rowes[4]);echo "<br>";
-                      echo "<tr>";
+                        $rowes[5] = $rowes[5]*60;
+                        $rowes[5] = $rowes[12]+$rowes[5];
                         $longtext = $rowes[9];
                         $rowes[9] = wordwrap($longtext, 50, "\n");
                         $longtext = $rowes[8];
                         $rowes[8] = wordwrap($longtext, 20, "\n");
-                        echo "<td>".$rowes[0]."</td>";
-                        echo "<td>".$rowes[1]."</td>";
-                        echo "<td>".$rowes[2]."</td>";
-                        echo "<td>".$rowes[3]."</td>";
-                        echo "<td>".$rowes[4]."</td>";
-                        echo "<td>".$rowes[5]."</td>";
-                        echo "<td>".$rowes[6]."</td>";
-                        echo "<td>".$rowes[7]."</td>";
-                        echo "<td>".$rowes[8]."</td>";
-                        echo "<td>".$rowes[9]."</td>";
-                        echo "<td>".$rowes[11]."</td>";
-                        echo "<td>".$rowes[12]."</td>";
-                      echo "</tr>";
-                    }
+                        $arr_delay[] = $rowes;
+                        echo "<tr>";
+                          echo "<td>".$rowes[0]."</td>";
+                          echo "<td>".$rowes[1]."</td>";
+                          echo "<td>".$rowes[2]."</td>";
+                          echo "<td>".$rowes[3]."</td>";
+                          echo "<td>".$rowes[4]."</td>";
+                          echo "<td>".$rowes[5]."</td>";
+                          echo "<td>".$rowes[6]."</td>";
+                          echo "<td>".$rowes[7]."</td>";
+                          echo "<td>".$rowes[8]."</td>";
+                          echo "<td>".$rowes[9]."</td>";
+                          echo "<td>".$rowes[10]."</td>";
+                          echo "<td>".$rowes[11]."</td>";
+                        echo "</tr>";
+                        //$i++;
+                      }
+                      //print json_encode($arr_delay);
                    ?>
                   </tbody>
                 </table>
@@ -275,85 +293,66 @@
                 ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
               }
             });
-            var actype = <?php echo(json_encode($ACType)); ?>;
-            var acreg = <?php echo(json_encode($ACReg)); ?>;
-            var datestart = <?php echo(json_encode($DateStart2)); ?>;
-            var dateend = <?php echo(json_encode($DateEnd)); ?>;
-            var ata = <?php echo(json_encode($ATA2)); ?>;
-            var fault_code = <?php echo(json_encode($Fault_code2)); ?>;
-            var keyword = <?php echo(json_encode($Keyword)); ?>;
-            var dcp = <?php echo(json_encode($DCPs)); ?>;
-            var rtabo = <?php echo(json_encode($RTABOs)); ?>;
+            var arr_x = <?php echo json_encode($arr_x); ?>;
+            var arr_y = <?php echo json_encode($arr_y); ?>;
+            var graf_actype = <?php echo json_encode($graf_actype); ?>;
             $(document).ready(function(){
-              $.ajax({
-                url: "data_grafik_delay.php",
-                method: "POST",
-                data: {actype: actype, acreg: acreg, datestart: datestart, dateend: dateend, ata: ata, fault_code: fault_code, keyword: keyword, dcp: dcp, rtabo: rtabo},
-                success: function(data) {
-                  console.log(data);
-                  var date = {
-                    date : [],
-                    delay : []
-                  };
-                  // var date = [];
-                  // var delay = [];
-
-                  for(var i in data) {
-                    date.date.push(data[i].DateEvent);
-                    date.delay.push(data[i].delay);
-                    //delay.push(data[i].delay);
+              var chartdata = {
+                labels: arr_x,
+                datasets : [
+                  {
+                    label: 'Delay',
+                    fill: 'false',
+                    backgroundColor: 'rgba(200, 200, 200, 0)',
+                    borderColor: 'rgba(0, 0, 255, 1)',
+                    pointBackgroundColor: 'rgba(255, 0, 0, 1)',
+                    pointBorderColor: 'rgba(255, 0, 0, 1)',
+                    lineTension: '0',
+                    data: arr_y
                   }
+                ]
+              };
 
-                  var chartdata = {
-                    labels: date.date,
-                    datasets : [
-                      {
-                        label: 'Delay',
-                        fill: 'false',
-                        backgroundColor: 'rgba(200, 200, 200, 0)',
-                        borderColor: 'rgba(0, 0, 255, 1)',
-                        pointBackgroundColor: 'rgba(255, 0, 0, 1)',
-                        pointBorderColor: 'rgba(255, 0, 0, 1)',
-                        lineTension: '0',
-                        data: date.delay
-                      }
-                    ]
-                  };
-
-                  var options = {
-                    title : {
-                      display : true,
-                      position : "top",
-                      text : "Delay (D4)",
-                      fontSize : 18,
-                      fontColor : "#111"
-                    },
-                    legend : {
-                      display : true,
-                      position : "bottom"
-                    },
-                    scales: {
-                          yAxes: [{
-                              ticks: {
-                                  beginAtZero: true
-                              }
-                          }]
-                      }
-                  };
-
-                  var ctx = $("#graf_data_delay");
-
-                  var barGraph = new Chart(ctx, {
-                    type: 'line',
-                    data: chartdata,
-                    options: options
-                  });
+              var options = {
+                title : {
+                  display : true,
+                  position : "top",
+                  text : "Delay (D4)" + " - " + graf_actype,
+                  fontSize : 18,
+                  fontColor : "#111"
                 },
-                error: function(data) {
-                  console.log(data);
-                }
+                legend : {
+                  display : true,
+                  position : "top"
+                },
+                scales: {
+                    yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      },
+                      scaleLabel: {
+                          display: true,
+                          labelString: 'Number'
+                      }
+                    }],
+                    xAxes: [{
+                      scaleLabel: {
+                          display: true,
+                          labelString: 'Month'
+                      }
+                    }]
+                  }
+              };
+
+              var ctx = $("#graf_data_delay");
+
+              var barGraph = new Chart(ctx, {
+                type: 'line',
+                data: chartdata,
+                options: options
               });
             });
+
           </script>
           <div class="col-md-12 mt">
             <div class="panel panel-default">
@@ -373,9 +372,10 @@
           <script type="text/javascript">
             // this function generates the pdf using the table
             function generate() {
+              var data = <?php echo json_encode($arr_delay); ?>;
               var pdfsize = 'a4';
-              var columns = ["A/C Type", "A/C REG", "STA DEP", "STA ARR", "Flight No", "Delay Length", "ATA", "SUB ATA", "Problem", "Rectification", "DCP", "RTB/RTA/RTO"];
-              var data = tableToJson($("#table_delay").get(0), columns);
+              var columns = ["A/C Type", "A/C REG", "STA DEP", "STA ARR", "Flight No", "Technical Delay Length", "ATA", "SUB ATA", "Problem", "Rectification", "DCP", "RTB/RTA/RTO"];
+              //var data = tableToJson($("#table_delay").get(0), columns);
               console.log(data);
               var canvas = document.querySelector('#graf_data_delay');
               var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
@@ -384,7 +384,9 @@
               doc.autoTable(columns, data, {
                 theme: 'grid',
                 styles: {
-                  overflow: 'linebreak'
+                  overflow: 'linebreak',
+                  fontSize: '6',
+                  columnWidth: 'auto'
                 },
                 pageBreak: 'always',
                 tableWidth: 'auto'
@@ -406,7 +408,6 @@
                 }
                 data.push(rowData);
               }
-
               return data;
             }
           </script>
