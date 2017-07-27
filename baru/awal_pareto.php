@@ -12,7 +12,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>Aircraft Reliability - Pareto Delay/Techlog</title>
+    <title>Aircraft Reliability - Pareto Techlog/Delay</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">

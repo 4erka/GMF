@@ -227,60 +227,77 @@ if(!empty($_POST["remcode"])){
     	<?php
 
       if(isset($where_remcode)){
-        $sql_comp = "SELECT DATE_FORMAT(DateRem, '%Y-%m') AS dates, COUNT(DATE_FORMAT(DateRem, '%Y-%m')) AS number_of_rem FROM tblcompremoval
-        WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
+        $sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
+        WHERE ".$where_actype." ".$where_remcode." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
       }
       else {
         #$sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
-        $sql_comp = "SELECT DATE_FORMAT(DateRem, '%Y-%m') AS dates, COUNT(DATE_FORMAT(DateRem, '%Y-%m')) AS number_of_rem FROM tblcompremoval
-        WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
+        $sql_comp = "SELECT DATE_FORMAT(DateRem, '%m-%Y'), COUNT(DateRem) AS number_of_rem FROM tblcompremoval
+        WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY DateRem;";
       }
 
         $res_comp = mysqli_query($link, $sql_comp);
 
-//        print_r($sql_comp);
+        //print_r($sql_comp);
 
         $temp_total = 0;
         $before_temp = Array();
+        $last_count;
 
         $i=0;
         while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
-          if($i == 0){
+          //$temp = explode("-", $rowes[0]);
+          //if($i == 0){
             $arr_comp[$i][0] = $rowes[0];
             $arr_comp[$i][1] = $rowes[1];
             $i++;
-          }
-          else {
-            $now = strtotime("+1 Month", strtotime($before_temp[0]));
+//            $temp_total = $rowes[1];
+        //  }
 
-            if($rowes[0] == date("Y-m", $now)){
-              $arr_comp[$i][0] = $rowes[0];
-              $arr_comp[$i][1] = $rowes[1];
-              $i++;
+/*    		$i = 0;
+        $j = 0;
+    		while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
+          $temp = explode("-", $rowes[0]);
+          //print_r($temp[1]);
+          if($i == 0){
+            $arr_comp[$j][0] = $temp[0]."-".$temp[1];
+            $temp_total = $rowes[1];
+          }
+          else{
+            if($temp[1] == $before_temp[0]){
+              $temp_total += $rowes[1];
+              //print_r($temp_total);
             }
             else {
-              $now = strtotime($before_temp[0]);
-              $now = strtotime("+1 Month", $now);
+              $arr_comp[$j][1] = $temp_total;
+              $j++;
 
-              while($rowes[0] != date("Y-m", $now)){
+              $arr_comp[$j][0] = $temp[0]."-".$temp[1];
+              $temp_total = $rowes[1];
 
-                  $arr_comp[$i][0] = date("Y-m", $now);
-                  $arr_comp[$i][1] = 0;
-                  $i++;
+              if($temp[1]-1 != $before_temp[0]){
+                // while (1) {
+                //   if($temp[1]-1 == $before_temp[0]) break;
+                  $arr_comp[$j][1] = 0;
+                  $j++;
 
-                  $now = strtotime("+1 Month", $now);
+                  $temp_now = $before_temp[0]+1;
+                  $arr_comp[$j][0] = $temp[0]."-".$temp_now;
+//                }
               }
+              else {
 
-              $arr_comp[$i][0] = $rowes[0];
-              $arr_comp[$i][1] = $rowes[1];
-              $i++;
+              }
             }
           }
-          $before_temp[0] = $rowes[0];
+          $before_temp[0] = $temp[1];
           $before_temp[1] = $rowes[1];
-        }
+          $last_count = $rowes[1];
+    			$i++;
+    		}
 
-//        var_dump($arr_comp);
+        $arr_comp[$j][1] = $temp_total;
+*/}
     	 ?>
 
        <div class="col-md-12 mt">
@@ -473,7 +490,7 @@ if(!empty($_POST["remcode"])){
   <!-- TOP 10 Component Removal -->
   <?php
     $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
-    FROM tblcompremoval WHERE ".$where_actype." AND REG LIKE '%".$ACReg."%' AND ".$where_remcode." AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY PartNo ORDER BY number_of_part DESC";
+    FROM tblcompremoval WHERE ".$where_actype." AND REG LIKE '%".$ACReg."%' AND RemCode = 'u' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY PartNo ORDER BY number_of_part DESC";
 
     //print_r($sql_graph_comp);
 

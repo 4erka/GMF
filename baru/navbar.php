@@ -29,7 +29,7 @@
                 }
               ?>
                     <i class="fa fa-desktop"></i>
-                    <span>Pareto Delay / Techlog</span>
+                    <span>Pareto Techlog / Delay</span>
                 </a>
                 <!--
                 <ul class="sub">

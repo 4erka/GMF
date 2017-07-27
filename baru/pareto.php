@@ -176,17 +176,13 @@ $Graph_type = $_POST['graph'];
           $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		  $res_graph_delay = mysqli_query($link, $sql_graph_delay);
 
-          //print_r($sql_graph_pirep);
+          #print_r($sql_graph_delay);
 
           $i = 0;
       		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
       			//if($i > 9) break;
             $temp_pirep[$i] = $rowes[0];
             $i++;
-
-//            $arr_pirep[$i][0] = $rowes[0];
-//      			$arr_pirep[$i][1] = $rowes[1];
-  //    			$i++;
       		}
 
           for($i=0; $i<sizeof($temp_pirep); $i++){
@@ -220,20 +216,17 @@ $Graph_type = $_POST['graph'];
 
           for($i=0; $i<sizeof($temp_delay); $i++){
             if($temp_delay[$i] == NULL){
-              $ar[$i] = '0000';
+              $ar_new[$i] = '0000';
             }
             else {
-              $ar[$i] = $temp_delay[$i];
+              $ar_new[$i] = $temp_delay[$i];
             }
           }
 
-//          $ar = array_replace($temp_delay,array_fill_keys(array_keys($temp_delay, NULL),'0000'));
-          #$ar = array_slice($ar, 0, 20);
-
-          $ar1 = array_count_values($ar);
-          #print_r($ar1);
+          $ar1 = array_count_values($ar_new);
 
           arsort($ar1);
+//          var_dump($ar1);
 
           $keys=array_keys($ar1);//Split the array so we can find the most occuring key
 
@@ -242,15 +235,6 @@ $Graph_type = $_POST['graph'];
             $arr_delay[$i][0] = $keys[$i];
             $arr_delay[$i][1] = $ar1[$keys[$i]];
           }
-#          var_dump($arr_delay);
-
-#          print_r($ar1);
-
-#          echo "The most occuring value is ".$keys[0]." with ".$keys[]." occurences.<br>";
-#          print_r($keys[0][0]);
-#          $top10 = array_slice($keys, 0, 10);
-#          print_r($top10[0]);
-
     		}
 
         #print_r($sql_graph_delay );
@@ -346,24 +330,39 @@ $Graph_type = $_POST['graph'];
     }]
   };
 
+  var options = {
+    title : {
+      display : true,
+      position : "top",
+      text : "Top 10 Delay",
+      fontSize : 18,
+      fontColor : "#111"
+    },
+    legend : {
+      display : true,
+      position : "bottom"
+    },
+    scales: {
+          yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'Number'
+              },
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
+  };
+
   var myBarChart = new Chart(ctx, {
       type: 'bar',
       data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                  }
-              }]
-          }
-      }
+      options: options
   });
   </script>
 
   <script>
-
   var label_data = [];
   var jumlah_pirep = [];
   var z=0;
@@ -397,22 +396,37 @@ $Graph_type = $_POST['graph'];
     }]
   };
 
+  var options = {
+    title : {
+      display : true,
+      position : "top",
+      text : "Top 10 Pirep",
+      fontSize : 18,
+      fontColor : "#111"
+    },
+    legend : {
+      display : true,
+      position : "bottom"
+    },
+    scales: {
+          yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: 'Number'
+              },
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
+  };
+
   var myBarChart = new Chart(ctx, {
       type: 'bar',
       data: data,
-      options: {
-          barValueSpacing: 20,
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      min: 0,
-                  }
-              }]
-          }
-      }
+      options: options
   });
   </script>
-
 
 </div>
   </body>

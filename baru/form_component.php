@@ -6,7 +6,7 @@
 
 ?>
 
-<form action="component_removal.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px">
+<form id="form1" method="post" class="form-horizontal style-form" style="margin-bottom: 50px">
 
 <br>
 
@@ -115,7 +115,9 @@
     </tr>
     <tr>
       <td style="width:50%">
-        <input type="submit" value="Display Report" class="btn btn-default">
+        <input type="submit" onclick="submitForm('component_removal.php')" value="Display Report" class="btn btn-default">
+
+        <input type="submit" onclick="submitForm('graph_component.php')" value="Display Pareto" class="btn btn-default">
       </td>
     </tr>
 
@@ -123,6 +125,15 @@
 </table>
 
 </form>
+
+<script type="text/javascript">
+  function submitForm(action) {
+    var form = document.getElementById('form1');
+    form.action = action;
+    form.submit();
+  }
+</script>
+
 <!--
 <p>Date: <input type="text" id="datepicker"></p>
 -->
