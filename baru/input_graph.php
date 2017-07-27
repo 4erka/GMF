@@ -4,11 +4,11 @@
 
 ?>
 
-<form action="graph.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px" id="form_graph">
+<form action="graph.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px" id="form_graph" name="form_graph" onsubmit="return validateForm()">
 
 	<div class="form-group">
-  <label class="col-sm-2 col-sm-2 control-label">A/C Type</label>
-    <div class="col-sm-10">
+  <label class="col-xs-6 col-sm-2 control-label">A/C Type</label>
+    <div class="col-sm-3">
       <select name="actype" class="form-control">
           <?php
             while($row = $res_actype->fetch_array(MYSQLI_NUM))
@@ -16,11 +16,8 @@
            ?>
       </select>
     </div>
-  </div>
-
-	<div class="form-group">
-    <label class="col-sm-2 col-sm-2 control-label">A/C Reg</label>
-      <div class="col-sm-10">
+    <label class="col-xs-6 col-sm-2 control-label">A/C Reg</label>
+      <div class="col-sm-3">
         <input type="text" class="form-control" name="acreg">
       </div>
   </div>
@@ -29,10 +26,12 @@
     <label class="col-xs-6 col-sm-2 control-label">Date from</label>
       <div class="col-sm-3">
         <input type="date" class="form-control" name="datefrom" id="id_datefrom">
+        Format: yyyy-mm-dd || Chrome: mm/dd/yyyy
       </div>
     <label class="col-xs-6 col-sm-2 control-label">Date to</label>
       <div class="col-sm-3">
         <input type="date" class="form-control" name="dateto" id="id_dateto">
+        Format: yyyy-mm-dd || Chrome: mm/dd/yyyy
       </div>
   </div>
 
@@ -78,7 +77,7 @@
 				</div>
 				<div class="radio">
           <label>
-  					<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)"> Pirep<br>
+  					<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)"> Techlog<br>
             <label class="checkbox-inline">
               <input type="checkbox" name="pima[]" value="pirep" id="cl_pirep"> Pirep
             </label>
@@ -102,6 +101,7 @@
 </form>
 
 <script type="text/javascript">
+  //configuration input disabled and enabled
 	document.getElementById("radio_delay").checked = true;
 	check(document.getElementById("radio_delay").value);
 	function check(depir) {
@@ -132,4 +132,20 @@
 		depir = "graph_" + depir + ".php";
 	    document.getElementById("form_graph").action=depir;
 	}
+  //confirm input form, if there is null in subject which must not null
+  function validateForm(){
+    var cl_dcp = document.form_graph.cl_delay.checked || document.form_graph.cl_cancel.checked||  document.form_graph.cl_x.checked;
+    var datefrom = document.forms["form_graph"]["datefrom"].value;
+    var dateto = document.forms["form_graph"]["dateto"].value;
+      if(document.getElementById("radio_delay").checked){
+      if(datefrom == "" || dateto == ""){
+        alert("Field Datefrom and Dateto must not empty");
+        return false;
+      }
+      else if(cl_dcp == false){
+        alert("Checklist Delay, Cancel or All must not empty");
+        return false;
+      }
+    }
+  }
 </script>

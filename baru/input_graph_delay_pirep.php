@@ -5,11 +5,11 @@
 	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 
-<form action="graph.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px" id="form_graph">
+<form action="graph.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px" id="form_graph" name="form_graph" onsubmit="return validateForm()">
 
 	<div class="form-group">
-	  	<label class="col-sm-2 col-sm-2 control-label">A/C Type</label>
-	    <div class="col-sm-10">
+	  	<label class="col-xs-6 col-sm-2 control-label">A/C Type</label>
+	    <div class="col-sm-3">
 	      <select name="actype" class="form-control">
 	          <?php
 				$isSelect = "";
@@ -25,11 +25,8 @@
 			 ?>
 	      </select>
 	    </div>
-	</div>
-
-	<div class="form-group">
-	    <label class="col-sm-2 col-sm-2 control-label">A/C Reg</label>
-	    <div class="col-sm-10">
+	    <label class="col-xs-6 col-sm-2 control-label">A/C Reg</label>
+	    <div class="col-sm-3">
 	    	<?php
 				echo '<input type="text" name="acreg" class="form-control" value="'.$_POST["acreg"].'">';
 			?>
@@ -42,12 +39,14 @@
 	    	<?php
 				echo '<input type="date" name="datefrom" class="form-control" id="id_datefrom" value="'.$_POST["datefrom"].'">';
 			?>
+			Format: yyyy-mm-dd || Chrome: mm/dd/yyyy
 	    </div>
 	    <label class="col-sm-3 col-sm-2 control-label">Date to</label>
 	    <div class="col-sm-3">
 	    	<?php
 				echo '<input type="date" name="dateto" class="form-control" id="id_dateto" value="'.$_POST["dateto"].'">';
 			?>
+			Format: yyyy-mm-dd || Chrome: mm/dd/yyyy
 	    </div>
 	</div>
 
@@ -190,10 +189,10 @@
 					<label>
 						<?php
 							if($_POST["depir"]=="pirep"){?>
-								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)" checked> Pirep <br><?php
+								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)" checked> Techlog <br><?php
 							}
 							else{?>
-								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)"> Pirep <br><?php
+								<input type="radio" name="depir" value="pirep" id="radio_pirep" onclick="check(this.value)"> Techlog <br><?php
 							}
 							if(empty($_POST['pima'])){
 								$Pima = "";
@@ -282,4 +281,20 @@
 		depir = "graph_" + depir + ".php";
 	    document.getElementById("form_graph").action=depir;
 	}
+	//confirm input form, if there is null in subject which must not null
+	function validateForm(){
+	    var cl_dcp = document.form_graph.cl_delay.checked || document.form_graph.cl_cancel.checked||  document.form_graph.cl_x.checked;
+	    var datefrom = document.forms["form_graph"]["datefrom"].value;
+	    var dateto = document.forms["form_graph"]["dateto"].value;
+	      if(document.getElementById("radio_delay").checked){
+	      if(datefrom == "" || dateto == ""){
+	        alert("Field Datefrom and Dateto must not empty");
+	        return false;
+	      }
+	      else if(cl_dcp == false){
+	        alert("Checklist Delay, Cancel or All must not empty");
+	        return false;
+	      }
+	    }
+  	}
 </script>

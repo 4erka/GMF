@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
-	$ACType = "'".$_POST["actype"]."'";
+	$graf_actype = $_POST["actype"];
+	$ACType = "'%".$_POST["actype"]."%'";
 	if(empty($_POST["acreg"])){
 		$ACReg = "";
 	}
@@ -66,12 +67,24 @@
 		  $i++;
 		}
 	}
-
 	include "config/connect.php";
+	include 'jsonwrapper.php';
 
-	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, STAARR, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE = ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd."";
+	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, STAARR, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd."";
+
+	$sql_grafik = "SELECT COUNT(DATE) as pirep, DATE_FORMAT(DATE, '%m-%Y') as DATE FROM tblpirep_swift WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd." GROUP BY MONTH(DATE)";
+
+	mysqli_set_charset($link, "utf8");
 		
 	$res_pirep = mysqli_query($link, $sql_pirep);
+
+	$res_grafik = mysqli_query($link, $sql_grafik);
+	$arr_x = array();
+	$arr_y = array();
+	while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)){
+		$arr_y[] = $rowes[0];
+		$arr_x[] = $rowes[1];
+	}
 ?>
 
 <html>
@@ -82,7 +95,7 @@
 	  <meta name="author" content="Dashboard">
 	  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-	  <title>TLP Report - Graph</title>
+	  <title>Reliability Dashboard - Graph</title>
 
 	  <!-- Bootstrap core CSS -->
 	  <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -163,6 +176,10 @@
 
 			<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 			<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+			<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+			<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+			<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+			<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
 			<div class="col-md-12 mt">
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -190,7 +207,13 @@
 						    </thead>
 						    <tbody>
 						    	<?php
+						    		$arr_pirep = array();
 									while ($rowes = $res_pirep->fetch_array(MYSQLI_NUM)) {
+										$longtext = $rowes[10];
+				                        $rowes[10] = wordwrap($longtext, 35, "\n");
+				                        $longtext = $rowes[11];
+										$rowes[11] = wordwrap($longtext, 50, "\n");
+										$arr_pirep[] = $rowes;
 										echo "<tr>";
 											echo "<td>".$rowes[0]."</td>";
 											echo "<td>".$rowes[1]."</td>";
@@ -217,6 +240,10 @@
 					$(document).ready(function() {
 				$('#table_pirep').DataTable({
 					"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+					dom: 'Blfrtip',
+					buttons: [{
+					  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+					}],
 				});
 				} );
 			</script>
@@ -229,82 +256,63 @@
 	                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
 	              }
 	            });
-				var actype1 = <?php echo(json_encode($ACType)); ?>;
-				var acreg1 = <?php echo(json_encode($ACReg)); ?>;
-				var datestart1 = <?php echo(json_encode($DateStart)); ?>;
-				var dateend1 = <?php echo(json_encode($DateEnd)); ?>;
-				var ata1 = <?php echo(json_encode($ATA)); ?>;
-				var fault_code1 = <?php echo(json_encode($Fault_code)); ?>;
-				var keyword1 = <?php echo(json_encode($Keyword)); ?>;
-				var pima = <?php echo(json_encode($Pimas)); ?>;
+	            var arr_x = <?php echo json_encode($arr_x); ?>;
+	            var arr_y = <?php echo json_encode($arr_y); ?>;
+	            var graf_actype = <?php echo json_encode($graf_actype); ?>;
 				$(document).ready(function(){
-					$.ajax({
-						url: "data_grafik_pirep.php",
-						method: "POST",
-						data: {actype: actype1, acreg: acreg1, datestart: datestart1, dateend: dateend1, ata: ata1, fault_code: fault_code1, keyword: keyword1, pima: pima},
-						success: function(data) {
-							console.log(data);
-							var date = {
-								date : [],
-								pirep : []
-							};
-							// var date = [];
-							// var delay = [];
-
-							for(var i in data) {
-								date.date.push(data[i].DATE);
-								date.pirep.push(data[i].pirep);
-								//delay.push(data[i].delay);
+					var chartdata = {
+						labels: arr_x,
+						datasets : [
+							{
+								label: 'Pirep',
+								fill: 'false',
+								backgroundColor: 'rgba(200, 200, 200, 0.75)',
+								borderColor: 'rgba(255, 0, 0, 1)',
+								pointBackgroundColor: 'rgba(0, 0, 255, 1)',
+								pointBorderColor: 'rgba(0, 0, 255, 1)',
+								lineTension: '0',
+								data: arr_y
 							}
+						]
+					};
 
-							var chartdata = {
-								labels: date.date,
-								datasets : [
-									{
-										label: 'Pirep',
-										fill: 'false',
-										backgroundColor: 'rgba(200, 200, 200, 0.75)',
-										borderColor: 'rgba(255, 0, 0, 1)',
-										pointBackgroundColor: 'rgba(0, 0, 255, 1)',
-										pointBorderColor: 'rgba(0, 0, 255, 1)',
-										lineTension: '0',
-										data: date.pirep
-									}
-								]
-							};
-
-							var options = {
-								title : {
-									display : true,
-									position : "top",
-									text : "Pirep (D2)",
-									fontSize : 18,
-									fontColor : "#111"
-								},
-								legend : {
-									display : true,
-									position : "bottom"
-								},
-								scales: {
-							        yAxes: [{
-							            ticks: {
-							                beginAtZero: true
-							            }
-							        }]
-							    }
-							};
-
-							var ctx = $("#graf_data_pirep");
-
-							var barGraph = new Chart(ctx, {
-								type: 'line',
-								data: chartdata,
-								options: options
-							});
+					var options = {
+						title : {
+							display : true,
+							position : "top",
+							text : "Pirep (D2)" + " - " + graf_actype,
+							fontSize : 18,
+							fontColor : "#111"
 						},
-						error: function(data) {
-							console.log(data);
-						}
+						legend : {
+							display : true,
+							position : "top"
+						},
+						scales: {
+					        yAxes: [{
+					            ticks: {
+					                beginAtZero: true
+					            },
+					            scaleLabel: {
+	                              display: true,
+	                              labelString: 'Number'
+	                          }
+					        }],
+					        xAxes: [{
+					            scaleLabel: {
+	                              display: true,
+	                              labelString: 'Month'
+	                          }
+					        }]
+					    }
+					};
+
+					var ctx = $("#graf_data_pirep");
+
+					var barGraph = new Chart(ctx, {
+						type: 'line',
+						data: chartdata,
+						options: options
 					});
 				});
 			</script>
@@ -325,11 +333,12 @@
 			<script src="js/jspdf.min.js"></script>
 	          <script src="js/jspdf.plugin.autotable.js"></script>
 	          <script type="text/javascript">
-	            // this function generates the pdf using the table
+	            // Function generates the pdf using the table
 	            function generate() {
-	              var pdfsize = 'a3';
+	              var data = <?php echo json_encode($arr_pirep); ?>;
+	              var pdfsize = 'a4';
 	              var columns = ["Date", "Sequence", "Notification Number", "A/C Type", "A/C Reg", "Sta Dep", "Sta Arr", "Flight No", "ATA", "SUB ATA", "Problem", "Rectification", "Coding"];
-	              var data = tableToJson($("#table_pirep").get(0), columns);
+	              //var data = tableToJson($("#table_pirep").get(0), columns);
 	              console.log(data);
 	              var canvas = document.querySelector('#graf_data_pirep');
 	              var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
@@ -338,7 +347,9 @@
 	              doc.autoTable(columns, data, {
 	                theme: 'grid',
 	                styles: {
-	                  overflow: 'linebreak'
+	                  overflow: 'linebreak',
+	                  fontSize: '6',
+	                  columnWidth: 'auto'
 	                },
 	                pageBreak: 'always',
 	                tableWidth: 'auto'
@@ -351,7 +362,6 @@
 	            // This function will return table data in an Array format
 	            function tableToJson(table, columns) {
 	              var data = [];
-	              // go through cells
 	              for (var i = 1; i < table.rows.length; i++) {
 	                var tableRow = table.rows[i];
 	                var rowData = [];
@@ -360,7 +370,6 @@
 	                }
 	                data.push(rowData);
 	              }
-	                
 	              return data;
 	            }
 	          </script>

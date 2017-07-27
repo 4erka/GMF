@@ -2,8 +2,9 @@
 
 <?php
 	include "config/connect.php";
+	include 'jsonwrapper.php';
 
-	$ACType = "'".$_POST["actype"]."'";
+	$ACType = "'%".$_POST["actype"]."%'";
 	if(empty($_POST["partnumber"])){
 		$PartNo = "";
 	}
@@ -33,14 +34,14 @@
 		$MonthEnd2 = " AND '".$month."'";
 	}
 
-	$sql_fh = "SELECT RevFHHours, RevFHMin FROM tbl_monthlyfhfc WHERE Actype = ".$ACType."".$MonthStart."".$MonthEnd;
+	$sql_fh = "SELECT RevFHHours, RevFHMin FROM tbl_monthlyfhfc WHERE Actype LIKE ".$ACType."".$MonthStart."".$MonthEnd;
 
-	$sql_rm = "SELECT COUNT(Aircraft) AS rem FROM tblcompremoval WHERE Aircraft = ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2;
+	$sql_rm = "SELECT COUNT(Aircraft) AS rem FROM tblcompremoval WHERE Aircraft LIKE ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." AND RemCode = 'U'";
 
-	$sql_qty = "SELECT DateRem, PartNo, QTY FROM tblcompremoval WHERE Aircraft = ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." ORDER BY DateRem DESC LIMIT 1";
+	$sql_qty = "SELECT DateRem, PartNo, QTY FROM tblcompremoval WHERE Aircraft LIKE ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." AND RemCode = 'U' ORDER BY DateRem DESC LIMIT 1";
 
-	$sql_tbl = "SELECT DateRem, PartNo, SerialNo, PartName, Reg FROM tblcompremoval WHERE Aircraft = ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2;
-
+	$sql_tbl = "SELECT DateRem, PartNo, SerialNo, PartName, Reg FROM tblcompremoval WHERE Aircraft LIKE ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." AND RemCode = 'U'";
+	mysqli_set_charset($link, "utf8");
 	$res_fh = mysqli_query($link, $sql_fh);
 	$res_rm = mysqli_query($link, $sql_rm);
 	$res_qty = mysqli_query($link, $sql_qty);
@@ -50,7 +51,6 @@
 		$rowes[1] = $rowes[1]/60;
 		$fhours = $fhours+$rowes[0]+$rowes[1];
 	}
-	$fhours = number_format($fhours, 2, '.', '');
 ?>
 
 <html lang="en">
@@ -61,7 +61,7 @@
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
-    <title>TLP Report - mtbur</title>
+    <title>Reliability Dashboard - MTBUR</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
@@ -133,23 +133,24 @@
 	        					<label class="col-sm-1 control-label">FH</label>
 								<div class="col-sm-2">
 									<?php  
-											echo "$fhours";
+											echo number_format($fhours, 2, '.', ',');
 										?>
 								</div><br><br>
 								<label class="col-sm-1 control-label">Removal</label>
 								<div class="col-sm-2">
 									<?php
-											$rm = $res_rm->fetch_array(MYSQLI_NUM)[0];
+											$rms = $res_rm->fetch_array(MYSQLI_NUM);
+											$rm = $rms[0];
 											echo "$rm";
 										?>
 								</div><br><br>
 								<label class="col-sm-1 control-label">MTBUR</label>
 								<div class="col-sm-2">
 									<?php
-											$qty = $res_qty->fetch_array(MYSQLI_NUM)[2];
+											$qtys = $res_qty->fetch_array(MYSQLI_NUM);
+											$qty = $qtys[2];
 											$mtbur = $fhours*$qty/$rm;
-											$mtbur = number_format($mtbur, 0, '.', '');
-											echo "$mtbur";
+											echo number_format($mtbur, 0, '.', ',');
 										?>
 								</div><br><br>
 								<!-- <label class="col-sm-1 control-label">Perhitungan MTBUR</label>
@@ -165,7 +166,10 @@
 
 					<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
 					<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
-
+					<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+					<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+					<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+					<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
 					<div class="col-md-12 mt">
         				<div class="panel panel-default">
         					<div class="panel-heading">
@@ -185,7 +189,9 @@
 								        </thead>
 								        <tbody>
 											<?php
+												$arr_mtbur = array();
 												while ($rowes = $res_tbl->fetch_array(MYSQLI_NUM)) {
+													$arr_mtbur[] = $rowes;
 													echo "<tr>";
 														echo "<td>".$rowes[0]."</td>";
 														echo "<td>".$rowes[1]."</td>";
@@ -204,6 +210,10 @@
 					$(document).ready(function() {
 					$('#table_mtbur').DataTable({
 						"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+						dom: 'Blfrtip',
+						buttons: [{
+						  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+						}],
 					});
 				} );
 				</script>
@@ -214,12 +224,13 @@
 		            // this function generates the pdf using the table
 		            function generate() {
 		              datatableLength = -1;
-		              var fhour = <?php echo(json_encode($fhours)); ?>;
+		              var fhour = <?php echo(json_encode(number_format($fhours, 2, '.', ','))); ?>;
 		              var rm = <?php echo(json_encode($rm)); ?>;
-		              var mtbur = <?php echo(json_encode($mtbur)); ?>;
+		              var mtbur = <?php echo(json_encode(number_format($mtbur, 0, '.', ','))); ?>;
+		              var data = <?php echo(json_encode($arr_mtbur)); ?>;
 		              var pdfsize = 'a4';
 		              var columns = ["Date Removal", "Part Number", "Serial Number", "Part Name", "Reg"];
-		              var data = tableToJson($("#table_mtbur").get(0), columns);
+		              //var data = tableToJson($("#table_mtbur").get(0), columns);
 		              console.log(data);
 		              var doc = new jsPDF('l', 'pt', pdfsize);
 		              doc.text(40, 40, "FH");
@@ -233,8 +244,8 @@
 		                styles: {
 		                  overflow: 'linebreak'
 		                },
-		                margin: {top: 120},
-		                pageBreak: 'always',
+		                startY: 120,
+		                margin: {top: 40},
 		                tableWidth: 'auto'
 		              });
 		              doc.save("table.pdf");
