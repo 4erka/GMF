@@ -36,20 +36,6 @@
             </select>
         </div>
       </td>
-      <td style="padding-left:50px; width:50%">
-        <div class="form-group">
-          <label class="control-label">A/C Registration</label>
-            <input type="text" class="form-control" name="acreg" value="<?php if(isset($ACReg))echo $_POST["acreg"] ?>">
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td style="width:50%">
-        <div class="form-group">
-          <label class="control-label">Part Number</label>
-              <input type="text" class="form-control" name="part_no" value="<?php if(isset($PartNum))echo $_POST["part_no"] ?>">
-        </div>
-      </td>
       <td style="width:50%; padding-left:50px">
         <div class="form-group">
           <label class="control-label">Removal Code</label>
@@ -115,7 +101,7 @@
     </tr>
     <tr>
       <td style="width:50%">
-        <input type="submit" onclick="submitForm('component_removal.php')" value="Display Report" class="btn btn-default">
+        <input type="submit" onclick="submitForm('graph_component.php')" value="Display Pareto" class="btn btn-default">
       </td>
     </tr>
 

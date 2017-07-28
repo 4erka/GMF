@@ -65,7 +65,7 @@
           <div class="col-md-12 mt">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4><i class="fa fa-angle-right"></i> Filter Pareto Display</h4>
+                <h4><i class="fa fa-angle-right"></i> Filter Pareto Criteria</h4>
               </div>
               <div class="panel-body">
                 <?php

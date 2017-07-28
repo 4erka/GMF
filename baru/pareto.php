@@ -113,7 +113,7 @@ $Graph_type = $_POST['graph'];
           <div class="col-md-12 mt">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4><i class="fa fa-angle-right"></i> Filter Pareto Display</h4>
+                <h4><i class="fa fa-angle-right"></i> Filter Pareto Criteria</h4>
               </div>
               <div class="panel-body">
                 <?php
@@ -136,6 +136,9 @@ $Graph_type = $_POST['graph'];
 
         $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		$res_graph_delay = mysqli_query($link, $sql_graph_delay);
+
+        $row_delay_cnt = mysqli_num_rows($res_graph_delay);
+        $row_pirep_cnt = mysqli_num_rows($res_graph_pirep);
 
     		$i = 0;
     		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
@@ -176,66 +179,73 @@ $Graph_type = $_POST['graph'];
           $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		  $res_graph_delay = mysqli_query($link, $sql_graph_delay);
 
+          $row_delay_cnt = mysqli_num_rows($res_graph_delay);
+          $row_pirep_cnt = mysqli_num_rows($res_graph_pirep);
+
           #print_r($sql_graph_delay);
 
-          $i = 0;
-      		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
-      			//if($i > 9) break;
-            $temp_pirep[$i] = $rowes[0];
-            $i++;
-      		}
-
-          for($i=0; $i<sizeof($temp_pirep); $i++){
-            if($temp_pirep[$i] == NULL){
-              $ar[$i] = '0000';
+          if($row_pirep_cnt>0){
+            $i = 0;
+            while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
+              //if($i > 9) break;
+              $temp_pirep[$i] = $rowes[0];
+              $i++;
             }
-            else {
-              $ar[$i] = $temp_pirep[$i];
+
+            for($i=0; $i<sizeof($temp_pirep); $i++){
+              if($temp_pirep[$i] == NULL){
+                $ar[$i] = '0000';
+              }
+              else {
+                $ar[$i] = $temp_pirep[$i];
+              }
             }
-          }
 
-          $ar0 = array_count_values($ar);
+            $ar0 = array_count_values($ar);
 
-          arsort($ar0);
+            arsort($ar0);
 
-          $keys=array_keys($ar0);//Split the array so we can find the most occuring key
+            $keys=array_keys($ar0);//Split the array so we can find the most occuring key
 
-          $arr_pirep = Array();
-          for($i=0; $i<10; $i++){
-            $arr_pirep[$i][0] = $keys[$i];
-            $arr_pirep[$i][1] = $ar0[$keys[$i]];
+            $arr_pirep = Array();
+            for($i=0; $i<10; $i++){
+              $arr_pirep[$i][0] = $keys[$i];
+              $arr_pirep[$i][1] = $ar0[$keys[$i]];
+            }
           }
 
           //======================================================================Delay=======================================================
 
-      		$i = 0;
-      		while ($rowes = $res_graph_delay->fetch_array(MYSQLI_NUM)) {
-      			$temp_delay[$i] = $rowes[0];
-            $i++;
-      		}
+          if($row_delay_cnt>0){
+        		$i = 0;
+        		while ($rowes = $res_graph_delay->fetch_array(MYSQLI_NUM)) {
+        			$temp_delay[$i] = $rowes[0];
+              $i++;
+        		}
 
-          for($i=0; $i<sizeof($temp_delay); $i++){
-            if($temp_delay[$i] == NULL){
-              $ar_new[$i] = '0000';
+            for($i=0; $i<sizeof($temp_delay); $i++){
+              if($temp_delay[$i] == NULL){
+                $ar_new[$i] = '0000';
+              }
+              else {
+                $ar_new[$i] = $temp_delay[$i];
+              }
             }
-            else {
-              $ar_new[$i] = $temp_delay[$i];
+
+            $ar1 = array_count_values($ar_new);
+
+            arsort($ar1);
+  //          var_dump($ar1);
+
+            $keys=array_keys($ar1);//Split the array so we can find the most occuring key
+
+            $arr_delay = Array();
+            for($i=0; $i<10; $i++){
+              $arr_delay[$i][0] = $keys[$i];
+              $arr_delay[$i][1] = $ar1[$keys[$i]];
             }
-          }
-
-          $ar1 = array_count_values($ar_new);
-
-          arsort($ar1);
-//          var_dump($ar1);
-
-          $keys=array_keys($ar1);//Split the array so we can find the most occuring key
-
-          $arr_delay = Array();
-          for($i=0; $i<10; $i++){
-            $arr_delay[$i][0] = $keys[$i];
-            $arr_delay[$i][1] = $ar1[$keys[$i]];
-          }
-    		}
+    		  }
+        }
 
         #print_r($sql_graph_delay );
 
@@ -248,7 +258,14 @@ $Graph_type = $_POST['graph'];
              <h4><i class="fa fa-angle-right"></i>Top 10 Delay</h4>
            </div>
            <div class="panel-body">
-             <canvas id="grafik_delay" style="height: 250px; margin-top: 50px"></canvas>
+             <?php
+             if($row_delay_cnt > 0){
+               echo "<canvas id='grafik_delay' style='height: 250px; margin-top: 50px'></canvas>";
+             }
+             else {
+               echo"<h2> Tidak ada data</h2>";
+             }
+              ?>
            </div>
          </div>
        </div>
@@ -259,7 +276,14 @@ $Graph_type = $_POST['graph'];
              <h4><i class="fa fa-angle-right"></i>Top 10 Pirep</h4>
            </div>
            <div class="panel-body">
-             <canvas id="grafik_pirep" style="height: 250px; margin-top: 50px"></canvas>
+             <?php
+             if($row_pirep_cnt > 0){
+               echo "<canvas id='grafik_pirep' style='height: 250px; margin-top: 50px'></canvas>";
+             }
+             else {
+               echo"<h2> Tidak ada data</h2>";
+             }
+              ?>
            </div>
          </div>
        </div>

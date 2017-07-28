@@ -5,12 +5,11 @@
 //Mendapatkan Value yang di passing
 if(empty($_POST["actype"])){
   $ACType = "";
+  $where_actype = "";
 }
 else{
-//  $data = implode("','",$_POST["actype"]);
-//  $where_actype = "Aircraft IN ('$data')";
   $ACType = "'".$_POST['actype']."%'";
-  $where_actype = "Aircraft LIKE ".$ACType;
+  $where_actype = "AND Aircraft LIKE ".$ACType;
 }
 if(empty($_POST["acreg"])){
   $ACReg = "";
@@ -20,35 +19,33 @@ else{
 }
 if(empty($_POST["part_no"])){
   $PartNum = "";
+  $where_part = "";
+  $need_table = 1;
 }
 else{
-  $PartNum = "".$_POST['part_no']."";
+  $PartNum = "'".$_POST['part_no']."%'";
+  $where_part = "AND PartNo LIKE '".$_POST['part_no']."%'";
+  $need_table = 0;
 }
 if(!empty($_POST["datefrom"])){
   $DateStart = "".$_POST['datefrom']."";
-  //$temp = explode('/', $_POST["datefrom"]);
-//  echo $_POST['datefrom'];
-  //$DateStart = $temp[2]."-".$temp[1]."-".$temp[0];
 }
 else{
   $DateStart = "";
 }
 if(!empty($_POST["dateto"])){
   $DateEnd = "".$_POST['dateto']."";
-//  $temp = explode('/', $_POST["dateto"]);
-  //$DateEnd = $temp[2]."-".$temp[1]."-".$temp[0];
 }
 else
   $DateEnd = "";
 
 if(!empty($_POST["remcode"])){
-  $i = 0;
+//  $i = 0;
   $data = implode("','",$_POST["remcode"]);
-  $where_remcode = "RemCode IN ('$data')";
-  foreach ($_POST['remcode'] as $val) {
-    $RemCode[$i] = $val;
-    $i++;
-  }
+  $where_remcode = "AND RemCode IN ('$data')";
+}
+else {
+  $where_remcode = "";
 }
 
   include 'config/connect.php';
@@ -113,7 +110,7 @@ if(!empty($_POST["remcode"])){
       *********************************************************************************************************************************************************** -->
 
       <?php
-        $page_now = "component";
+        $page_now = "pareto_comp";
         include 'header.php';
        ?>
 
@@ -126,6 +123,19 @@ if(!empty($_POST["remcode"])){
         include 'navbar.php';
        ?>
 
+       <?php
+
+          $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
+          FROM tblcompremoval WHERE DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_actype."".$where_remcode." GROUP BY PartNo ORDER BY number_of_part DESC";
+
+                             //print_r($sql_graph_comp);
+
+          $res_graph_comp = mysqli_query($link, $sql_graph_comp);
+
+          $row_cnt = mysqli_num_rows($res_graph_comp);
+
+        ?>
+
       <!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
@@ -135,11 +145,11 @@ if(!empty($_POST["remcode"])){
           <div class="col-md-12 mt">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4><i class="fa fa-angle-right"></i> Filter Component Trend</h4>
+                <h4><i class="fa fa-angle-right"></i>Filter Component Removal Criteria</h4>
               </div>
               <div class="panel-body">
                 <?php
-                  include 'form_component.php';
+                  include 'form_pareto_comp.php';
                 ?>
               </div>
             </div>
@@ -151,58 +161,72 @@ if(!empty($_POST["remcode"])){
             <h4><i class="fa fa-angle-right"></i>Top 10 Component Removal</h4>
           </div>
           <div class="panel-body">
-            <canvas id="grafik_pareto" style="height: 250px; margin-top: 50px"></canvas>
+            <?php
+              if($row_cnt>0){
+                echo "<canvas id='grafik_pareto' style='height: 250px; margin-top: 50px'></canvas>";
+              }
+              else {
+                echo "<h2>Tidak ada data</h2>";
+              }
+
+             ?>
           </div>
         </div>
       </div>
 
       <div class="col-md-12 mt">
-        <div class="content-panel">
+        <div class="panel panel-default">
+          <div class="panel-heading">
             <h4><i class="fa fa-angle-right"></i>Definition Table</h4>
+          </div>
+          <div class="panel-body">
               <section id="unseen" style="padding: 10px">
               <table id="comp_table" class="table table-bordered table-striped table-condensed">
                 <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
-                <hr>
+                <br>
+                <br>
+                <br>
                     <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Code</th>
-                        <th>Name</th>
+                      <?php
+                        if($row_cnt>0){
+                          echo "<th>No</th>";
+                          echo "<th>Code</th>";
+                          echo "<th>Part Name</th>";
+                        }
+                       ?>
+
                     </tr>
                     </thead>
                     <tbody>
 
                     <?php
-                      if(isset($_POST['remcode'])){
-                        $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
-                        FROM tblcompremoval WHERE ".$where_actype." AND REG LIKE '%".$ACReg."%' AND ".$where_remcode." AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY PartNo ORDER BY number_of_part DESC";
-                      }
-                      else{
-                        $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
-                        FROM tblcompremoval WHERE REG LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY PartNo ORDER BY number_of_part DESC";
-                      }
-
-                      //print_r($sql_graph_comp);
-
-                      $res_graph_comp = mysqli_query($link, $sql_graph_comp);
 
                       $arr_pareto = Array();
 
                       $i = 0;
                       $num = 1;
-                      while ($rowes = $res_graph_comp->fetch_array(MYSQLI_NUM)) {
-                        if($i > 9) break;
+
+                      if($row_cnt > 0){
+                        while ($rowes = $res_graph_comp->fetch_array(MYSQLI_NUM)) {
+                          if($i > 9) break;
+                          echo "<tr>";
+                            echo "<td>".$num."</td>"; //ID
+                            echo "<td>".$rowes[0]."</td>"; //ID
+                            echo "<td>".$rowes[1]."</td>"; //ATA
+                            //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
+                          echo "</tr>";
+                          $arr_pareto[$i][0] = $rowes[0];
+                          $arr_pareto[$i][1] = $rowes[1];
+                          $arr_pareto[$i][2] = $rowes[2];
+                          $i++;
+                          $num++;
+                        }
+                      }
+                      else {
                         echo "<tr>";
-                          echo "<td>".$num."</td>"; //ID
-                          echo "<td>".$rowes[0]."</td>"; //ID
-                          echo "<td>".$rowes[1]."</td>"; //ATA
-                          //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
+                          echo "<h3>Tidak ada data</h3>";
                         echo "</tr>";
-                        $arr_pareto[$i][0] = $rowes[0];
-                        $arr_pareto[$i][1] = $rowes[1];
-                        $arr_pareto[$i][2] = $rowes[2];
-                        $i++;
-                        $num++;
                       }
 
                       //print_r($sql_rem);
@@ -210,8 +234,8 @@ if(!empty($_POST["remcode"])){
                     </tbody>
                 </table>
               </section>
-
-            </div><! --/content-panel -->
+            </div>
+          </div><!--/content-panel -->
       </div><!-- /col-md-12 -->
 
       </section>

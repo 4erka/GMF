@@ -1,7 +1,7 @@
 <?php
 
   //Memilih Ac Type
-  $sql0 = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+  $sql0 = "SELECT DISTINCT ACtype FROM tbl_master_actype ORDER BY ACtype ASC";
   $res0 = mysqli_query($link, $sql0);
 
 ?>

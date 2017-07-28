@@ -26,29 +26,23 @@ else{
 }
 if(!empty($_POST["datefrom"])){
   $DateStart = "".$_POST['datefrom']."";
-  //$temp = explode('/', $_POST["datefrom"]);
-//  echo $_POST['datefrom'];
-  //$DateStart = $temp[2]."-".$temp[1]."-".$temp[0];
 }
 else{
   $DateStart = "";
 }
 if(!empty($_POST["dateto"])){
   $DateEnd = "".$_POST['dateto']."";
-//  $temp = explode('/', $_POST["dateto"]);
-  //$DateEnd = $temp[2]."-".$temp[1]."-".$temp[0];
 }
 else
   $DateEnd = "";
 
 if(!empty($_POST["remcode"])){
-  $i = 0;
+//  $i = 0;
   $data = implode("','",$_POST["remcode"]);
   $where_remcode = "AND RemCode IN ('$data')";
-  foreach ($_POST['remcode'] as $val) {
-    $RemCode[$i] = $val;
-    $i++;
-  }
+}
+else {
+  $where_remcode = "";
 }
 
   include 'config/connect.php';
@@ -124,6 +118,15 @@ if(!empty($_POST["remcode"])){
 
       <?php
         include 'navbar.php';
+
+        $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
+                FROM tblcompremoval
+                WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
+                "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_remcode;
+
+      $res_rem = mysqli_query($link, $sql_rem);
+
+      $row_cnt = mysqli_num_rows($res_rem);
        ?>
 
       <!-- **********************************************************************************************************************************************************
@@ -135,7 +138,7 @@ if(!empty($_POST["remcode"])){
           <div class="col-md-12 mt">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4><i class="fa fa-angle-right"></i> Filter Component Trend</h4>
+                <h4><i class="fa fa-angle-right"></i> Filter Component Removal Criteria</h4>
               </div>
               <div class="panel-body">
                 <?php
@@ -147,54 +150,46 @@ if(!empty($_POST["remcode"])){
 
 
           <div class="col-md-12 mt">
-            <div class="content-panel">
-                <h4><i class="fa fa-angle-right"></i> Tabel</h4>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4><i class="fa fa-angle-right"></i> Tabel Component Removal</h4>
+              </div>
+              <div class="panel-body">
                   <section id="unseen" style="padding: 10px">
                   <table id="comp_table" class="table table-bordered table-striped table-condensed">
                     <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
-                    <hr>
+                    <br>
+                    <br>
+                    <br>
                         <thead>
                         <tr>
-                            <th>Notification</th>
-                            <th>ATA</th>
-                            <th>Equipment</th>
-                            <th>Part Number</th>
-                            <th>Serial Number</th>
-                            <th>Part Name</th>
-                            <th>Register</th>
-                            <th>A/C Type</th>
-                            <th>Rem Code</th>
-                            <th>Real Reason</th>
-                            <th>Date Removal</th>
-                            <th>TSN</th>
-                            <th>TSI</th>
-                            <th>CSN</th>
-                            <th>CSI</th>
+                          <?php
+                            if($row_cnt>0){
+                              echo "<th>Notification</th>";
+                              echo "<th>ATA</th>";
+                              echo "<th>Equipment</th>";
+                              echo "<th>Part Number</th>";
+                              echo "<th>Serial Number</th>";
+                              echo "<th>Part Name</th>";
+                              echo "<th>Register</th>";
+                              echo "<th>A/C Type</th>";
+                              echo "<th>Rem Code</th>";
+                              echo "<th>Real Reason</th>";
+                              echo "<th>Date Removal</th>";
+                              echo "<th>TSN</th>";
+                              echo "<th>TSI</th>";
+                              echo "<th>CSN</th>";
+                              echo "<th>CSI</th>";
+                            }
+                           ?>
                         </tr>
                         </thead>
                         <tbody>
 
                         <?php
 
-                        if(isset($RemCode)){
-
-                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
-                                  FROM tblcompremoval
-                                  WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
-                                  "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_remcode;
-                        }
-                        else {
-                          $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
-                                  FROM tblcompremoval
-                                  WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
-                                  "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."'";
-                        }
-
-
-                        $res_rem = mysqli_query($link, $sql_rem);
-
                           //print_r($sql_rem);
-
+                        if($row_cnt>0){
                           while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
                             echo "<tr>";
                               echo "<td>".$rowes[0]."</td>"; //ID
@@ -212,20 +207,23 @@ if(!empty($_POST["remcode"])){
                               echo "<td>".$rowes[12]."</td>"; //TSI
                               echo "<td>".$rowes[13]."</td>"; //CSN
                               echo "<td>".$rowes[14]."</td>"; //CSI/
-                              //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
                             echo "</tr>";
                           }
+                        }
+                        else {
+                          echo "<h2>Tidak ada data</h2>";
+                        }
 
                          ?>
                         </tbody>
                     </table>
                   </section>
-
-                </div><! --/content-panel -->
+                </div> <!--Panel body-->
+              </div> <!--/content-panel -->
           </div><!-- /col-md-12 -->
 
     	<?php
-
+      // SQL untuk grafik component rempval
       if(isset($where_remcode)){
         $sql_comp = "SELECT DATE_FORMAT(DateRem, '%Y-%m') AS dates, COUNT(DATE_FORMAT(DateRem, '%Y-%m')) AS number_of_rem FROM tblcompremoval
         WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
@@ -233,7 +231,7 @@ if(!empty($_POST["remcode"])){
       else {
         #$sql_comp = "SELECT DateRem, COUNT(DateRem) AS number_of_rem FROM tblcompremoval
         $sql_comp = "SELECT DATE_FORMAT(DateRem, '%Y-%m') AS dates, COUNT(DATE_FORMAT(DateRem, '%Y-%m')) AS number_of_rem FROM tblcompremoval
-        WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
+        WHERE ".$where_actype." AND ".$where_remcode." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
       }
 
         $res_comp = mysqli_query($link, $sql_comp);
@@ -280,7 +278,6 @@ if(!empty($_POST["remcode"])){
           $before_temp[1] = $rowes[1];
         }
 
-//        var_dump($arr_comp);
     	 ?>
 
        <div class="col-md-12 mt">
@@ -289,18 +286,15 @@ if(!empty($_POST["remcode"])){
              <h4><i class="fa fa-angle-right"></i>Grafik Component Removal</h4>
            </div>
            <div class="panel-body">
-             <canvas id="grafik_comp" style="height: 250px; margin-top: 50px"></canvas>
-           </div>
-         </div>
-       </div>
+             <?php
+              if($row_cnt>0){
+                echo "<canvas id='grafik_comp' style='height: 250px; margin-top: 50px'></canvas>";
+              }
+              else {
+                echo "<h2>Tidak ada data</h2>";
+              }
+              ?>
 
-       <div class="col-md-12 mt">
-         <div class="panel panel-default">
-           <div class="panel-heading">
-             <h4><i class="fa fa-angle-right"></i>Top 10 Component Removal</h4>
-           </div>
-           <div class="panel-body">
-             <canvas id="grafik_pareto" style="height: 250px; margin-top: 50px"></canvas>
            </div>
          </div>
        </div>
@@ -349,8 +343,6 @@ if(!empty($_POST["remcode"])){
           {
             extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
           }
-          //  'excelHtml5', 'pdfHtml5'
-            //'copy', 'csv', 'excel', 'pdf', 'print'
         ],
         responsive: true
       });
@@ -468,94 +460,6 @@ if(!empty($_POST["remcode"])){
 
       return data;
     }
-  </script>
-
-  <!-- TOP 10 Component Removal -->
-  <?php
-    $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
-    FROM tblcompremoval WHERE ".$where_actype." AND REG LIKE '%".$ACReg."%' AND ".$where_remcode." AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY PartNo ORDER BY number_of_part DESC";
-
-    //print_r($sql_graph_comp);
-
-    $res_graph_comp = mysqli_query($link, $sql_graph_comp);
-
-    $arr_pareto = Array();
-
-    $i = 0;
-    while ($rowes = $res_graph_comp->fetch_array(MYSQLI_NUM)) {
-      if($i > 9) break;
-      $arr_pareto[$i][0] = $rowes[0];
-      $arr_pareto[$i][1] = $rowes[1];
-      $arr_pareto[$i][2] = $rowes[2];
-      $i++;
-    }
-
-   ?>
-
-  <script>
-  var part_no = [];
-  var part_name = [];
-  var jumlah_comp = [];
-  var z=0;
-
-  var arr_comp = <?php echo json_encode($arr_pareto); ?>;
-
-  for ( tot=arr_comp.length; z < tot; z++) {
-     part_no.push(arr_comp[z][0]);
-     part_name.push(arr_comp[z][1]);
-     jumlah_comp.push(arr_comp[z][2]);
-  };
-
-  Chart.plugins.register({
-    beforeDraw: function(chartInstance) {
-      var ctx = chartInstance.chart.ctx;
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
-    }
-  });
-
-  var ctx = document.getElementById("grafik_pareto").getContext("2d");
-
-  var data = {
-    labels: part_no,
-    datasets: [{
-      label: "Number of Component Removal",
-      backgroundColor: "red",
-      strokeColor: "black",
-      data: jumlah_comp
-    }]
-  };
-
-  var options = {
-    title : {
-      display : true,
-      position : "top",
-      text : "Top 10 Component Removal",
-      fontSize : 18,
-      fontColor : "#111"
-    },
-    legend : {
-      display : true,
-      position : "bottom"
-    },
-    scales: {
-          yAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: 'Number'
-              },
-              ticks: {
-                  beginAtZero: true
-              }
-          }]
-      }
-  };
-
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: options
-  });
   </script>
 
     </div>

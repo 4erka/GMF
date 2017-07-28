@@ -6,7 +6,7 @@
         <ul class="sidebar-menu" id="nav-accordion">
 
             <li class="mt">
-              <?php
+              <?php //Urutan 1
                 if($page_now == "graph"){
                   echo "<a class='active' href='awal_graph.php'>";
                 }
@@ -20,7 +20,7 @@
             </li>
 
             <li class="sub-menu">
-              <?php
+              <?php //Urutan 2
                 if($page_now == "pareto"){
                   echo "<a class='active' href='awal_pareto.php'>";
                 }
@@ -31,17 +31,10 @@
                     <i class="fa fa-desktop"></i>
                     <span>Pareto Techlog / Delay</span>
                 </a>
-                <!--
-                <ul class="sub">
-                    <li><a  href="general.html">General</a></li>
-                    <li><a  href="buttons.html">Buttons</a></li>
-                    <li><a  href="panels.html">Panels</a></li>
-                </ul>
-              -->
             </li>
 
             <li class="sub-menu">
-              <?php
+              <?php //Urutan 3
                 if($page_now == "component"){
                   echo "<a class='active' href='awal_component.php'>";
                 }
@@ -55,7 +48,21 @@
             </li>
 
             <li class="sub-menu">
-              <?php
+              <?php //Urutan 4
+                if($page_now == "pareto_comp"){
+                  echo "<a class='active' href='awal_pareto_comp.php'>";
+                }
+                else {
+                  echo "<a href='awal_pareto_comp.php'>";
+                }
+              ?>
+                    <i class="fa fa-desktop"></i>
+                    <span>Pareto Component Removal</span>
+                </a>
+            </li>
+
+            <li class="sub-menu">
+              <?php //Urutan 5
                 if($page_now == "mtbur"){
                   echo "<a class='active' href='awal_mtbur.php'>";
                 }
@@ -69,35 +76,7 @@
             </li>
 
             <li class="sub-menu">
-              <?php
-                if($page_now == "oil"){
-                  echo "<a class='active' href='oil_consumption.php'>";
-                }
-                else {
-                  echo "<a href='oil_consumption.php'>";
-                }
-              ?>
-                    <i class="fa fa-fire"></i>
-                    <span>Oil Consumption</span>
-                </a>
-            </li>
-
-            <li class="sub-menu">
-              <?php
-                if($page_now == "pfr"){
-                  echo "<a class='active' href='pfr_online.php'>";
-                }
-                else {
-                  echo "<a href='pfr_online.php'>";
-                }
-              ?>
-                    <i class="fa fa-paper-plane"></i>
-                    <span>Pfr Online</span>
-                </a>
-            </li>
-
-            <li class="sub-menu">
-              <?php
+              <?php // Uurtan 6
                 if($page_now == "mtbur_w"){
                   echo "<a class='active' href='mtburw.php'>";
                 }
@@ -111,7 +90,35 @@
             </li>
 
             <li class="sub-menu">
-              <?php
+              <?php // Urutan 7
+                if($page_now == "oil"){
+                  echo "<a class='active' href='oil_consumption.php'>";
+                }
+                else {
+                  echo "<a href='oil_consumption.php'>";
+                }
+              ?>
+                    <i class="fa fa-fire"></i>
+                    <span>Oil Consumption</span>
+                </a>
+            </li>
+
+            <li class="sub-menu">
+              <?php // Urutan 8
+                if($page_now == "pfr"){
+                  echo "<a class='active' href='pfr_online.php'>";
+                }
+                else {
+                  echo "<a href='pfr_online.php'>";
+                }
+              ?>
+                    <i class="fa fa-paper-plane"></i>
+                    <span>Pfr Online</span>
+                </a>
+            </li>
+
+            <li class="sub-menu">
+              <?php //Urutan 9
                 if($page_now == "help"){
                   echo "<a class='active' href='help.php'>";
                 }
@@ -123,50 +130,6 @@
                     <span>User Guide</span>
                 </a>
             </li>
-
-            <!--
-            <li class="sub-menu">
-                <a href="javascript:;" >
-                    <i class="fa fa-book"></i>
-                    <span>Extra Pages</span>
-                </a>
-                <ul class="sub">
-                    <li><a  href="blank.html">Blank Page</a></li>
-                    <li><a  href="login.html">Login</a></li>
-                    <li><a  href="lock_screen.html">Lock Screen</a></li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:;" >
-                    <i class="fa fa-tasks"></i>
-                    <span>Forms</span>
-                </a>
-                <ul class="sub">
-                    <li><a  href="form_component.html">Form Components</a></li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:;" >
-                    <i class="fa fa-th"></i>
-                    <span>Data Tables</span>
-                </a>
-                <ul class="sub">
-                    <li><a  href="basic_table.html">Basic Table</a></li>
-                    <li><a  href="responsive_table.html">Responsive Table</a></li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:;" >
-                    <i class=" fa fa-bar-chart-o"></i>
-                    <span>Charts</span>
-                </a>
-                <ul class="sub">
-                    <li><a  href="morris.html">Morris</a></li>
-                    <li><a  href="chartjs.html">Chartjs</a></li>
-                </ul>
-            </li>
-          -->
-
         </ul>
         <!-- sidebar menu end-->
     </div>
