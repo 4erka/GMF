@@ -41,6 +41,7 @@
 	$sql_qty = "SELECT DateRem, PartNo, QTY FROM tblcompremoval WHERE Aircraft LIKE ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." AND RemCode = 'U' ORDER BY DateRem DESC LIMIT 1";
 
 	$sql_tbl = "SELECT DateRem, PartNo, SerialNo, PartName, Reg FROM tblcompremoval WHERE Aircraft LIKE ".$ACType."".$PartNo."".$MonthStart2."".$MonthEnd2." AND RemCode = 'U'";
+	
 	mysqli_set_charset($link, "utf8");
 	$res_fh = mysqli_query($link, $sql_fh);
 	$res_rm = mysqli_query($link, $sql_rm);
@@ -147,10 +148,15 @@
 								<label class="col-sm-1 control-label">MTBUR</label>
 								<div class="col-sm-2">
 									<?php
-											$qtys = $res_qty->fetch_array(MYSQLI_NUM);
-											$qty = $qtys[2];
-											$mtbur = $fhours*$qty/$rm;
-											echo number_format($mtbur, 0, '.', ',');
+											if($rm != 0){
+												$qtys = $res_qty->fetch_array(MYSQLI_NUM);
+												$qty = $qtys[2];
+												$mtbur = $fhours*$qty/$rm;
+												echo number_format($mtbur, 0, '.', ',');
+											}
+											else{
+												echo "N\A";
+											}
 										?>
 								</div><br><br>
 								<!-- <label class="col-sm-1 control-label">Perhitungan MTBUR</label>
@@ -176,7 +182,7 @@
         						<h4><i class="fa fa-angle-right"></i> Table MTBUR</h4>
         					</div>
         					<div class="panel-body" style="padding: 10px">
-        						<button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
+        						<button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left" style="margin-bottom: 10px">Export as PDF</button>
         						<table id="table_mtbur" class="table table-bordered table-striped table-condensed">
 								        <thead>
 								            <tr>

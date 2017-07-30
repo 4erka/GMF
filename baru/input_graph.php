@@ -1,5 +1,5 @@
 <?php
-	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype ORDER BY ACType";
 	$res_actype = mysqli_query($link, $sql_actype);
 
 ?>
@@ -59,7 +59,7 @@
               <input type="checkbox" name="dcp[]" value="c" id="cl_cancel"> Cancel
             </label>
             <label class="checkbox-inline">
-              <input type="checkbox" name="dcp[]" value="x" id="cl_x"> All
+              <input type="checkbox" name="dcp[]" value="x" id="cl_x"> Non Technical Delay
             </label><br>
             <label class="checkbox-inline">
               <input type="checkbox" name="rtabo[]" value="rta" id="cl_rta"> RTA

@@ -46,15 +46,23 @@
 	}
 	if(empty($_POST["pima"])){
     	$Pimas="";
+    	$graph_title = "Pirep & Marep";
 	}
 	else{
 		$Pima = $_POST['pima'];
 		$i = 0;
 		foreach ($Pima as &$value) {
 		  if($i == 0){
+		  	if($Pima[$i]=="pirep"){
+		  		$graph_title = "Pirep";
+		  	}
+		  	else{
+		  		$graph_title = "Marep";
+		  	}
 		    $Pima[$i] = " AND PirepMarep IN ('".$Pima[$i]."'";
 		  }
 		  else{
+		  	$graph_title = "Pirep & Marep";
 		    $Pima[$i] = ",'".$Pima[$i]."'";
 		  }
 		  $i++;
@@ -72,19 +80,65 @@
 
 	$sql_pirep = "SELECT DATE, SEQ, Notification, ACTYPE, REG, STADEP, STAARR, FN, ATA, SUBATA, PROBLEM, ACTION, PirepMarep FROM tblpirep_swift WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd."";
 
-	$sql_grafik = "SELECT COUNT(DATE) as pirep, DATE_FORMAT(DATE, '%m-%Y') as DATE FROM tblpirep_swift WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd." GROUP BY MONTH(DATE)";
+	$sql_grafik = "SELECT COUNT(DATE) as pirep, DATE_FORMAT(DATE, '%Y-%m') as DATES FROM tblpirep_swift WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA."".$Fault_code."".$Keyword."".$Pimas."".$DateStart."".$DateEnd." GROUP BY DATES ORDER BY DATE";
 
 	mysqli_set_charset($link, "utf8");
 		
 	$res_pirep = mysqli_query($link, $sql_pirep);
 
 	$res_grafik = mysqli_query($link, $sql_grafik);
+
+	$temp_total = 0;
+	$before_temp = array();
+	$arr_pirep_grafik = array();
+
+	$i=0;
+	while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)) {
+		if($i == 0){
+		  $arr_pirep_grafik[$i][0] = $rowes[0];
+		  $arr_pirep_grafik[$i][1] = $rowes[1];
+		  $i++;
+		}
+		else {
+		  $now = strtotime("+1 Month", strtotime($before_temp[0]));
+
+		  if($rowes[1] == date("Y-m", $now)){
+		    $arr_pirep_grafik[$i][0] = $rowes[0];
+		    $arr_pirep_grafik[$i][1] = $rowes[1];
+		    $i++;
+		  }
+		  else {
+		    $now = strtotime($before_temp[0]);
+		    $now = strtotime("+1 Month", $now);
+
+		    while($rowes[1] != date("Y-m", $now)){
+
+		        $arr_pirep_grafik[$i][0] = 0;
+		        $arr_pirep_grafik[$i][1] = date("Y-m", $now);
+		        $i++;
+
+		        $now = strtotime("+1 Month", $now);
+		    }
+
+		    $arr_pirep_grafik[$i][0] = $rowes[0];
+		    $arr_pirep_grafik[$i][1] = $rowes[1];
+		    $i++;
+		  }
+		}
+		$before_temp[0] = $rowes[1];
+		$before_temp[1] = $rowes[0];
+	}
+
 	$arr_x = array();
 	$arr_y = array();
-	while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)){
-		$arr_y[] = $rowes[0];
-		$arr_x[] = $rowes[1];
+	for($i = 0; $i < count($arr_pirep_grafik); $i++){
+		$arr_y[] = $arr_pirep_grafik[$i][0];
+		$arr_x[] = $arr_pirep_grafik[$i][1];
 	}
+	// while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)){
+	// 	$arr_y[] = $rowes[0];
+	// 	$arr_x[] = $rowes[1];
+	// }
 ?>
 
 <html>
@@ -164,7 +218,7 @@
 			<div class="col-md-12 mt">
 	            <div class="panel panel-default">
 	              <div class="panel-heading">
-	                <h4><i class="fa fa-angle-right"></i> Filter Graph Delay / Pirep</h4>
+	                <h4><i class="fa fa-angle-right"></i> Filter Techlog / Delay Criteria</h4>
 	              </div>
 	              <div class="panel-body">
 	                <?php 
@@ -186,7 +240,7 @@
 						<h4><i class="fa fa-angle-right"></i> Table Pirep</h4>
 					</div>
 					<div class="panel-body">
-						<button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
+						<button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left" style="margin-bottom: 10px">Export as PDF</button>
 						<table id="table_pirep" class="display cell-border" cellspacing="0" width="100%">
 						    <thead>
 						        <tr>
@@ -207,6 +261,7 @@
 						    </thead>
 						    <tbody>
 						    	<?php
+						    		//print_r($sql_grafik);
 						    		$arr_pirep = array();
 									while ($rowes = $res_pirep->fetch_array(MYSQLI_NUM)) {
 										$longtext = $rowes[10];
@@ -242,7 +297,7 @@
 					"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 					dom: 'Blfrtip',
 					buttons: [{
-					  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+					  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default', title: graph_title + " - " + graf_actype
 					}],
 				});
 				} );
@@ -259,12 +314,13 @@
 	            var arr_x = <?php echo json_encode($arr_x); ?>;
 	            var arr_y = <?php echo json_encode($arr_y); ?>;
 	            var graf_actype = <?php echo json_encode($graf_actype); ?>;
+	            var graph_title = <?php echo json_encode($graph_title); ?>;
 				$(document).ready(function(){
 					var chartdata = {
 						labels: arr_x,
 						datasets : [
 							{
-								label: 'Pirep',
+								label: graph_title,
 								fill: 'false',
 								backgroundColor: 'rgba(200, 200, 200, 0.75)',
 								borderColor: 'rgba(255, 0, 0, 1)',
@@ -280,7 +336,7 @@
 						title : {
 							display : true,
 							position : "top",
-							text : "Pirep (D2)" + " - " + graf_actype,
+							text : graph_title + " - " + graf_actype,
 							fontSize : 18,
 							fontColor : "#111"
 						},
@@ -357,7 +413,7 @@
 	              let finalY = doc.autoTable.previous.finalY;
 	              doc.addPage();
 	              doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
-	              doc.save("table.pdf");
+	              doc.save(graph_title + " - " + graf_actype);
 	            }
 	            // This function will return table data in an Array format
 	            function tableToJson(table, columns) {

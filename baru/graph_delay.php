@@ -44,20 +44,32 @@
   else{
     $Keyword = " AND (PROBLEM LIKE '%".$_POST['keyword']."%' OR RECTIFICATION LIKE '%".$_POST['keyword']."%')";
   }
-  if(empty($_POST["dcp"]) or $_POST["dcp"] == "c"){
+  if(empty($_POST["dcp"])){
     $DCPs="";
   }
   else{
     $DCP = $_POST['dcp'];
     $i = 0;
     foreach ($DCP as &$value) {
-        if($i == 0){
+      if($i == 0){
+        if($DCP[$i]=="d"){
+          $graph_title = "Delay";
+        }
+        else if($DCP[$i] == "c"){
+          $graph_title = "Cancel";
+        }
+        else{
+          $graph_title = "Non Technical Delay";
+        }
         $DCP[$i] = " AND DCP IN ('".$DCP[$i]."'";
       }
-      else if($i == 1){
-        $DCP[$i] = ",'".$DCP[$i]."'";
-      }
       else{
+        if($DCP[$i] == "c"){
+          $graph_title = $graph_title." & Cancel";
+        }
+        else{
+          $graph_title = $graph_title." & Non Technical Delay";
+        }
         $DCP[$i] = ",'".$DCP[$i]."'";
       }
       $i++;
@@ -103,8 +115,8 @@
   include "config/connect.php";
   include 'jsonwrapper.php';
 
-  $sql_delay = "SELECT ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, DCP, RtABO, MinTot FROM mcdrnew WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$RTABOs."".$DateStart2."".$DateEnd."";
-  $sql_grafik = "SELECT COUNT(DateEvent) as delay, DATE_FORMAT(DateEvent, '%m-%Y') as DateEvent FROM mcdrnew WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$RTABOs."".$Keyword."".$DateStart2."".$DateEnd." GROUP BY MONTH(DateEvent)";
+  $sql_delay = "SELECT DateEvent, ACtype, Reg, DepSta, ArivSta, FlightNo, HoursTot, ATAtdm, SubATAtdm, Problem, Rectification, DCP, RtABO, MinTot FROM mcdrnew WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$Keyword."".$RTABOs."".$DateStart2."".$DateEnd."";
+  $sql_grafik = "SELECT COUNT(DateEvent) as delay, DATE_FORMAT(DateEvent, '%Y-%m') as DateEvents FROM mcdrnew WHERE ACTYPE LIKE ".$ACType."".$ACReg."".$ATA2."".$Fault_code2."".$DCPs."".$RTABOs."".$Keyword."".$DateStart2."".$DateEnd." GROUP BY DateEvents ORDER BY DateEvent";
 
   mysqli_set_charset($link, "utf8");
 
@@ -112,12 +124,57 @@
 
   $res_grafik = mysqli_query($link, $sql_grafik);
 
+  $temp_total = 0;
+  $before_temp = array();
+  $arr_delay_grafik = array();
+
+  $i=0;
+  while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)) {
+    if($i == 0){
+      $arr_delay_grafik[$i][0] = $rowes[0];
+      $arr_delay_grafik[$i][1] = $rowes[1];
+      $i++;
+    }
+    else {
+      $now = strtotime("+1 Month", strtotime($before_temp[0]));
+
+      if($rowes[1] == date("Y-m", $now)){
+        $arr_delay_grafik[$i][0] = $rowes[0];
+        $arr_delay_grafik[$i][1] = $rowes[1];
+        $i++;
+      }
+      else {
+        $now = strtotime($before_temp[0]);
+        $now = strtotime("+1 Month", $now);
+
+        while($rowes[1] != date("Y-m", $now)){
+
+            $arr_delay_grafik[$i][0] = 0;
+            $arr_delay_grafik[$i][1] = date("Y-m", $now);
+            $i++;
+
+            $now = strtotime("+1 Month", $now);
+        }
+
+        $arr_delay_grafik[$i][0] = $rowes[0];
+        $arr_delay_grafik[$i][1] = $rowes[1];
+        $i++;
+      }
+    }
+    $before_temp[0] = $rowes[1];
+    $before_temp[1] = $rowes[0];
+  }
+
   $arr_x = array();
   $arr_y = array();
-  while ($rowes = $res_grafik->fetch_array(MYSQLI_NUM)){
-    $arr_y[] = $rowes[0];
-    $arr_x[] = $rowes[1];
+  for($i = 0; $i < count($arr_delay_grafik); $i++){
+    $arr_y[] = $arr_delay_grafik[$i][0];
+    $arr_x[] = $arr_delay_grafik[$i][1];
   }
+  // while ($rowes = $array_delay_grafik->fetch_array(MYSQLI_NUM)){
+  //   $arr_y[] = $rowes[0];
+  //   $arr_x[] = $rowes[1];
+  // }
 ?>
 
 <html>
@@ -196,7 +253,7 @@
           <div class="col-md-12 mt">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4><i class="fa fa-angle-right"></i> Filter Graph Delay / Pirep</h4>
+                <h4><i class="fa fa-angle-right"></i> Filter Techlog / Delay Criteria</h4>
               </div>
               <div class="panel-body">
                 <?php
@@ -219,10 +276,11 @@
                 <h4><i class="fa fa-angle-right"></i> Table Delay</h4>
               </div>
               <div class="panel-body">
-                <button onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
-                <table id="table_delay" class="display cell-border" cellspacing="0" width="100%">
+                <button onclick="generate()" type="button" class="btn btn-default pull-left" style="margin-bottom: 10px">Export as PDF</button>
+                <table id="table_delay" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
                   <thead>
                       <tr>
+                          <th>Date</th>
                           <th>A/C Type</th>
                           <th>A/C Reg</th>
                           <th>Sta Dep</th>
@@ -239,14 +297,17 @@
                   </thead>
                   <tbody>
                     <?php
+                      //print_r($sql_delay);
+                      //print_r($arr_x);
+                      //print_r($arr_y);
                       $arr_delay = array();
                       while ($rowes = $res_delay->fetch_array(MYSQLI_NUM)) {
-                        $rowes[5] = $rowes[5]*60;
-                        $rowes[5] = $rowes[12]+$rowes[5];
+                        $rowes[6] = $rowes[6]*60;
+                        $rowes[6] = $rowes[13]+$rowes[6];
+                        $longtext = $rowes[10];
+                        $rowes[10] = wordwrap($longtext, 50, "\n");
                         $longtext = $rowes[9];
-                        $rowes[9] = wordwrap($longtext, 50, "\n");
-                        $longtext = $rowes[8];
-                        $rowes[8] = wordwrap($longtext, 20, "\n");
+                        $rowes[9] = wordwrap($longtext, 20, "\n");
                         $arr_delay[] = $rowes;
                         echo "<tr>";
                           echo "<td>".$rowes[0]."</td>";
@@ -261,6 +322,7 @@
                           echo "<td>".$rowes[9]."</td>";
                           echo "<td>".$rowes[10]."</td>";
                           echo "<td>".$rowes[11]."</td>";
+                          echo "<td>".$rowes[12]."</td>";
                         echo "</tr>";
                         //$i++;
                       }
@@ -276,9 +338,8 @@
             $('#table_delay').DataTable({
               "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
               dom: 'Blfrtip',
-              buttons: [
-                {
-                  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+              buttons: [{
+                  extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default', title: graph_title + " - " + graf_actype
                 }],
             });
             });
@@ -296,12 +357,13 @@
             var arr_x = <?php echo json_encode($arr_x); ?>;
             var arr_y = <?php echo json_encode($arr_y); ?>;
             var graf_actype = <?php echo json_encode($graf_actype); ?>;
+            var graph_title = <?php echo json_encode($graph_title); ?>;
             $(document).ready(function(){
               var chartdata = {
                 labels: arr_x,
                 datasets : [
                   {
-                    label: 'Delay',
+                    label: graph_title,
                     fill: 'false',
                     backgroundColor: 'rgba(200, 200, 200, 0)',
                     borderColor: 'rgba(0, 0, 255, 1)',
@@ -317,7 +379,7 @@
                 title : {
                   display : true,
                   position : "top",
-                  text : "Delay (D4)" + " - " + graf_actype,
+                  text : graph_title + " - " + graf_actype,
                   fontSize : 18,
                   fontColor : "#111"
                 },
@@ -374,7 +436,7 @@
             function generate() {
               var data = <?php echo json_encode($arr_delay); ?>;
               var pdfsize = 'a4';
-              var columns = ["A/C Type", "A/C REG", "STA DEP", "STA ARR", "Flight No", "Technical Delay Length", "ATA", "SUB ATA", "Problem", "Rectification", "DCP", "RTB/RTA/RTO"];
+              var columns = ["Date", "A/C Type", "A/C REG", "STA DEP", "STA ARR", "Flight No", "Technical Delay Length", "ATA", "SUB ATA", "Problem", "Rectification", "DCP", "RTB/RTA/RTO"];
               //var data = tableToJson($("#table_delay").get(0), columns);
               console.log(data);
               var canvas = document.querySelector('#graf_data_delay');
@@ -394,7 +456,7 @@
               let finalY = doc.autoTable.previous.finalY;
               doc.addPage();
               doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
-              doc.save("table.pdf");
+              doc.save(graph_title + " - " + graf_actype);
             }
             // This function will return table data in an Array format
             function tableToJson(table, columns) {

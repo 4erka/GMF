@@ -1,7 +1,7 @@
 <?php
 	include'config/connect.php';
 
-	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype ORDER BY ACType";
 	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 
@@ -82,7 +82,17 @@
 								$DCP = "";
 							}
 							else{
-								$DCP = $_POST['dcp'];
+								$DCPs = $_POST['dcp'];
+								$DCP = array("", "", "");
+								for($i = 0; $i < count($DCPs); $i++){
+									if($DCPs[$i] == "d"){
+										$DCP[0] = "d";
+									}else if($DCPs[$i] == "c"){
+										$DCP[1] = "c";
+									}else if($DCPs[$i] == "x"){
+										$DCP[2] = "x";
+									}
+								}
 							}
 							$flag_d = 0;
 							$flag_c = 0;
@@ -95,44 +105,59 @@
 									<label class="checkbox-inline">
 										<input type="checkbox" name="dcp[]" value="d" id="cl_delay"> D
 									</label><?php
-									if($DCP[$i]=="x"){?>
-										<label class="checkbox-inline">
-											<input type="checkbox" name="dcp[]" value="c" id="cl_cancel"> C
-										</label><?php
-									}
-								}
-								else if($i == 1 and $DCP[$i] != "c"  and $flag_c == 0){?>
-									<label class="checkbox-inline">
-										<input type="checkbox" name="dcp[]" value="c" id="cl_cancel"> C
-									</label><?php
-								}
-								else if($i == 2 and $DCP[$i] != "x"  and $flag_x == 0){?>
-									<label class="checkbox-inline">
-										<input type="checkbox" name="dcp[]" value="x" id="cl_x"> All
-									</label><br><?php
-								}
-								if($DCP[$i] == "d"){?>
+									$flag_d = 1;
+									continue;
+								}else if($DCP[$i] == "d" and $flag_d == 0){?>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="dcp[]" value="d" id="cl_delay" checked> D
 									</label><?php
 									$flag_d = 1;
-								}else if($DCP[$i] == "c"){?>
+									continue;
+								}
+								if($i == 1 and $DCP[$i] != "c"  and $flag_c == 0){?>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="dcp[]" value="c" id="cl_cancel"> C
+									</label><?php
+									$flag_c = 1;
+									continue;
+								}else if($DCP[$i] == "c" and $flag_c == 0){?>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="dcp[]" value="c" id="cl_cancel" checked> C
 									</label><?php
 									$flag_c = 1;
-								}else if($DCP[$i] == "x"){?>
+									continue;
+								}
+								if($i == 2 and $DCP[$i] != "x"  and $flag_x == 0){?>
 									<label class="checkbox-inline">
-										<input type="checkbox" name="dcp[]" value="x" id="cl_x" checked> All
+										<input type="checkbox" name="dcp[]" value="x" id="cl_x"> Non Technical Delay
 									</label><br><?php
 									$flag_x = 1;
+									continue;
+								}else if($DCP[$i] == "x" and $flag_x == 0){?>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="dcp[]" value="x" id="cl_x" checked> Non Technical Delay
+									</label><br><?php
+									$flag_x = 1;
+									continue;
 								}
 							}
 							if(empty($_POST['rtabo'])){
 								$RTABO = "";
 							}
 							else{
-								$RTABO= $_POST['rtabo'];
+								$RTABOs = $_POST['rtabo'];
+								$RTABO = array("", "", "", "", "");
+								for($i = 0; $i < count($RTABOs); $i++){
+									if($RTABOs[$i] == "rta"){
+										$RTABO[0] = "rta";
+									}else if($RTABOs[$i] == "rtb"){
+										$RTABO[1] = "rtb";
+									}else if($RTABOs[$i] == "rto"){
+										$RTABO[2] = "rto";
+									}else if($RTABOs[$i] == "rtg"){
+										$RTABO[3] = "rtg";
+									}
+								}
 							}
 							$flag_a = 0;
 							$flag_b = 0;
@@ -146,40 +171,53 @@
 									<label class="checkbox-inline">
 										<input type="checkbox" name="rtabo[]" value="rta" id="cl_rta"> RTA
 									</label><?php
-
-								}else if($i == 1 and $RTABO[$i] != "rtb"  and $flag_b == 0){?>
-									<label class="checkbox-inline">
-										<input type="checkbox" name="rtabo[]" value="rtb" id="cl_rtb"> RTB
-									</label><?php
-								}else if($i == 2 and $RTABO[$i] != "rto"  and $flag_o == 0){?>
-									<label class="checkbox-inline">
-										<input type="checkbox" name="rtabo[]" value="rto" id="cl_rto"> RTO
-									</label><?php
-								}else if($i == 3 and $RTABO[$i] != "rtg"  and $flag_g == 0){?>
-									<label class="checkbox-inline">
-										<input type="checkbox" name="rtabo[]" value="rtg" id="cl_rtg"> RTG
-									</label><?php
-								}
-								if($RTABO[$i] == "rta"){?>
+									$flag_a = 1;
+									continue;
+								}else if($RTABO[$i] == "rta" and $flag_a == 0){?>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="rtabo[]" value="rta" id="cl_rta" checked> RTA
 									</label><?php
 									$flag_a = 1;
-								}else if($RTABO[$i] == "rtb"){?>
+									continue;
+								}
+								if($i == 1 and $RTABO[$i] != "rtb"  and $flag_b == 0){?>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="rtabo[]" value="rtb" id="cl_rtb"> RTB
+									</label><?php
+									$flag_b = 1;
+									continue;
+								}else if($RTABO[$i] == "rtb" and $flag_b == 0){?>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="rtabo[]" value="rtb" id="cl_rtb" checked> RTB
 									</label><?php
 									$flag_b = 1;
-								}else if($RTABO[$i] == "rto"){?>
+									continue;
+								}
+								if($i == 2 and $RTABO[$i] != "rto"  and $flag_o == 0){?>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="rtabo[]" value="rto" id="cl_rto"> RTO
+									</label><?php
+									$flag_o = 1;
+									continue;
+								}else if($RTABO[$i] == "rto" and $flag_o == 0){?>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="rtabo[]" value="rto" id="cl_rto" checked> RTO
 									</label><?php
 									$flag_o = 1;
-								}else if($RTABO[$i] == "rtg"){?>
+									continue;
+								}
+								if($i == 3 and $RTABO[$i] != "rtg"  and $flag_g == 0){?>
+									<label class="checkbox-inline">
+										<input type="checkbox" name="rtabo[]" value="rtg" id="cl_rtg"> RTG
+									</label><?php
+									$flag_g = 1;
+									continue;
+								}else if($RTABO[$i] == "rtg" and $flag_g == 0){?>
 									<label class="checkbox-inline">
 										<input type="checkbox" name="rtabo[]" value="rtg" id="cl_rtg" checked> RTG
 									</label><?php
 									$flag_g = 1;
+									continue;
 								}
 							}
 						?>
@@ -265,6 +303,7 @@
 
 			document.getElementById("cl_pirep").disabled = false;
 			document.getElementById("cl_marep").disabled = false;
+			//alert("gendeng aa");
 	    }
 	    else{
 			document.getElementById("cl_pirep").disabled = true;
@@ -277,6 +316,7 @@
 			document.getElementById("cl_rtb").disabled = false;
 			document.getElementById("cl_rto").disabled = false;
 			document.getElementById("cl_rtg").disabled = false;
+			//alert("gendeng bb");
 	    }
 		depir = "graph_" + depir + ".php";
 	    document.getElementById("form_graph").action=depir;

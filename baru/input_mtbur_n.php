@@ -1,5 +1,5 @@
 <?php
-	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype ORDER BY ACType";
 	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 <form method="post" style="margin-bottom: 50px" id="form_mtbur" class="form-horizontal style-form" name="form_mtbur" onsubmit="return validateForm()">
