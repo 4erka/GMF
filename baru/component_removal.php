@@ -37,6 +37,12 @@ else
 if(!empty($_POST["remcode"])){
   $data = implode("','",$_POST["remcode"]);
   $where_remcode = "AND RemCode IN ('$data')";
+
+  $i = 0;
+  foreach ($_POST['remcode'] as $val) {
+    $RemCode[$i] = $val;
+    $i++;
+  }
 }
 else {
   $where_remcode = "";
