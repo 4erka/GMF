@@ -507,7 +507,8 @@ else {
       doc.autoTable(columns, data, {
         theme: 'grid',
         styles: {
-          overflow: 'linebreak'
+          overflow: 'linebreak',
+          fontSize:'6'
         },
         pageBreak: 'always',
         tableWidth: 'auto'
