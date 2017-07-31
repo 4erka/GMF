@@ -128,7 +128,7 @@ else {
           $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
           FROM tblcompremoval WHERE DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_actype."".$where_remcode." GROUP BY PartNo ORDER BY number_of_part DESC";
 
-                             //print_r($sql_graph_comp);
+          //print_r($sql_graph_comp);
 
           $res_graph_comp = mysqli_query($link, $sql_graph_comp);
 

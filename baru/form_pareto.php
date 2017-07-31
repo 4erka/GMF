@@ -1,9 +1,20 @@
 <?php
 
-  //Memilih Ac Type
+/*====================================================================================================
+  menampilkan daftar jenis Aircraft sesuai tabel tbl_master_actype
+  ====================================================================================================
+*/
   $sql0 = "SELECT DISTINCT ACtype FROM tbl_master_actype ORDER BY ACtype ASC";
   $res0 = mysqli_query($link, $sql0);
 
+  /*====================================================================================================
+    Agar user tidak lupa akan filter yang telah dipilih, maka kami menampilkan hasil pilihan dan isian
+    user ke kolom kolom semula
+
+    Karena halaman ini bersifat dinamis, untuk memastikan apakah user pernah menginputkna sesuatu, maka
+    kami beri if(isset) pada setiap filed
+    ====================================================================================================
+  */
 ?>
 
 <form action="pareto.php" method="post" class="form-horizontal style-form" style="margin-bottom: 50px">

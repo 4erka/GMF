@@ -7,8 +7,6 @@ if(empty($_POST["actype"])){
   $ACType = "";
 }
 else{
-//  $data = implode("','",$_POST["actype"]);
-//  $where_actype = "Aircraft IN ('$data')";
   $ACType = "'".$_POST['actype']."%'";
   $where_actype = "Aircraft LIKE ".$ACType;
 }
@@ -37,7 +35,6 @@ else
   $DateEnd = "";
 
 if(!empty($_POST["remcode"])){
-//  $i = 0;
   $data = implode("','",$_POST["remcode"]);
   $where_remcode = "AND RemCode IN ('$data')";
 }
@@ -45,6 +42,11 @@ else {
   $where_remcode = "";
 }
 
+/*====================================================================================================
+  Connect.php sebagai php yang menghubunkan script ke database
+  jsonwrapper.php sebagai pelengkap, karena php versi server tidak dapat mengenali fungsi json_encode
+  ====================================================================================================
+*/
   include 'config/connect.php';
   include 'jsonwrapper.php';
  ?>
@@ -88,6 +90,12 @@ else {
     <![endif]-->
 
     <?php
+    /*====================================================================================================
+      loader_style.php yang berisi link menuju css yang digunakan untuk loading screen
+
+      fungsi onload myfunction() terletak pada loader.php yang berfungsi untuk menjalankan loading screen
+      ====================================================================================================
+    */
       include 'loader_style.php';
     ?>
 </head>
@@ -95,6 +103,12 @@ else {
 <body onload="myFunction()" style="margin:0;">
 
     <?php
+    /*====================================================================================================
+      loader.php berisikan tentang fungsi untuk menjalankan loading screen
+
+      loading hanya bekerja pada div dengan id="myDiv" saja
+      ====================================================================================================
+    */
       include 'loader.php';
     ?>
 
@@ -107,6 +121,11 @@ else {
       *********************************************************************************************************************************************************** -->
 
       <?php
+      /*====================================================================================================
+        header.php adalah bagian atas website yang berisi toggle menu, logo, dan tulisan "Home"
+        $page_now sebagai penunjuk lokasi halaman terkini
+        ====================================================================================================
+      */
         $page_now = "component";
         include 'header.php';
        ?>
@@ -117,6 +136,11 @@ else {
       <!--sidebar start-->
 
       <?php
+      /*====================================================================================================
+        navbar.php adalah bagian kiri website yang berisi daftar halaman yang tersedia dan menunjukkan dimana
+        posisi user terkini
+        ====================================================================================================
+      */
         include 'navbar.php';
 
         $sql_rem = "SELECT ID, ATA, AIN, PartNo, SerialNo, PartName, Reg, Aircraft, RemCode, `Real Reason`, DateRem, TSN, TSI, CSN, CSI
@@ -142,6 +166,11 @@ else {
               </div>
               <div class="panel-body">
                 <?php
+                /*====================================================================================================
+                  form_component.php berisikan filter component removal yang harus diisi user untuk menampilkan data
+                  component removal yang sesuai
+                  ====================================================================================================
+                */
                   include 'form_component.php';
                 ?>
               </div>

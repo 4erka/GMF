@@ -7,8 +7,6 @@ if(empty($_POST["actype"])){
   $ACType = "";
 }
 else{
-//  $data = implode("','",$_POST["actype"]);
-//  $where_actype = "ACType IN ('$data')";
   $ACType = "'".$_POST['actype']."%'";
   $where_actype = "ACType LIKE '".$_POST['actype']."%'";
 }
@@ -31,6 +29,12 @@ else
   $DateEnd = "";
 
 $Graph_type = $_POST['graph'];
+
+/*====================================================================================================
+  Connect.php sebagai php yang menghubunkan script ke database
+  jsonwrapper.php sebagai pelengkap, karena php versi server tidak dapat mengenali fungsi json_encode
+  ====================================================================================================
+*/
 
   include 'config/connect.php';
   include 'jsonwrapper.php';
@@ -72,6 +76,13 @@ $Graph_type = $_POST['graph'];
     <![endif]-->
 
     <?php
+    /*====================================================================================================
+      loader_style.php yang berisi link menuju css yang digunakan untuk loading screen
+
+      fungsi onload myfunction() terletak pada loader.php yang berfungsi untuk menjalankan loading screen
+      ====================================================================================================
+    */
+
       include 'loader_style.php';
     ?>
     </head>
@@ -79,6 +90,13 @@ $Graph_type = $_POST['graph'];
     <body onload="myFunction()" style="margin:0;">
 
     <?php
+
+    /*====================================================================================================
+      loader.php berisikan tentang fungsi untuk menjalankan loading screen
+
+      loading hanya bekerja pada div dengan id="myDiv" saja
+      ====================================================================================================
+    */
       include 'loader.php';
     ?>
 
@@ -91,6 +109,11 @@ $Graph_type = $_POST['graph'];
       *********************************************************************************************************************************************************** -->
 
       <?php
+      /*====================================================================================================
+        header.php adalah bagian atas website yang berisi toggle menu, logo, dan tulisan "Home"
+        $page_now sebagai penunjuk lokasi halaman terkini
+        ====================================================================================================
+      */
         $page_now = "pareto";
         include 'header.php';
        ?>
@@ -101,6 +124,11 @@ $Graph_type = $_POST['graph'];
       <!--sidebar start-->
 
       <?php
+      /*====================================================================================================
+        navbar.php adalah bagian kiri website yang berisi daftar halaman yang tersedia dan menunjukkan dimana
+        posisi user terkini
+        ====================================================================================================
+      */
         include 'navbar.php';
        ?>
 
@@ -117,12 +145,23 @@ $Graph_type = $_POST['graph'];
               </div>
               <div class="panel-body">
                 <?php
+                /*====================================================================================================
+                  form_pareto.php berisikan filter pareto yang harus diisi user untuk menampilkan data pareto yang
+                  sesuai
+                  ====================================================================================================
+                */
                   include 'form_pareto.php';
                 ?>
               </div>
             </div>
           </div>
     	<?php
+
+      /*====================================================================================================
+        $Graph_type ada 3 jenis, didapatkan dari form_pareto.php berbentuk radio button
+        maksudnya adalah apabila user menginginkan sumbu X diisi dengan ata, aircraft registration, atau sub-ata
+        ====================================================================================================
+      */
 
       if($Graph_type == 'ata' || $Graph_type == 'ac_reg'){
         if($Graph_type == 'ata'){
@@ -134,12 +173,28 @@ $Graph_type = $_POST['graph'];
     			$sql_graph_delay = "SELECT Reg, COUNT(Reg) AS number_of_reg FROM mcdrnew WHERE ".$where_actype." AND DCP <> 'X' AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY REG ORDER BY number_of_reg DESC";
     		}
 
+        /*====================================================================================================
+          Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_graph_pirep untuk pirep, $res_graph_delay
+          untuk Delay
+          Query akan menampilkan jumlah kejadian tiap ata, atau registrasi, dan mengurutkan sesuai jumlah tertinggi ke
+          rendah
+
+          untuk memastikan bahwa ada data yang terambil, maka dilakukan perhitungan hasil yang disimpan dalam
+          $row_delay_cnt untuk jumlah row pada delay dan $row_pirep_cnt unutk jumlah row ppada pirep
+          ====================================================================================================
+        */
         $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		$res_graph_delay = mysqli_query($link, $sql_graph_delay);
 
         $row_delay_cnt = mysqli_num_rows($res_graph_delay);
         $row_pirep_cnt = mysqli_num_rows($res_graph_pirep);
 
+        /*====================================================================================================
+          Karena hasil query sudah diurutkan, maka hasilnya disimpan pada 10 array dengan ketentuan,
+          $arr_pirep[$i][0] akan menyimpan kategori yang dipilih (ata atau nomor registrasi)
+          $arr_pirep[$i][1] akan menyimpan jumlah kejadian sesua dengan ata atau nomor registrasi
+          ====================================================================================================
+        */
     		$i = 0;
     		while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
     			if($i > 9) break;
@@ -148,6 +203,12 @@ $Graph_type = $_POST['graph'];
     			$i++;
     		}
 
+        /*====================================================================================================
+          Karena hasil query sudah diurutkan, maka hasilnya disimpan pada 10 array dengan ketentuan,
+          $arr_delay[$i][0] akan menyimpan kategori yang dipilih (ata atau nomor registrasi)
+          $arr_delay[$i][1] akan menyimpan jumlah kejadian sesua dengan ata atau nomor registrasi
+          ====================================================================================================
+        */
     		$i = 0;
     		while ($rowes = $res_graph_delay->fetch_array(MYSQLI_NUM)) {
     			if($i > 9) break;
@@ -155,10 +216,16 @@ $Graph_type = $_POST['graph'];
     			$arr_delay[$i][1] = $rowes[1];
     			$i++;
     		}
-
       }
 
     	else{
+        /*====================================================================================================
+          Karena sub ata NULL, 0, dan 00 dianggap 00, maka perlu dilakukan penyamanaan terlebih dahulu
+          kedua query ini berfungsi untuk menggabungkan ata-subata, yang mana subata telah diseragamkan menjadi 00
+          apabila subata tersebut NULL, 00, atau 0
+          ====================================================================================================
+        */
+
 #          $sql_graph_pirep = "SELECT concat_ws('-',ata, subata) as ata_subata, COUNT(concat(ata, subata)) AS number_of_subata FROM tblpirep_swift WHERE ata >= 21 AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY ata_subata ORDER BY number_of_subata DESC";
           $sql_graph_pirep = "SELECT CASE
             WHEN subata = '0' THEN CONCAT_WS('-',ata, '00')
@@ -176,21 +243,42 @@ $Graph_type = $_POST['graph'];
           	END AS new_ata
             FROM mcdrnew WHERE DCP <>'X' AND ".$where_actype." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd."";
 
+            /*====================================================================================================
+              Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_graph_pirep untuk pirep, $res_graph_delay
+              untuk Delay
+              Query akan menampilkan jumlah kejadian tiap ata, atau registrasi, dan mengurutkan sesuai jumlah tertinggi ke
+              rendah
+
+              untuk memastikan bahwa ada data yang terambil, maka dilakukan perhitungan hasil yang disimpan dalam
+              $row_delay_cnt untuk jumlah row pada delay dan $row_pirep_cnt unutk jumlah row ppada pirep
+              ====================================================================================================
+            */
+
           $res_graph_pirep = mysqli_query($link, $sql_graph_pirep);
     		  $res_graph_delay = mysqli_query($link, $sql_graph_delay);
 
           $row_delay_cnt = mysqli_num_rows($res_graph_delay);
           $row_pirep_cnt = mysqli_num_rows($res_graph_pirep);
 
-          #print_r($sql_graph_delay);
+          /*====================================================================================================
+            Apabila jumlah hasil query tidak kosong, maka dilakukan ekstraksi nilai
+            hasil disimpan dalam $temp_pirep[$i]
+            ====================================================================================================
+          */
+
+          //======================================================================Pirep=======================================================
 
           if($row_pirep_cnt>0){
             $i = 0;
             while ($rowes = $res_graph_pirep->fetch_array(MYSQLI_NUM)) {
-              //if($i > 9) break;
               $temp_pirep[$i] = $rowes[0];
               $i++;
             }
+
+            /*====================================================================================================
+              Unutk memastikan tidak adanya NULL, maka setiap array yang berisi null akan diisi dengan 0000
+              ====================================================================================================
+            */
 
             for($i=0; $i<sizeof($temp_pirep); $i++){
               if($temp_pirep[$i] == NULL){
@@ -200,6 +288,18 @@ $Graph_type = $_POST['graph'];
                 $ar[$i] = $temp_pirep[$i];
               }
             }
+
+            /*====================================================================================================
+              Fungsi untuk menghitung jumlah kemunculan value tertentu dan hasil kemunculannya disimpan bersama
+              value aslinya pada $ar0
+              Kemudian mengurutkan array sesuai jumlah kemunculan terbesar ke terkecil dengan fungsi arsort()
+              Kemudian menamai setiap array tadi dengan fungsi array_keys yang hasil penamaannya disimpan dalam $keys
+              jadi $keys berisi value ata-subata saja
+
+              Lalu ata-subata yang telah didata, dicari jumlahnya
+              jumlah kemunculan ada pada $ar0, tetapi kode ata-subata ada pada $keys
+              ====================================================================================================
+            */
 
             $ar0 = array_count_values($ar);
 
@@ -223,6 +323,11 @@ $Graph_type = $_POST['graph'];
               $i++;
         		}
 
+            /*====================================================================================================
+              Unutk memastikan tidak adanya NULL, maka setiap array yang berisi null akan diisi dengan 0000
+              ====================================================================================================
+            */
+
             for($i=0; $i<sizeof($temp_delay); $i++){
               if($temp_delay[$i] == NULL){
                 $ar_new[$i] = '0000';
@@ -232,10 +337,21 @@ $Graph_type = $_POST['graph'];
               }
             }
 
+            /*====================================================================================================
+              Fungsi untuk menghitung jumlah kemunculan value tertentu dan hasil kemunculannya disimpan bersama
+              value aslinya pada $ar1
+              Kemudian mengurutkan array sesuai jumlah kemunculan terbesar ke terkecil dengan fungsi arsort()
+              Kemudian menamai setiap array tadi dengan fungsi array_keys yang hasil penamaannya disimpan dalam $keys
+              jadi $keys berisi value ata-subata saja
+
+              Lalu ata-subata yang telah didata, dicari jumlahnya
+              jumlah kemunculan ada pada $ar1, tetapi kode ata-subata ada pada $keys
+              ====================================================================================================
+            */
+
             $ar1 = array_count_values($ar_new);
 
             arsort($ar1);
-  //          var_dump($ar1);
 
             $keys=array_keys($ar1);//Split the array so we can find the most occuring key
 
@@ -247,8 +363,6 @@ $Graph_type = $_POST['graph'];
     		  }
         }
 
-        #print_r($sql_graph_delay );
-
     	 ?>
        <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
@@ -259,6 +373,11 @@ $Graph_type = $_POST['graph'];
            </div>
            <div class="panel-body">
              <?php
+             /*====================================================================================================
+               Apabila ada data,, maka akan memunculkan grafik
+               Apabila tidak ada data, akan memunculkan tulisan "Tidak ada data"
+               ====================================================================================================
+             */
              if($row_delay_cnt > 0){
                echo "<canvas id='grafik_delay' style='height: 250px; margin-top: 50px'></canvas>";
              }
@@ -277,6 +396,11 @@ $Graph_type = $_POST['graph'];
            </div>
            <div class="panel-body">
              <?php
+             /*====================================================================================================
+               Apabila ada data,, maka akan memunculkan grafik
+               Apabila tidak ada data, akan memunculkan tulisan "Tidak ada data"
+               ====================================================================================================
+             */
              if($row_pirep_cnt > 0){
                echo "<canvas id='grafik_pirep' style='height: 250px; margin-top: 50px'></canvas>";
              }
@@ -321,15 +445,24 @@ $Graph_type = $_POST['graph'];
   <script type="text/javascript" src="js/Chart.min.js"></script>
   <script>
 
+  /*====================================================================================================
+    Chart yang kami buat adalah plugin dari ChartJs
+    berikut adalah code untuk memasukkan data hasil querry kedalam chart
+
+    label_data berisi label yang sesuai dengan keinginan user di awal, bisa berupa ata, subata, ata-subata
+    sedangkan jumlah_delay merupakan jumlah kejadian sesuai dengan label
+    ====================================================================================================
+  */
+
   var label_data = [];
-  var jumlah_pirep = [];
+  var jumlah_delay = [];
   var z=0;
 
-  var arr_pirep = <?php echo json_encode($arr_delay); ?>;
+  var arr_delay = <?php echo json_encode($arr_delay); ?>;
 
-  for ( tot=arr_pirep.length; z < tot; z++) {
-     label_data.push(arr_pirep[z][0]);
-     jumlah_pirep.push(arr_pirep[z][1]);
+  for ( tot=arr_delay.length; z < tot; z++) {
+     label_data.push(arr_delay[z][0]);
+     jumlah_delay.push(arr_delay[z][1]);
   };
 
   Chart.plugins.register({
@@ -343,14 +476,12 @@ $Graph_type = $_POST['graph'];
   var ctx = document.getElementById("grafik_delay").getContext("2d");
 
   var data = {
-    labels: label_data,//["dD 1", "dD 2", "dD 3", "dD 4", "dD 5", "dD 6", "dD 7", "dD 8", "dD 9", "dD 10"],
+    labels: label_data,
     datasets: [{
       label: "Jumlah Delay",
-//          fillColor: "rgba(0,60,100,1)",
       backgroundColor: "lightblue",
-//          hoverBackgroundColor: ["#66A2EB", "#FCCE56"],
       strokeColor: "black",
-      data: jumlah_pirep
+      data: jumlah_delay
     }]
   };
 
@@ -387,6 +518,15 @@ $Graph_type = $_POST['graph'];
   </script>
 
   <script>
+  /*====================================================================================================
+    Chart yang kami buat adalah plugin dari ChartJs
+    berikut adalah code untuk memasukkan data hasil querry kedalam chart
+
+    label_data berisi label yang sesuai dengan keinginan user di awal, bisa berupa ata, subata, ata-subata
+    sedangkan jumlah_pirep merupakan jumlah kejadian sesuai dengan label
+    ====================================================================================================
+  */
+
   var label_data = [];
   var jumlah_pirep = [];
   var z=0;
@@ -409,12 +549,10 @@ $Graph_type = $_POST['graph'];
   var ctx = document.getElementById("grafik_pirep").getContext("2d");
 
   var data = {
-    labels: label_data,//["dD 1", "dD 2", "dD 3", "dD 4", "dD 5", "dD 6", "dD 7", "dD 8", "dD 9", "dD 10"],
+    labels: label_data,
     datasets: [{
       label: "Jumlah Pirep",
-//          fillColor: "rgba(0,60,100,1)",
       backgroundColor: "red",
-//          hoverBackgroundColor: ["#66A2EB", "#FCCE56"],
       strokeColor: "black",
       data: jumlah_pirep
     }]

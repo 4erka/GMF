@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 
 <?php
-  $pg_now = "pareto";
 
+/*====================================================================================================
+  Connect.php sebagai php yang menghubunkan script ke database
+  ====================================================================================================
+*/
   include 'config/connect.php';
  ?>
 
@@ -60,6 +63,12 @@
       *********************************************************************************************************************************************************** -->
 
       <?php
+      /*====================================================================================================
+        header.php adalah bagian atas website yang berisi toggle menu, logo, dan tulisan "Home"
+        $page_now sebagai penunjuk lokasi halaman terkini
+        ====================================================================================================
+      */
+        $page_now = "pareto_comp";
         include 'header.php';
        ?>
 
@@ -69,7 +78,11 @@
       <!--sidebar start-->
 
       <?php
-        $page_now = "pareto_comp";
+      /*====================================================================================================
+        navbar.php adalah bagian kiri website yang berisi daftar halaman yang tersedia dan menunjukkan dimana
+        posisi user terkini
+        ====================================================================================================
+      */
         include 'navbar.php';
        ?>
 
@@ -87,6 +100,11 @@
               </div>
               <div class="panel-body">
                 <?php
+                /*====================================================================================================
+                  form_pareto_comp.php berisikan filter pareto component yang harus diisi user untuk menampilkan data
+                  pareto component yang sesuai
+                  ====================================================================================================
+                */
                   include 'form_pareto_comp.php';
                 ?>
               </div>
