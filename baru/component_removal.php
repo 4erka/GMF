@@ -154,6 +154,15 @@ else {
                 WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
                 "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_remcode;
 
+      /*====================================================================================================
+        Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_rem
+        Query akan menampilkan jumlah kejadian component removal pada kriteria sesuai filter
+
+        untuk memastikan bahwa ada data yang terambil, maka dilakukan perhitungan hasil yang disimpan dalam
+        $row_cnt untuk jumlah row pada hasil query $res_rem
+        ====================================================================================================
+      */
+
       mysqli_set_charset($link, "utf8");
 
       $res_rem = mysqli_query($link, $sql_rem);
@@ -193,14 +202,18 @@ else {
               </div>
               <div class="panel-body">
                   <section id="unseen" style="padding: 10px">
-                  <table id="comp_table" class="table table-bordered table-striped table-condensed">
-                    <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
+                  <button id="exportButton" onclick="generate()" type="button" class="btn btn-default pull-left"><i class="fa fa-print"></i> Export as PDF</button>
+                  <table id="comp_table" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
                     <br>
                     <br>
                     <br>
                         <thead>
                         <tr>
                           <?php
+        /*====================================================================================================
+          Apabila data hasil query tidak kosong, maka akan menampilkan tabel
+          ====================================================================================================
+        */
                             if($row_cnt>0){
                               echo "<th>Notification</th>";
                               echo "<th>ATA</th>";
@@ -224,7 +237,12 @@ else {
                         <tbody>
 
                         <?php
+        /*====================================================================================================
+          $arr_comp_rem adalah array yang nantinya akan menyimpan data hasil query agar dapat diekspor ke pdf
 
+          apabila ada data, maka akan membuat tabel dengan isi seperti dibawah
+          ====================================================================================================
+        */
                           //print_r($sql_rem);
                         $arr_comp_rem =array();
                         if($row_cnt>0){
@@ -262,7 +280,7 @@ else {
           </div><!-- /col-md-12 -->
 
     	<?php
-      // SQL untuk grafik component rempval
+      // SQL untuk grafik component removal
       if(isset($where_remcode)){
         $sql_comp = "SELECT DATE_FORMAT(DateRem, '%Y-%m') AS dates, COUNT(DATE_FORMAT(DateRem, '%Y-%m')) AS number_of_rem FROM tblcompremoval
         WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
@@ -273,32 +291,47 @@ else {
         WHERE ".$where_actype." AND ".$where_remcode." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg."%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' GROUP BY dates;";
       }
 
+      /*====================================================================================================
+        Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_comp
+        Query akan menampilkan jumlah kejadian component removal pada kriteria sesuai filter per dan dihitung
+        per bulan, bukan per kejadian per hari
+
+        karena grafik akan menampilkan data 0, maka perlunya algoritma khusus yang dapat menampilkan data 0
+        dan bulan selanjutnya
+        ====================================================================================================
+      */
+
         $res_comp = mysqli_query($link, $sql_comp);
 
 //        print_r($sql_comp);
 
-        $temp_total = 0;
         $before_temp = Array();
 
         $i=0;
         while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
           if($i == 0){
-            $arr_comp[$i][0] = $rowes[0];
-            $arr_comp[$i][1] = $rowes[1];
+            $arr_comp[$i][0] = $rowes[0]; //Berisi Tahun-bulan kejadian
+            $arr_comp[$i][1] = $rowes[1]; //Berisi jumlah kejadian
             $i++;
           }
           else {
+            //Variable $now merupakan variabel dinamis yang isinya adalah Tahun dan bulan, tepat 1 bulan setelahnya
             $now = strtotime("+1 Month", strtotime($before_temp[0]));
 
+            //Apabila Bulan dan tahun sekarang sama dengan bulan dan tahun pada tabel hasil query, maka hasilnya akan disimpan
+            //dalam array
             if($rowes[0] == date("Y-m", $now)){
               $arr_comp[$i][0] = $rowes[0];
               $arr_comp[$i][1] = $rowes[1];
               $i++;
             }
+            //Apabila masih tidak sama, berarti menyimpan jumlah kejadian 0 ke dalam array
             else {
-              $now = strtotime($before_temp[0]);
+              $now = strtotime($before_temp[0]); //$before_temp berisi bulan dan tahun pada array hasil query sebelumnya
               $now = strtotime("+1 Month", $now);
 
+              //Selama bulan dan tahun ke $now masih belum ada kejadian, maka akan diisi 0 hingga menemukan
+              //tahun dan bulan selanjutnya
               while($rowes[0] != date("Y-m", $now)){
 
                   $arr_comp[$i][0] = date("Y-m", $now);
@@ -313,8 +346,8 @@ else {
               $i++;
             }
           }
-          $before_temp[0] = $rowes[0];
-          $before_temp[1] = $rowes[1];
+          $before_temp[0] = $rowes[0]; //Berisi Tahun-Bulan kejadian sebelumnya
+          $before_temp[1] = $rowes[1]; //Berisi jumlah kejadian
         }
 
     	 ?>
@@ -377,12 +410,11 @@ else {
   <script type="text/javascript">
     $(document).ready(function() {
       $('#comp_table').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-          {
-            extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
-          }
-        ],
+        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]], //Table lenght options
+        dom: 'Blfrtip',
+        buttons: [{ //Tambahan tombol untuk export ke xls
+          extend : 'excelHtml5', text: 'Export As Excel', className: 'btn btn-default'
+          }],
         responsive: true
       });
   });
@@ -396,14 +428,14 @@ else {
       var jumlah_pirep = [];
       var z=0;
 
-      var arr_pirep = <?php echo json_encode($arr_comp); ?>;
+      var arr_pirep = <?php echo json_encode($arr_comp); ?>; //Konversi array php menjadi array JS
 
       for ( tot=arr_pirep.length; z < tot; z++) {
-         label_data.push(arr_pirep[z][0]);
-         jumlah_pirep.push(arr_pirep[z][1]);
+         label_data.push(arr_pirep[z][0]); //Berisi bulan dan tahun kejadian
+         jumlah_pirep.push(arr_pirep[z][1]); //Berisi jumlah kejadian
       };
 
-      Chart.plugins.register({
+      Chart.plugins.register({ //Agar saat diekspor pdf, background chart berwarna putih
         beforeDraw: function(chartInstance) {
           var ctx = chartInstance.chart.ctx;
           ctx.fillStyle = "white";
@@ -411,10 +443,11 @@ else {
         }
       });
 
+      //Meletakkan grafik pada div yang memiliki id "grafik_comp"
       var ctx = document.getElementById("grafik_comp").getContext("2d");
 
       var data = {
-        labels: label_data,
+        labels: label_data, //berisi bulan dan tahun yang sudah disiapkan
         datasets: [{
           label: "Number of Component Removal In A Month",
           fill: 'false',
@@ -423,7 +456,7 @@ else {
           pointBackgroundColor: 'rgba(255, 0, 0, 1)',
           pointBorderColor: 'rgba(255, 0, 0, 1)',
           lineTension: '0',
-          data: jumlah_pirep
+          data: jumlah_pirep //berisi jumlah component removal
         }]
       };
 
@@ -443,16 +476,16 @@ else {
               yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Number'
+                    labelString: 'Number' //Label di sebelah kiri, untuk memudahkan user membaca grafik
                   },
                   ticks: {
-                      beginAtZero: true
+                      beginAtZero: true //agar batas bawah grafik adalah 0
                   }
               }]
           }
       };
 
-      var myBarChart = new Chart(ctx, {
+      var myBarChart = new Chart(ctx, { //Inisiasi grafik
           type: 'line',
           data: data,
           options: options

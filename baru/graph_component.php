@@ -326,9 +326,8 @@ else {
   <script type="text/javascript" src="js/Chart.min.js"></script>
 
   <!-- TOP 10 Component Removal -->
-  <script>
+  <script type="text/javascript">
   var part_no = [];
-  //var part_name = [];
   var jumlah_comp = [];
   var z=0;
 
@@ -336,7 +335,6 @@ else {
 
   for ( tot=arr_comp.length; z < tot; z++) {
      part_no.push(arr_comp[z][0]);
-     //part_name.push(arr_comp[z][1]);
      jumlah_comp.push(arr_comp[z][2]);
   };
 
