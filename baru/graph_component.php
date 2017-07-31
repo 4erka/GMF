@@ -53,6 +53,12 @@ else {
   $where_remcode = "";
 }
 
+
+/*====================================================================================================
+  Connect.php sebagai php yang menghubunkan script ke database
+  jsonwrapper.php sebagai pelengkap, karena php versi server tidak dapat mengenali fungsi json_encode
+  ====================================================================================================
+*/
   include 'config/connect.php';
   include 'jsonwrapper.php';
  ?>
@@ -96,6 +102,13 @@ else {
     <![endif]-->
 
     <?php
+
+    /*====================================================================================================
+      loader_style.php yang berisi link menuju css yang digunakan untuk loading screen
+
+      fungsi onload myfunction() terletak pada loader.php yang berfungsi untuk menjalankan loading screen
+      ====================================================================================================
+    */
       include 'loader_style.php';
     ?>
 </head>
@@ -103,6 +116,13 @@ else {
 <body onload="myFunction()" style="margin:0;">
 
     <?php
+
+    /*====================================================================================================
+      loader.php berisikan tentang fungsi untuk menjalankan loading screen
+
+      loading hanya bekerja pada div dengan id="myDiv" saja
+      ====================================================================================================
+    */
       include 'loader.php';
     ?>
 
@@ -115,6 +135,11 @@ else {
       *********************************************************************************************************************************************************** -->
 
       <?php
+      /*====================================================================================================
+        header.php adalah bagian atas website yang berisi toggle menu, logo, dan tulisan "Home"
+        $page_now sebagai penunjuk lokasi halaman terkini
+        ====================================================================================================
+      */
         $page_now = "pareto_comp";
         include 'header.php';
        ?>
@@ -125,6 +150,11 @@ else {
       <!--sidebar start-->
 
       <?php
+      /*====================================================================================================
+        navbar.php adalah bagian kiri website yang berisi daftar halaman yang tersedia dan menunjukkan dimana
+        posisi user terkini
+        ====================================================================================================
+      */
         include 'navbar.php';
        ?>
 
@@ -132,6 +162,15 @@ else {
 
           $sql_graph_comp = "SELECT PartNo, PartName, COUNT(PartNo) AS number_of_part
           FROM tblcompremoval WHERE DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_actype."".$where_remcode." GROUP BY PartNo ORDER BY number_of_part DESC";
+
+          /*====================================================================================================
+            Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_graph_comp
+            Query akan menampilkan jumlah kejadian component removal pada kriteria sesuai filter
+
+            untuk memastikan bahwa ada data yang terambil, maka dilakukan perhitungan hasil yang disimpan dalam
+            $row_cnt untuk jumlah row pada hasil query $res_graph_comp
+            ====================================================================================================
+          */
 
           //print_r($sql_graph_comp);
 
@@ -154,6 +193,11 @@ else {
               </div>
               <div class="panel-body">
                 <?php
+                /*====================================================================================================
+                  form_pareto_comp.php berisikan filter pareto component removal yang harus diisi user untuk menampilkan
+                  data component removal yang sesuai
+                  ====================================================================================================
+                */
                   include 'form_pareto_comp.php';
                 ?>
               </div>
@@ -212,18 +256,25 @@ else {
                       $i = 0;
                       $num = 1;
 
+                      /*====================================================================================================
+                        Apabila ada data, maka data tersebut akan ditampilkan dalam tabel untuk mendefinisikan kode part
+                        dan nama dari part tersebut
+
+                        Selagi mengisi tabel, data tersebut disimpan dalam $arr_pareto
+                        ====================================================================================================
+                      */
+
                       if($row_cnt > 0){
                         while ($rowes = $res_graph_comp->fetch_array(MYSQLI_NUM)) {
                           if($i > 9) break;
                           echo "<tr>";
-                            echo "<td>".$num."</td>"; //ID
-                            echo "<td>".$rowes[0]."</td>"; //ID
-                            echo "<td>".$rowes[1]."</td>"; //ATA
-                            //echo "<td>".$rowes[5].$rowes[6]."</td>"; //4DigitCode
+                            echo "<td>".$num."</td>"; //No
+                            echo "<td>".$rowes[0]."</td>"; //Code
+                            echo "<td>".$rowes[1]."</td>"; //Part Name
                           echo "</tr>";
-                          $arr_pareto[$i][0] = $rowes[0];
-                          $arr_pareto[$i][1] = $rowes[1];
-                          $arr_pareto[$i][2] = $rowes[2];
+                          $arr_pareto[$i][0] = $rowes[0]; //Code
+                          $arr_pareto[$i][1] = $rowes[1]; //Part Name
+                          $arr_pareto[$i][2] = $rowes[2]; //Jumlah
                           $i++;
                           $num++;
                         }
