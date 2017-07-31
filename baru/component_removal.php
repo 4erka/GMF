@@ -148,6 +148,8 @@ else {
                 WHERE ".$where_actype." AND PartNo LIKE '%".$PartNum."%' AND Reg LIKE '%".$ACReg.
                 "%' AND DateRem BETWEEN '".$DateStart."' AND '".$DateEnd."' ".$where_remcode;
 
+      mysqli_set_charset($link, "utf8");
+
       $res_rem = mysqli_query($link, $sql_rem);
 
       $row_cnt = mysqli_num_rows($res_rem);
@@ -218,8 +220,10 @@ else {
                         <?php
 
                           //print_r($sql_rem);
+                        $arr_comp_rem =array();
                         if($row_cnt>0){
                           while ($rowes = $res_rem->fetch_array(MYSQLI_NUM)) {
+                            $arr_comp_rem[] = $rowes;
                             echo "<tr>";
                               echo "<td>".$rowes[0]."</td>"; //ID
                               echo "<td>".$rowes[1]."</td>"; //ATA
@@ -453,9 +457,9 @@ else {
   <script type="text/javascript">
     // this function generates the pdf using the table
     function generate() {
+      var data = <?php echo json_encode($arr_comp_rem); ?>;
       var pdfsize = 'a4';
       var columns = ["Notification", "ATA", "Equipment", "Part Number", "Serial Number", "Part Name", "Register", "A/C Type", "Rem Code", "Real Reason", "Date Removal", "TSN", "TSI", "CSN", "CSI"];
-      var data = tableToJson($("#comp_table").get(0), columns);
       console.log(data);
       var canvas = document.querySelector('#grafik_comp');
       var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
@@ -473,21 +477,6 @@ else {
       doc.addPage();
       doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
       doc.save("table.pdf");
-    }
-    // This function will return table data in an Array format
-    function tableToJson(table, columns) {
-      var data = [];
-      // go through cells
-      for (var i = 1; i < table.rows.length; i++) {
-        var tableRow = table.rows[i];
-        var rowData = [];
-        for (var j = 0; j < tableRow.cells.length; j++) {
-          rowData.push(tableRow.cells[j].innerHTML)
-        }
-        data.push(rowData);
-      }
-
-      return data;
     }
   </script>
 

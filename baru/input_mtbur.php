@@ -1,5 +1,5 @@
 <?php
-	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype";
+	$sql_actype = "SELECT DISTINCT ACtype FROM tbl_master_actype ORDER BY ACType";
 	$res_actype = mysqli_query($link, $sql_actype);
 ?>
 
