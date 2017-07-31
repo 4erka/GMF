@@ -51,7 +51,7 @@
                 <h4><i class="fa fa-angle-right"></i>User Guide</h4>
               </div>
               <div class="panel-body">
-                <iframe src="https://drive.google.com/file/d/0BwGUEcfNKl-MN21hVzJUTHVzTlk/preview" width="100%" height="480"></iframe>
+                <iframe src="https://drive.google.com/file/d/0B9cZrZWbvvOFeTF0LXMyYWcxdE0/preview" width="100%" height="480"></iframe>
               </div>
             </div>
           </div>
