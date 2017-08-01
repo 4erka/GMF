@@ -303,51 +303,49 @@ else {
 
         $res_comp = mysqli_query($link, $sql_comp);
 
-//        print_r($sql_comp);
+        $graph_cnt = mysqli_num_rows($res_comp);
 
+        //print_r($sql_comp);
+        $temp_arr_comp = Array();
         $before_temp = Array();
 
         $i=0;
         while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
-          if($i == 0){
-            $arr_comp[$i][0] = $rowes[0]; //Berisi Tahun-bulan kejadian
-            $arr_comp[$i][1] = $rowes[1]; //Berisi jumlah kejadian
-            $i++;
-          }
-          else {
-            //Variable $now merupakan variabel dinamis yang isinya adalah Tahun dan bulan, tepat 1 bulan setelahnya
-            $now = strtotime("+1 Month", strtotime($before_temp[0]));
+          $temp_arr_comp[$i][0] = $rowes[0];
+          $temp_arr_comp[$i][1] = $rowes[1];
+          $i++;
+        }
+
+
+        $i = 0;
+        $temp_arr = 0;
+        $now = strtotime($DateStart);
+        $end_date = strtotime($DateEnd);
+
+        $end_date = strtotime("+1 Month", $end_date);
+
+        while (date("Y-m" ,$now) != date("Y-m" ,$end_date)) {
 
             //Apabila Bulan dan tahun sekarang sama dengan bulan dan tahun pada tabel hasil query, maka hasilnya akan disimpan
             //dalam array
-            if($rowes[0] == date("Y-m", $now)){
-              $arr_comp[$i][0] = $rowes[0];
-              $arr_comp[$i][1] = $rowes[1];
+            if($temp_arr_comp[$temp_arr][0] == date("Y-m", $now)){
+              $arr_comp[$i][0] = $temp_arr_comp[$temp_arr][0];
+              $arr_comp[$i][1] = $temp_arr_comp[$temp_arr][1];
+              if($temp_arr < $graph_cnt-1)
+                $temp_arr++;
               $i++;
             }
+
             //Apabila masih tidak sama, berarti menyimpan jumlah kejadian 0 ke dalam array
             else {
-              $now = strtotime($before_temp[0]); //$before_temp berisi bulan dan tahun pada array hasil query sebelumnya
-              $now = strtotime("+1 Month", $now);
-
               //Selama bulan dan tahun ke $now masih belum ada kejadian, maka akan diisi 0 hingga menemukan
               //tahun dan bulan selanjutnya
-              while($rowes[0] != date("Y-m", $now)){
-
-                  $arr_comp[$i][0] = date("Y-m", $now);
-                  $arr_comp[$i][1] = 0;
-                  $i++;
-
-                  $now = strtotime("+1 Month", $now);
-              }
-
-              $arr_comp[$i][0] = $rowes[0];
-              $arr_comp[$i][1] = $rowes[1];
+              $arr_comp[$i][0] = date("Y-m", $now);
+              $arr_comp[$i][1] = 0;
               $i++;
             }
-          }
-          $before_temp[0] = $rowes[0]; //Berisi Tahun-Bulan kejadian sebelumnya
-          $before_temp[1] = $rowes[1]; //Berisi jumlah kejadian
+
+          $now = strtotime("+1 Month", $now);
         }
 
     	 ?>
