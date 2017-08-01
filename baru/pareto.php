@@ -226,14 +226,13 @@ $Graph_type = $_POST['graph'];
           ====================================================================================================
         */
 
-#          $sql_graph_pirep = "SELECT concat_ws('-',ata, subata) as ata_subata, COUNT(concat(ata, subata)) AS number_of_subata FROM tblpirep_swift WHERE ata >= 21 AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY ata_subata ORDER BY number_of_subata DESC";
           $sql_graph_pirep = "SELECT CASE
             WHEN subata = '0' THEN CONCAT_WS('-',ata, '00')
             WHEN subata = '' THEN CONCAT_WS('-', ata, '00')
             ELSE CONCAT_WS('-', ata, subata)
             END AS ata_subata
             FROM tblpirep_swift WHERE ata >= 21 AND DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep'";
-          #$sql_graph_delay = "SELECT CONCAT(ATAtdm, COALESCE(NULLIF(SubATAtdm,''),'00')) AS ata_subata, COUNT(CONCAT(ATAtdm, COALESCE(NULLIF(SubATAtdm,''),'00'))) AS number_of_subata FROM mcdrnew WHERE DCP = 'D' OR DCP = 'C' AND ACTYPE = ".$ACType." AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY ata_subata ORDER BY number_of_subata DESC";
+
           $sql_graph_delay = "SELECT CASE
           	WHEN ISNULL(SubATAtdm) THEN CONCAT_WS('-' ,ATAtdm, '00')
           	WHEN SubATAtdm = '' THEN CONCAT_WS('-' ,ATAtdm, '00')
@@ -379,6 +378,7 @@ $Graph_type = $_POST['graph'];
                ====================================================================================================
              */
              if($row_delay_cnt > 0){
+               echo "<button onclick='generate()' type='button' class='btn btn-default pull-left'><i class='fa fa-print'></i> Export as PDF</button>";
                echo "<canvas id='grafik_delay' style='height: 250px; margin-top: 50px'></canvas>";
              }
              else {
@@ -461,8 +461,8 @@ $Graph_type = $_POST['graph'];
   var arr_delay = <?php echo json_encode($arr_delay); ?>;
 
   for ( tot=arr_delay.length; z < tot; z++) {
-     label_data.push(arr_delay[z][0]);
-     jumlah_delay.push(arr_delay[z][1]);
+     label_data.push(arr_delay[z][0]); //Berisi registrasi, ata, atau ata-subata, dari table delay
+     jumlah_delay.push(arr_delay[z][1]); //Berisi jumlah kejadian
   };
 
   Chart.plugins.register({
@@ -534,11 +534,11 @@ $Graph_type = $_POST['graph'];
   var arr_pirep = <?php echo json_encode($arr_pirep); ?>;
 
   for ( tot=arr_pirep.length; z < tot; z++) {
-     label_data.push(arr_pirep[z][0]);
-     jumlah_pirep.push(arr_pirep[z][1]);
+     label_data.push(arr_pirep[z][0]); //Berisi registrasi, ata, atau ata-subata, dari table pirep
+     jumlah_pirep.push(arr_pirep[z][1]); //Berisi jumlah kejadian
   };
 
-  Chart.plugins.register({
+  Chart.plugins.register({ //Agar grafik yang dicetak memiliki background putih
     beforeDraw: function(chartInstance) {
       var ctx = chartInstance.chart.ctx;
       ctx.fillStyle = "white";
@@ -588,6 +588,28 @@ $Graph_type = $_POST['graph'];
       data: data,
       options: options
   });
+  </script>
+
+  <script src="js/jspdf.min.js"></script>
+  <script src="js/jspdf.plugin.autotable.js"></script>
+  <script type="text/javascript">
+    // this function generates the pdf using the table
+    function generate() {
+      var pdfsize = 'a4';
+      //console.log(data);
+      var canvas = document.querySelector('#grafik_delay');
+      var canvas1 = document.querySelector('#grafik_pirep');
+      var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
+      var canvasImg1 = canvas1.toDataURL("image/jpeg", 2.0);
+      var doc = new jsPDF('l', 'pt', pdfsize);
+      var width = doc.internal.pageSize.width;
+
+      let finalY = doc.autoTable.previous.finalY;
+      doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
+      doc.addPage();
+      doc.addImage(canvasImg1, 'JPEG', 40, 40, width-80, 400);
+      doc.save("pareto.pdf");
+    }
   </script>
 
 </div>

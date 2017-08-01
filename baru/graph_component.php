@@ -165,7 +165,8 @@ else {
 
           /*====================================================================================================
             Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_graph_comp
-            Query akan menampilkan jumlah kejadian component removal pada kriteria sesuai filter
+            Query akan menampilkan jumlah kejadian component removal pada kriteria sesuai filter dan telah diurutkan
+            berdasarkan jumlah kejadian
 
             untuk memastikan bahwa ada data yang terambil, maka dilakukan perhitungan hasil yang disimpan dalam
             $row_cnt untuk jumlah row pada hasil query $res_graph_comp
@@ -335,11 +336,11 @@ else {
   <script type="text/javascript">
     // this function generates the pdf using the table
     function generate() {
-      var pdfsize = 'a4';
-      var columns = ["No", "Code", "Name"];
-      var data = tableToJson($("#comp_table").get(0), columns);
+      var pdfsize = 'a4'; //Ukuran PDF
+      var columns = ["No", "Code", "Name"]; //Nama kolom yang akan diekspor
+      var data = tableToJson($("#comp_table").get(0), columns); // Tabel yang akan diekspor
       console.log(data);
-      var canvas = document.querySelector('#grafik_pareto');
+      var canvas = document.querySelector('#grafik_pareto'); // Grafik yang akan di ekspor
       var canvasImg = canvas.toDataURL("image/jpeg", 1.0);
       var doc = new jsPDF('l', 'pt', pdfsize);
       var width = doc.internal.pageSize.width;
