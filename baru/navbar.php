@@ -1,7 +1,7 @@
 <!--sidebar start -->
 
 <aside>
-    <div id="sidebar"  class="nav-collapse " style="z-index:1; top: 0px;">
+    <div id="sidebar"  class="nav-collapse " style="z-index:0; top: 0px;">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
 

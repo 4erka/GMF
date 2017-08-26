@@ -23,13 +23,17 @@ else{
   $PartNum = "".$_POST['part_no']."";
 }
 if(!empty($_POST["datefrom"])){
-  $DateStart = "".$_POST['datefrom']."";
+  $temp_date = explode('/', $_POST['datefrom']);
+  $DateStart = $temp_date[2]."-".$temp_date[1]."-".$temp_date[0];
+//  $DateStart = date("Y-d-m", strtotime($_POST['datefrom']));
 }
 else{
   $DateStart = "";
 }
 if(!empty($_POST["dateto"])){
-  $DateEnd = "".$_POST['dateto']."";
+  $temp_date = explode('/', $_POST['dateto']);
+  $DateEnd = $temp_date[2]."-".$temp_date[1]."-".$temp_date[0];
+//  $DateEnd = date("Y-d-m", strtotime($_POST['dateto']));
 }
 else
   $DateEnd = "";
@@ -89,11 +93,20 @@ else {
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/jquery-1.8.3.min.js"></script>
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 
     <?php
     /*====================================================================================================
@@ -301,51 +314,53 @@ else {
         ====================================================================================================
       */
 
+      //print_r($sql_rem);
+
         $res_comp = mysqli_query($link, $sql_comp);
 
         $graph_cnt = mysqli_num_rows($res_comp);
 
-        //print_r($sql_comp);
         $temp_arr_comp = Array();
         $before_temp = Array();
 
         $i=0;
-        while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
-          $temp_arr_comp[$i][0] = $rowes[0];
-          $temp_arr_comp[$i][1] = $rowes[1];
-          $i++;
-        }
+        if($graph_cnt > 0){
+          while ($rowes = $res_comp->fetch_array(MYSQLI_NUM)) {
+            $temp_arr_comp[$i][0] = $rowes[0];
+            $temp_arr_comp[$i][1] = $rowes[1];
+            $i++;
+          }
 
+          $i = 0;
+          $temp_arr = 0;
+          $now = strtotime($DateStart);
+          $end_date = strtotime($DateEnd);
 
-        $i = 0;
-        $temp_arr = 0;
-        $now = strtotime($DateStart);
-        $end_date = strtotime($DateEnd);
+          $end_date = strtotime("+1 Month", $end_date);
 
-        $end_date = strtotime("+1 Month", $end_date);
+          while (date("Y-m" ,$now) != date("Y-m" ,$end_date)) {
 
-        while (date("Y-m" ,$now) != date("Y-m" ,$end_date)) {
+              //Apabila Bulan dan tahun sekarang sama dengan bulan dan tahun pada tabel hasil query, maka hasilnya akan disimpan
+              //dalam array
+              if($temp_arr_comp[$temp_arr][0] == date("Y-m", $now)){
+                $arr_comp[$i][0] = $temp_arr_comp[$temp_arr][0];
+                $arr_comp[$i][1] = $temp_arr_comp[$temp_arr][1];
+                if($temp_arr < $graph_cnt-1)
+                  $temp_arr++;
+                $i++;
+              }
 
-            //Apabila Bulan dan tahun sekarang sama dengan bulan dan tahun pada tabel hasil query, maka hasilnya akan disimpan
-            //dalam array
-            if($temp_arr_comp[$temp_arr][0] == date("Y-m", $now)){
-              $arr_comp[$i][0] = $temp_arr_comp[$temp_arr][0];
-              $arr_comp[$i][1] = $temp_arr_comp[$temp_arr][1];
-              if($temp_arr < $graph_cnt-1)
-                $temp_arr++;
-              $i++;
-            }
+              //Apabila masih tidak sama, berarti menyimpan jumlah kejadian 0 ke dalam array
+              else {
+                //Selama bulan dan tahun ke $now masih belum ada kejadian, maka akan diisi 0 hingga menemukan
+                //tahun dan bulan selanjutnya
+                $arr_comp[$i][0] = date("Y-m", $now);
+                $arr_comp[$i][1] = 0;
+                $i++;
+              }
 
-            //Apabila masih tidak sama, berarti menyimpan jumlah kejadian 0 ke dalam array
-            else {
-              //Selama bulan dan tahun ke $now masih belum ada kejadian, maka akan diisi 0 hingga menemukan
-              //tahun dan bulan selanjutnya
-              $arr_comp[$i][0] = date("Y-m", $now);
-              $arr_comp[$i][1] = 0;
-              $i++;
-            }
-
-          $now = strtotime("+1 Month", $now);
+            $now = strtotime("+1 Month", $now);
+          }
         }
 
     	 ?>
@@ -379,12 +394,10 @@ else {
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/jquery-1.8.3.min.js"></script>
+
     <script src="assets/js/bootstrap.min.js"></script>
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-    <script src="assets/js/jquery.scrollTo.min.js"></script>
-    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+      
     <script src="assets/js/jquery.sparkline.js"></script>
 
 
@@ -514,7 +527,7 @@ else {
       let finalY = doc.autoTable.previous.finalY;
       doc.addPage();
       doc.addImage(canvasImg, 'JPEG', 40, 40, width-80, 400);
-      doc.save("table.pdf");
+      doc.save("table-component.pdf");
     }
   </script>
 

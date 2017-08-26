@@ -5,6 +5,7 @@
 //Mendapatkan Value yang di passing
 if(empty($_POST["actype"])){
   $ACType = "";
+  $where_actype = "";
 }
 else{
   $ACType = "'".$_POST['actype']."%'";
@@ -17,13 +18,17 @@ else{
   $ACReg = $_POST['acreg'];
 }
 if(!empty($_POST["datefrom"])){
-  $DateStart = "'".$_POST['datefrom']."'";
+  $temp_date = explode('/', $_POST['datefrom']);
+  $DateStart = "'".$temp_date[2]."-".$temp_date[1]."-".$temp_date[0]."'";
 }
 else{
   $DateStart = "";
 }
 if(!empty($_POST["dateto"])){
-  $DateEnd = "'".$_POST['dateto']."'";
+    $temp_date = explode('/', $_POST['dateto']);
+    $DateEnd = "'".$temp_date[2]."-".$temp_date[1]."-".$temp_date[0]."'";
+//  $date = str_replace('/', '-', $_POST['dateto']);
+//  $DateEnd = "'".date("Y-m-d", strtotime($date))."'";
 }
 else
   $DateEnd = "";
@@ -69,11 +74,20 @@ $Graph_type = $_POST['graph'];
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/jquery-1.8.3.min.js"></script>
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 
     <?php
     /*====================================================================================================
@@ -172,7 +186,6 @@ $Graph_type = $_POST['graph'];
     			$sql_graph_pirep = "SELECT REG, COUNT(REG) AS number_of_reg FROM tblpirep_swift WHERE DATE BETWEEN ".$DateStart." AND ".$DateEnd." AND ata >= 21 AND ".$where_actype." AND REG LIKE '%".$ACReg."%' AND PirepMarep = 'pirep' GROUP BY REG ORDER BY number_of_reg DESC";
     			$sql_graph_delay = "SELECT Reg, COUNT(Reg) AS number_of_reg FROM mcdrnew WHERE ".$where_actype." AND DCP <> 'X' AND REG LIKE '%".$ACReg."' AND DateEvent BETWEEN ".$DateStart." AND ".$DateEnd." GROUP BY REG ORDER BY number_of_reg DESC";
     		}
-
         /*====================================================================================================
           Menquery sql yang telah disiapkan dan hasilnya disimpan dalam $res_graph_pirep untuk pirep, $res_graph_delay
           untuk Delay
@@ -216,8 +229,8 @@ $Graph_type = $_POST['graph'];
     			$arr_delay[$i][1] = $rowes[1];
     			$i++;
     		}
+            //  print_r($sql_graph_pirep);
       }
-
     	else{
         /*====================================================================================================
           Karena sub ata NULL, 0, dan 00 dianggap 00, maka perlu dilakukan penyamanaan terlebih dahulu
@@ -422,12 +435,10 @@ $Graph_type = $_POST['graph'];
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/jquery-1.8.3.min.js"></script>
+
     <script src="assets/js/bootstrap.min.js"></script>
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-    <script src="assets/js/jquery.scrollTo.min.js"></script>
-    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+
     <script src="assets/js/jquery.sparkline.js"></script>
 
 
@@ -478,7 +489,7 @@ $Graph_type = $_POST['graph'];
   var data = {
     labels: label_data,
     datasets: [{
-      label: "Jumlah Delay",
+      label: "Number of Delay",
       backgroundColor: "lightblue",
       strokeColor: "black",
       data: jumlah_delay
@@ -551,7 +562,7 @@ $Graph_type = $_POST['graph'];
   var data = {
     labels: label_data,
     datasets: [{
-      label: "Jumlah Pirep",
+      label: "Number of Pirep",
       backgroundColor: "red",
       strokeColor: "black",
       data: jumlah_pirep
